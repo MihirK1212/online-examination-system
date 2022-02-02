@@ -1,7 +1,5 @@
 import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
 
-import './App.css';
-
 import MainHomepage from './pages/common/MainHomepage';
 import Admin from './pages/admin/router/Admin';
 import Instructor from './pages/instructor/router/Instructor';
