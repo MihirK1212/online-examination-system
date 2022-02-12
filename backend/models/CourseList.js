@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 const courseListSchema = mongoose.Schema({
     courseCode : String,
-    courseName : String
+    courseName : String,
+    description: String
 })
 
 
