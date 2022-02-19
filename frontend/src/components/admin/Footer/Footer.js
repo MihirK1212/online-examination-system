@@ -4,7 +4,7 @@ function Footer() {
   return (
     <>
       <div>
-          This is the admin foooter
+          
       </div>
     </>
   )
