@@ -4,7 +4,6 @@ import Navbar from '../../../components/admin/Navbar/Navbar';
 import Footer from '../../../components/admin/Footer/Footer';
 import StudentImage from "./student.png"
 import InstructorImage from "./instructor.png"
-import CourseImage from "./CourseImage.jpg"
 import c from "./cp.jpg"
 import { Box, Paper } from "@mui/material";
 import {Button} from "@mui/material"
