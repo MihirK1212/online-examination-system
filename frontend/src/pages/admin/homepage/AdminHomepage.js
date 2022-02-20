@@ -56,7 +56,7 @@ function AdminHomepage() {
   <div class="card-body">
   
     
-    <a href="#" class="btn btn-primary">Make Course Instance</a>
+    <a href="/admin/addCourseInstance" class="btn btn-primary">Make Course Instance</a>
   </div>
   <div class="card-footer text-muted">
   </div>
