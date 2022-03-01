@@ -13,6 +13,15 @@ app.get('/', (req, res) => {
   })
 })
 
+const adminsRoute = require('./routes/Admin')
+app.use('/admin',adminsRoute)
+
+const instructorsRoute = require('./routes/Instructors')
+app.use('/instructor',instructorsRoute)
+
+const studentsRoute = require('./routes/Students')
+app.use('/student',studentsRoute)
+
 app.listen(PORT, () => {
   console.log(`Listening on the port: ${PORT}`);
 });

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const questionSchema = mongoose.Schema({
+const questionsSchema = mongoose.Schema({
     questionType : String,
     questionNo : Number,
     questionContent : String,
@@ -8,4 +8,4 @@ const questionSchema = mongoose.Schema({
     questionAnswer : [String]
 })
 
-module.exports = questionSchema
+module.exports = questionsSchema

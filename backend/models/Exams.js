@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const questionSchema = require('./Question.js')
+const questionsSchema = require('./Questions.js')
 
 const examsSchema = mongoose.Schema({
     examName : String,
@@ -8,14 +8,15 @@ const examsSchema = mongoose.Schema({
     weightage : Number,
     startTimings : Date,
     endTimings : Date,
-    Questions : [questionSchema],
+    Questions : [questionsSchema],
     Submissions : [{
         studentEmail : String,
         responses :[{
             questionID : String,
             status : String,
             response : String
-        }]
+        }],
+        marksObtained : Number
     }]
 })
 

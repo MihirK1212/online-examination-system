@@ -8,6 +8,6 @@ const courseListSchema = mongoose.Schema({
 
 
 
-var CourseLists = mongoose.model('CourseLists', courseListSchema);
+var CourseList = mongoose.model('CourseList', courseListSchema);
 
-module.exports = CourseLists
+module.exports = CourseList

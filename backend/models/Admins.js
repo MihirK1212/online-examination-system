@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 
-const adminSchema = mongoose.Schema({
+const adminsSchema = mongoose.Schema({
     adminEmail : String,
     instituteName : String
 })
 
 
 
-var Admins = mongoose.model('Admins', adminSchema);
+var Admins = mongoose.model('Admins', adminsSchema);
 
 module.exports = Admins
