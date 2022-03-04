@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormControl, InputLabel,Select,MenuItem , TextField , Card} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import "./styles.css"
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
@@ -81,10 +82,12 @@ function AddCourseInstance() {
       reader.readAsBinaryString(file);
     }
 
-    
-
     const selectInstructor = (id)=>{
         setSelectedInstructors([...selectedInstructors,id])
+    }
+
+    const removeInstructor = (id)=>{
+      setSelectedInstructors([...selectedInstructors.filter(x=>x!==id)])
     }
 
     const filterList = (query)=>{
@@ -144,8 +147,7 @@ function AddCourseInstance() {
 
                     <ul>
                         {
-                            selectedInstructors.map(id=><li>{id}</li>)
-                        
+                            selectedInstructors.map(id=><Card className="instructorCard"><span>{id}</span> <CloseIcon onClick={()=>{removeInstructor(id)}}/></Card>)
                         }
                     </ul>
                     {
