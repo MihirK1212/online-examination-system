@@ -24,7 +24,8 @@ function AdminHomepage() {
                   <img src={StudentImage} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={120}
                       width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                      <Button variant="contained" >Add Students</Button>
+                      <Button variant="contained" ><a href="/admin/addStudent" style={{ color:'white', textDecoration: 'none' }}>Add Students</a></Button>
+                      
                   </Box>
               </Box>
           </Paper>
