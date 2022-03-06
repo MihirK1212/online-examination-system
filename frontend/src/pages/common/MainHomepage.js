@@ -6,6 +6,11 @@ import AdminImage from "./admin.png"
 import InstructorImage from "./instructor.png"
 import StudentImage from "./student.png"
 
+
+import { setExam } from '../../redux/actions/Exam';
+import { useEffect} from "react";
+import { useDispatch , useSelector} from "react-redux";
+
 import "./style.css"
 
 function MainHomepage() {
@@ -21,6 +26,17 @@ function MainHomepage() {
       alert("Invalid Login Credentials")
     }
   }
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+        dispatch(setExam([{"name":"exam1","questions":[1,2,3]}]))
+  }, [dispatch])
+
+  let exam = useSelector((state) => state.Exam)
+  console.log("exam is ",exam)
+
+
   return (
   <>
         <div className="header">

@@ -1,29 +1,17 @@
 import React from 'react';
-import { FormControl, InputLabel,Select,MenuItem , TextField , Card} from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
 import "./styles.css"
 import { useState } from 'react';
-import {Button} from "@mui/material"
 import * as XLSX from 'xlsx';
 
 function AddStudent() {
 
-    const instructors = ["asda123","xvkvx433","jsjd887","skdf9911","mihir123","mihi23","mk"];
-    const [selectedInstructors,setSelectedInstructors] = useState([])
-
-
-    const [formData,setFormData] = useState({"courseCode":"","year":2000,"semester":"spring"})
-
-    const [filteredList,setFilteredList] = useState([])
-    const [searchQuery,setSearchQuery] = useState(null)
-
+    
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
 
-    
     console.log("Columns",columns)
     console.log("Data",data)
-   
+
     // process CSV data
     const processData = dataString => {
       const dataStringLines = dataString.split(/\r\n|\n/);
@@ -63,7 +51,7 @@ function AddStudent() {
       setData(list);
       setColumns(columns);
     }
-   
+
     // handle file upload
     const handleFileUpload = e => {
       const file = e.target.files[0];
@@ -80,65 +68,9 @@ function AddStudent() {
         processData(data);
       };
       reader.readAsBinaryString(file);
+      
     }
-
     
-
-    const selectInstructor = (id)=>{
-        setSelectedInstructors([...selectedInstructors,id])
-    }
-
-    const filterList = (query)=>{
-        if(query===""){query=null;}
-        const res = instructors.filter(id=>id.startsWith(query))
-        setFilteredList(res)
-    }
-
-
-
-    
-
-    const [items, setItems] = useState([])
-
-    const readExcel = (file) => {
-      const promise = new Promise((resolve,reject)=>{
-
-        const fileReader = new FileReader();
-        fileReader.readAsArrayBuffer(file)
-
-        fileReader.onload=(e)=>{
-          const bufferArray=e.target.result;
-
-          const wb=XLSX.read(bufferArray,{type:"buffer"});
-
-          const wsname=wb.SheetNames[0];
-
-          const ws=wb.Sheets[wsname];
-
-          const data=XLSX.utils.sheet_to_json(ws)
-
-          resolve(data);
-        };
-
-        FileReader.onerror=((error)=>{
-          reject(error);
-        });
-      });
-
-      promise.then((d)=>{
-        console.log(d);
-        setItems(d)
-      });
-    };
-
-    // const submitCategory = (e) => {
-    //   e.persist();
-
-    //   const data = {
-    //     slug:categoryInput.slug,
-    //   }
-    // }
-
     return (
         <>
         <h1>This is the add student page</h1>
@@ -151,42 +83,31 @@ function AddStudent() {
                     <input
                     type="file"
                     accept=".csv,.xlsx,.xls"
-                    // onChange={handleFileUpload}
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      readExcel(file);
-                    }}
+                    onChange={handleFileUpload}
                     />
 
 
                     <table class="table">
                     <thead>
                       <tr>
-                        {/* <th scope="col">S No.</th> */}
-                        <th scope="col">Sno</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Roll</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Marks</th>
                       </tr>
                     </thead>
                     <tbody>
                       {
-                        items.map((d)=>(
-                      <tr key={d.Sno}>
-                        <th>{d.Sno}</th>
-                        <td>{d.Name}</td>
-                        <td>{d.Roll}</td>
-                        {/* <td>@twitter</td> */}
+                        data.map((d)=>(
+                      <tr key={d.Name}>
+                        <th>{d.Name}</th>
+                        <td>{d.Age}</td>
+                        <td>{d.Marks}</td>
                       </tr>
                         ))
                       }
                       
                     </tbody>
                   </table>
-
-
-                  {/* <Button className="btn btn-primary btn-block">Add Product</Button> */}
-                    <Button type="submit" variant="contained" style={{ textalign:'centre', marginTop: '10rem' }}>Add Students</Button>
-                     {/* <Button type="submit" style={{ paddingTop: '10px' }}>Add Students</Button> */}
                 </form> 
             </div>
         </>
