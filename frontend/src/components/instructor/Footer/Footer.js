@@ -5,7 +5,7 @@ function Footer() {
   return (
     <>
       <div>
-          this is the instructor footer
+          
       </div>
     </>
   )
