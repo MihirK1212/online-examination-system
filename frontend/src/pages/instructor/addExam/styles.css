@@ -1,0 +1,24 @@
+.formContainer{
+    width: 60%;
+    margin-left: 100px;
+    margin-top: 50px;
+}
+
+.instructorCard{
+    width: 40%;
+    margin-top: 15px;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.date-time{
+    margin-top: 30px;
+    margin-left: 100px;
+}
+
+.date-time span {
+    margin-left: 20px;
+    margin-right: 20px;
+}
