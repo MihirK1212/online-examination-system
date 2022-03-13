@@ -2,10 +2,12 @@ const mongoose = require('mongoose')
 
 const questionsSchema = mongoose.Schema({
     questionType : String,
-    questionNo : Number,
+    questionNumber : Number,
     questionContent : String,
+    questionMarks : Number,
     questionOptions : [String],
-    questionAnswer : [String]
+    questionAnswer : String,
+    questionAnswerOptions : [String],
 })
 
 module.exports = questionsSchema
