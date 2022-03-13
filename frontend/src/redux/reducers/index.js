@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
-import Exam from "./Exam"
+import exam from "./exam"
 
 export default combineReducers({
-    Exam
+    exam
 })
