@@ -6,8 +6,8 @@ const questionsSchema = mongoose.Schema({
     questionContent : String,
     questionMarks : Number,
     questionOptions : [String],
+    questionAnswerOptions : [Number],
     questionAnswer : String,
-    questionAnswerOptions : [String],
 })
 
 module.exports = questionsSchema

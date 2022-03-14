@@ -6,12 +6,3 @@ export const setExam = (examData) => async (dispatch) => {
         console.log(error)
     }
 }
-
-export const addQuestion = () => async (dispatch) => {
-  console.log("add Question called")
-  try {
-    dispatch({type:"ADD_QUESTION"})
-  } catch (error) {
-      console.log(error)
-  }
-}
