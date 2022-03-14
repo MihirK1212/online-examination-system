@@ -2,7 +2,7 @@ import React from 'react';
 import { FormControl, InputLabel,Select,MenuItem , TextField , Card} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import "./styles.css"
+import "./style.css"
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 

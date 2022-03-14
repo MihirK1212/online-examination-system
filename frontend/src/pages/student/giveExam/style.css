@@ -1,0 +1,24 @@
+.examDisplay
+{
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.currentQuestion
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.responsesStatus
+{
+    margin-top: 100px;
+}
+
+.questionBox
+{
+    border: 2px solid red;
+    margin: 2px;
+}
