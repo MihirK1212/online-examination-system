@@ -17,8 +17,27 @@
     margin-top: 100px;
 }
 
-.questionBox
+
+.not-seen-question
 {
-    border: 2px solid red;
+    border: 2px solid rgb(100, 100, 100);
+    border-radius: 5px;
     margin: 2px;
+    background-color: gray;
+}
+
+.not-attempted-question
+{
+    border: 2px solid rgb(180, 180, 9);
+    border-radius: 5px;
+    margin: 2px;
+    background-color: yellow;
+}
+
+.attempted-question
+{
+    border: 2px solid rgb(133, 199, 33);
+    border-radius: 5px;
+    margin: 2px;
+    background-color: greenyellow;
 }

@@ -12,9 +12,10 @@ const examsSchema = mongoose.Schema({
     Submissions : [{
         studentEmail : String,
         responses :[{
-            questionID : String,
+            questionNumber : Number,
             status : String,
-            response : String
+            questionGivenAnswer : String,
+            questionSelectedOptions : [Number]
         }],
         marksObtained : Number
     }]

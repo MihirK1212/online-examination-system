@@ -50,7 +50,7 @@ function ExamQuestion({question,qnIndex,handleDeleteQuestion,examData,setExamDat
         return answerOptions.includes(index)
     }
 
-    const includeOption = (index) => {
+    const optionSelect = (index) => {
         let answerOptions = formQuestion.questionAnswerOptions
         if(answerOptions.includes(index))
         {
@@ -153,7 +153,7 @@ function ExamQuestion({question,qnIndex,handleDeleteQuestion,examData,setExamDat
                                         return (
                                             <>
                                                 <Card className="optionCard" key={index}>
-                                                <FormControlLabel control={<Checkbox checked={isAnswer(index)} onChange={()=>{includeOption(index)}}/>} style={{marginLeft:20}}/>
+                                                <FormControlLabel control={<Checkbox checked={isAnswer(index)} onChange={()=>{optionSelect(index)}}/>} style={{marginLeft:20}}/>
                                                     <TextField
                                                         id="filled-multiline-flexible"
                                                         variant={'filled'}
