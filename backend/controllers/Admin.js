@@ -2,6 +2,7 @@ const Students = require('../models/Students')
 const Instructors = require('../models/Instructors')
 const CourseList = require('../models/CourseList')
 const Courses = require('../models/Courses')
+const Admins = require('../models/Admins')
 
 const  getAllStudents = async(req,res) => {
     try {
