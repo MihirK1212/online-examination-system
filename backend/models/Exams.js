@@ -4,10 +4,10 @@ const questionsSchema = require('./Questions.js')
 const examsSchema = mongoose.Schema({
     examName : String,
     examMarks : Number,
+    examWeightage : Number,
     instructions: String,
-    weightage : Number,
-    startTimings : Date,
-    endTimings : Date,
+    startTiming : Date,
+    endTiming : Date,
     Questions : [questionsSchema],
     Submissions : [{
         studentEmail : String,

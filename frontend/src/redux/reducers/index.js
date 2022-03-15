@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
-import Exam from "./Exam"
+import Responses from "./Responses"
 
 export default combineReducers({
-    Exam
+    Responses
 })

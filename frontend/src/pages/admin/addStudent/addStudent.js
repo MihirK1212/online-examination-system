@@ -1,5 +1,5 @@
 import React from 'react';
-import "./styles.css"
+import "./style.css"
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
@@ -74,7 +74,7 @@ function AddStudent() {
     return (
         <>
         <h1>This is the add student page</h1>
-            <div className="formContainer">
+            <div className="studentsForm">
                 <form action="/admin">
                      <h3 style={{ paddingTop:'20px', fontSize:'30px' }}>General Student Details</h3>
                     

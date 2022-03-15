@@ -1,0 +1,96 @@
+.questionCard
+{
+    width: 1000px;
+    min-height: 200px;
+    gap: 1;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.questionType
+{
+    width: 800px;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+.questionContent
+{
+    width: 800px;
+    margin-top: 30px;
+    margin-left: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.addOptionButton
+{
+    margin-top: 10px;
+    margin-left: 500px;
+    margin-bottom: 10px;
+    cursor:pointer;
+}
+
+.optionCard 
+{
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    width: 700px;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0;
+    background-color: rgb(192, 215, 250);
+}
+
+.optionText
+{
+    width: 500px;
+    margin-left: 20px;
+    margin-right: 40px;
+    height: 100%;
+    margin-bottom: 0;
+    margin-top: 0;
+    background-color: rgb(192, 215, 250);
+}
+
+.questionHeader 
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.marksInput
+{
+    width: 40px;
+    margin-left: 750px; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* background-color: rgb(205, 231, 222); */
+    
+}
+
+.buttons
+{
+    display: inline;
+    margin-top: 20px;
+    margin-left: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.numericAnswer
+{
+    margin-top: 20px;
+    margin-left: 100px;
+    margin-bottom: 10px;
+}
+
+.questionAnswer
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+

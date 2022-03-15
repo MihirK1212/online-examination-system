@@ -15,7 +15,15 @@ function Navbar() {
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Profile</a>
         </li>
-        
+        <li>
+          <a class="nav-link active" aria-current="page" href="#">Student List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Instructor List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Course List</a>
+        </li>
         
         
       </ul>
