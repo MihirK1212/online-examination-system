@@ -14,16 +14,6 @@ const  getCourses = async(req,res) => {
     }
 }
 
-const  getExams = async(req,res) => {
-    try {
-        let xyz = "hello"
-        return res.status(201).json({"data": xyz })
-    } catch (error) {
-        console.log(error)
-        return res.status(404).json({"message":error})
-    }
-}
-
 const  addExam = async(req,res) => {
     try {
         let xyz = "hello"
