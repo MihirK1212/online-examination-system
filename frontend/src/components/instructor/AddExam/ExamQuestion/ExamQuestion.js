@@ -15,6 +15,8 @@ function ExamQuestion({question,qnIndex,handleDeleteQuestion,examData,setExamDat
     const [formQuestion,setFormQuestion] = useState(question)
     const [editing,setEditing] = useState(false)
 
+    const qNum = question.questionNumber
+
     const saveQuestion = ()=> {
         
         setEditing(!editing)
@@ -91,7 +93,7 @@ function ExamQuestion({question,qnIndex,handleDeleteQuestion,examData,setExamDat
                                     </Button>
                                 }
                             </div>
-                            <DeleteIcon style={{marginLeft:50,marginTop:20,cursor:"default",display:"inline"}} onClick={()=>{handleDeleteQuestion(qnIndex)}}></DeleteIcon>
+                            <DeleteIcon style={{marginLeft:50,marginTop:20,cursor:"default",display:"inline"}} onClick={()=>{handleDeleteQuestion(qNum)}}></DeleteIcon>
                         </div>
                             
                         <div className={"questionType"}>
@@ -104,6 +106,7 @@ function ExamQuestion({question,qnIndex,handleDeleteQuestion,examData,setExamDat
                                     variant={'standard'}>
                                     <MenuItem value={'MCQ'}>Multiple Choice Question</MenuItem>
                                     <MenuItem value={'Numerical'}>Numerical Question</MenuItem>
+                                    <MenuItem value={'Subjective'}>Subjective Question</MenuItem>
                                 </Select>
                             </FormControl>
                         </div>
@@ -177,21 +180,26 @@ function ExamQuestion({question,qnIndex,handleDeleteQuestion,examData,setExamDat
                             </>
                             
                             :
-
-                            <div className='numericAnswer'>
-                                <TextField
-                                id="filled-number"
-                                label="Answer"
-                                type="number"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                value = {formQuestion.questionAnswer}
-                                onChange = {e=>setFormQuestion({...formQuestion,questionAnswer:e.target.value})}
-                                variant="filled"
-                                disabled={!editing}
-                                />
-                            </div>
+                            <>
+                                {
+                                    formQuestion.questionType==='Numerical'?
+                                        <div className='numericAnswer'>
+                                            <TextField
+                                            id="filled-number"
+                                            label="Numeric Answer"
+                                            type="number"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            value = {formQuestion.questionAnswer}
+                                            onChange = {e=>setFormQuestion({...formQuestion,questionAnswer:e.target.value})}
+                                            variant="filled"
+                                            disabled={!editing}
+                                            />
+                                        </div>
+                                    : <br></br>
+                                }
+                            </>
                         }
                     </Card>
                 </div>

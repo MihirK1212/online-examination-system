@@ -1,14 +1,22 @@
 import React from 'react'
 import { useState } from 'react';
-import "./style.css"
+import {useLocation} from 'react-router-dom';
+
 import { TextField} from "@material-ui/core";
-import ExamQuestion from '../../../components/instructor/ExamQuestion/ExamQuestion';
-import Navbar from "../../../components/instructor/Navbar/Navbar"
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button} from "@material-ui/core";
 
+import ExamQuestion from '../../../components/instructor/AddExam/ExamQuestion/ExamQuestion'
+import Navbar from "../../../components/instructor/AddExam/Navbar/Navbar"
+
+import "./style.css"
+
 function AddExam() {
+
+    const {state} = useLocation();
+    console.log("Received params ",state)
+    const course = state.course
     
     const [examData,setExamData] = useState({"examName":"","examMarks":0,"examWeightage":0,"instructions":"",
                                             "date": new Date(),"startTime":"","endTime":"",
@@ -17,16 +25,17 @@ function AddExam() {
     const [visible,setVisble] = useState(true)
 
     const handleAddQuestion = () => {
-        const newQuestion = {"questionType":"MCQ","questionNumber":examData.Questions.length+1,"questionContent":"","questionMarks":"","questionOptions":[],"questionAnswerOptions":[],"questionAnswer":""}
-        let questions = examData.Questions
-        questions.push(newQuestion)
-        setExamData({...examData,Questions:questions})
+        const questions = examData.Questions
+        const newQnNum = questions.length > 0 ? questions[questions.length-1].questionNumber + 1 : 1
+
+        const newQuestion = {"questionType":"MCQ","questionNumber":newQnNum,"questionContent":"","questionMarks":"","questionOptions":[],"questionAnswerOptions":[],"questionAnswer":""}
+        
+        setExamData({...examData,Questions:[...questions,newQuestion]})
     }
 
-    const handleDeleteQuestion = (qnIndex) => {
-        let questions = examData.Questions
-        questions = questions.filter((question,index)=>index!==qnIndex)
-        setExamData({...examData,Questions:[...questions]})
+    const handleDeleteQuestion = (questionNumber) => {
+        console.log("deleting ",questionNumber)
+        setExamData({...examData,Questions:examData.Questions.filter((question)=>question.questionNumber!==questionNumber)})
     }
 
     const handleSubmit = ()=>{
@@ -37,7 +46,15 @@ function AddExam() {
         postData.instructions = examData.instructions
         postData.startTiming = new Date(examData.date+" "+examData.startTime+':00')
         postData.endTiming = new Date(examData.date+" "+examData.endTime+':00')
-        postData.Questions = examData.Questions
+
+        let Questions = examData.Questions
+
+        Questions.map((question,index)=>{
+            question.questionNumber = index+1
+            return question
+        })
+
+        postData.Questions = Questions
         postData.Submissions = []
 
         console.log("Post data",postData)
@@ -47,6 +64,9 @@ function AddExam() {
     return (
         <>
             <Navbar/>  
+
+            <h5>Course Name : {course.courseName}</h5>
+
             <div className='container'>
                 <ArrowDropDownIcon style={{marginTop:20}} onClick={()=>{setVisble(!visible)}}></ArrowDropDownIcon>
 

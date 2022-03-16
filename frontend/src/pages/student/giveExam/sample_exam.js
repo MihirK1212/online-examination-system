@@ -4,8 +4,8 @@ const exam =
     examMarks : '100',
     examWeightage : '40',
     instructions: 'This is the mse of this course and will judge on various basis, dont cheat.',
-    startTiming : new Date("2021-05-18T10:00:00Z"),
-    endTiming : new Date("2021-05-18T12:00:00Z"),
+    startTiming : new Date("2022-03-16T17:00:00"),
+    endTiming : new Date("2022-03-16T19:04:00"),
     Questions : [
         {
             questionType : "MCQ",
@@ -35,8 +35,18 @@ const exam =
             questionAnswer : "",
         },
         {
-            questionType : "MCQ",
+            questionType : "Subjective",
             questionNumber : 4,
+            questionContent : "Subjective Question 1",
+            questionMarks : 6,
+            questionOptions : [],
+            questionAnswerOptions : [],
+            questionAnswer : "",
+            _id : "q4"
+        },
+        {
+            questionType : "MCQ",
+            questionNumber : 5,
             questionContent : "MCQ Question 3",
             questionMarks : 5,
             questionOptions : ["Op 1","Op 2","Op 3","Op 4","Op 5"],

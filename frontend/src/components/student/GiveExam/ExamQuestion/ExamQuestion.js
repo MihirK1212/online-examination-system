@@ -6,14 +6,14 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import './style.css'
 
-import { saveQuestionResponse } from '../../../redux/actions/Responses';
+import { saveQuestionResponse } from '../../../../redux/actions/Responses';
 
 function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub}) {
 
     const dispatch = useDispatch()
 
     let [selectedOptions,setSelectedOptions] = useState(response.questionSelectedOptions)
-    let [numericAnswer,setNumericAnswer] = useState(response.questionGivenAnswer)
+    let [givenAnswer,setGivenAnswer] = useState(response.questionGivenAnswer)
 
     const isChosen = (index) => {
         return selectedOptions.includes(index)
@@ -39,10 +39,10 @@ function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub}) {
         let responseData = {}
 
         responseData.questionNumber = question.questionNumber
-        responseData.questionGivenAnswer = numericAnswer
+        responseData.questionGivenAnswer = givenAnswer
         responseData.questionSelectedOptions = selectedOptions
         
-        if(numericAnswer==='' && selectedOptions.length===0)
+        if(givenAnswer==='' && selectedOptions.length===0)
         {
             responseData.status = 'NotAttempted'
         }
@@ -91,7 +91,7 @@ function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub}) {
 
                     </div>
 
-                <div className="questionContentStudent">
+                    <div className="questionContentStudent">
                         <TextField
                             id="filled-multiline-flexible"
                             variant={'filled'}
@@ -135,20 +135,39 @@ function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub}) {
                         </>
                         
                         :
+                        <>
+                        {
+                            question.questionType==='Numerical'?
+                            <div className='numericAnswerStudent'>
+                                <TextField
+                                id="filled-number"
+                                label="Numeric Answer"
+                                type="number"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                value = {givenAnswer}
+                                variant="filled"
+                                onChange = {e=>setGivenAnswer(e.target.value)}
+                                />
+                            </div>:
+                            <div className='subjectiveAnswerStudent'>
+                                <TextField
+                                    id="filled-multiline-flexible"
+                                    variant={'filled'}
+                                    label="Subjective Answer"
+                                    multiline
+                                    fullWidth
+                                    minRows={6}
+                                    value = {givenAnswer}
+                                    onChange = {e=>setGivenAnswer(e.target.value)}
+                                />
+                            </div>
+                        }
+                            
+                        </>
 
-                        <div className='numericAnswerStudent'>
-                            <TextField
-                            id="filled-number"
-                            label="Answer"
-                            type="number"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            value = {numericAnswer}
-                            variant="filled"
-                            onChange = {e=>setNumericAnswer(e.target.value)}
-                            />
-                        </div>
+                        
                     }
                 </Card>
 

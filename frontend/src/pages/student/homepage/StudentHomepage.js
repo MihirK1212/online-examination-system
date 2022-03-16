@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../../../components/student/Navbar/Navbar';
-import Footer from '../../../components/student/Footer/Footer';
+import Navbar from '../../../components/student/Homepage/Navbar/Navbar';
+import Footer from '../../../components/student/Homepage/Footer/Footer';
 
 function StudentHomepage() {
   return (

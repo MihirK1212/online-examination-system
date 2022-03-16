@@ -1,9 +1,9 @@
 import React from 'react';
 import {Routes,Route} from "react-router-dom";
 
-import AdminHomepage from '../homepage/AdminHomepage';
-import AddCourseInstance from '../addCourseInstance/addCourseInstance';
-import AddStudent from '../addStudent/addStudent';
+import AdminHomepage from '../Homepage/AdminHomepage';
+import AddCourseInstance from '../AddCourseInstance/AddCourseInstance';
+import AddStudents from '../AddStudents/AddStudents';
 
 function Admin() {
   return (
@@ -11,7 +11,7 @@ function Admin() {
     <div>
         <Routes>
             <Route path="/" element={<AdminHomepage/>}/>
-            <Route path="/addStudent" element={<AddStudent/>}/>
+            <Route path="/addStudents" element={<AddStudents/>}/>
             <Route path="/addCourseInstance" element={<AddCourseInstance/>}/>
         </Routes>
     </div>
