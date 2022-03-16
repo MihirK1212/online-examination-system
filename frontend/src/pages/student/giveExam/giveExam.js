@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 import React, { useState } from 'react'
 import {useDispatch , useSelector } from 'react-redux'
-import ExamQuestion from '../../../components/student/ExamQuestion/ExamQuestion'
+import ExamQuestion from '../../../components/student/GiveExam/ExamQuestion/ExamQuestion'
 import {setInitialResponses} from '../../../redux/actions/Responses'
 
 import exam from './sample_exam'

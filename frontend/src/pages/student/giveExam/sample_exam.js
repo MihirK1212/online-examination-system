@@ -35,8 +35,18 @@ const exam =
             questionAnswer : "",
         },
         {
-            questionType : "MCQ",
+            questionType : "Subjective",
             questionNumber : 4,
+            questionContent : "Subjective Question 1",
+            questionMarks : 6,
+            questionOptions : [],
+            questionAnswerOptions : [],
+            questionAnswer : "",
+            _id : "q4"
+        },
+        {
+            questionType : "MCQ",
+            questionNumber : 5,
             questionContent : "MCQ Question 3",
             questionMarks : 5,
             questionOptions : ["Op 1","Op 2","Op 3","Op 4","Op 5"],
