@@ -14,10 +14,10 @@ import "./style.css"
 function GiveExam() {
 
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
-    const startTiming = exam.startTiming
-    const endTiming = exam.endTiming
+    // const startTiming = exam.startTiming
+    // const endTiming = exam.endTiming
 
     const [timeHours,setTimeHours] = useState(0)
     const [timeMinutes,setTimeMinutes] = useState(0)
