@@ -6,6 +6,8 @@ import "./style.css"
 
 function AddStudent() {
 
+  console.log("testing")
+
     
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);

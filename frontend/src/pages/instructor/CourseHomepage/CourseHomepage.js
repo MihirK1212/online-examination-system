@@ -6,6 +6,8 @@ import Navbar from '../../../components/instructor/courseHomepage/Navbar/Navbar'
 function CourseHomepage() {
     const {state} = useLocation();
     console.log("Received params ",state)
+    
+    let course = state
   
     let exams = state.Exams;
     let a = state.announcements;
