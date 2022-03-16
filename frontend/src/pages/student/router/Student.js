@@ -1,8 +1,8 @@
 import React from 'react';
 import {Routes,Route} from "react-router-dom";
 
-import StudentHomepage from '../Homepage/StudentHomepage';
-import GiveExam from '../GiveExam/GiveExam';
+import StudentHomepage from '../homepage/StudentHomepage';
+import GiveExam from '../giveExam/GiveExam';
 
 function Student() {
   return (

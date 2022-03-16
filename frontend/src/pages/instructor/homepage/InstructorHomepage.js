@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@material-ui/core';
 
-import Navbar from '../../../components/instructor/Homepage/Navbar/Navbar';
+import Navbar from '../../../components/instructor/homepage/Navbar/Navbar';
 
 import Courses from "./sample_courses"
 

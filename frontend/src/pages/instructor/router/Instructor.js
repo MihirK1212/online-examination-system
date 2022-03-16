@@ -1,9 +1,9 @@
 import React from 'react';
 import {Routes,Route} from "react-router-dom";
 
-import InstructorHomepage from '../Homepage/InstructorHomepage';
-import CourseHomepage from '../CourseHomepage/CourseHomepage';
-import AddExam from "../AddExam/AddExam"
+import InstructorHomepage from '../homepage/InstructorHomepage';
+import CourseHomepage from '../courseHomepage/CourseHomepage';
+import AddExam from "../addExam/AddExam"
 
 function Instructor() {
 
