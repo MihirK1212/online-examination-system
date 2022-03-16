@@ -1,10 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Button } from '@material-ui/core';
+
 import Navbar from '../../../components/instructor/Homepage/Navbar/Navbar';
+
 import Courses from "./sample_courses"
-import { Link } from "react-router-dom";
 
 function InstructorHomepage() {
 
+  const navigate = useNavigate()
+
+  const goToCourse = (course) =>{
+    
+    console.log("going to course ",course)
+    navigate('/instructor/CourseHomepage', {
+      state : course,
+    })
+  }
   
   return (
     <>
@@ -17,13 +30,13 @@ function InstructorHomepage() {
       </div>
       
       
-      {Courses.map((Courses,index)=>{
+      {Courses.map((course,index)=>{
         return <>      
           <br/>
           <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
             <div class="card w-75 text-center border-secondary mb-3" >
               <div class="card-body">
-              <Link to={"/instructor/CourseHomepage/"+index} class="btn btn-primary">{Courses.courseName}</Link>
+              <Button onClick={()=>{goToCourse(course)}}>{course.courseName}</Button>
               </div>
             </div>
           </div>

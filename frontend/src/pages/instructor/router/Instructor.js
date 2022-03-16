@@ -12,8 +12,8 @@ function Instructor() {
     <div>
         <Routes>
             <Route path="/" element={<InstructorHomepage/>}/>
-            <Route path="/CourseHomepage/:index" element={<CourseHomepage/>}/>
-            <Route path="/addExam" element={<AddExam/>}/>
+            <Route path="/CourseHomepage" element={<CourseHomepage/>}/>
+            <Route path="/AddExam" element={<AddExam/>}/>
         </Routes>
     </div>
   </>)

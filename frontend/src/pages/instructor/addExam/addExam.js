@@ -16,6 +16,7 @@ function AddExam() {
 
     const {state} = useLocation();
     console.log("Received params ",state)
+    const course = state.course
     
     const [examData,setExamData] = useState({"examName":"","examMarks":0,"examWeightage":0,"instructions":"",
                                             "date": new Date(),"startTime":"","endTime":"",
@@ -63,6 +64,9 @@ function AddExam() {
     return (
         <>
             <Navbar/>  
+
+            <h5>Course Name : {course.courseName}</h5>
+
             <div className='container'>
                 <ArrowDropDownIcon style={{marginTop:20}} onClick={()=>{setVisble(!visible)}}></ArrowDropDownIcon>
 

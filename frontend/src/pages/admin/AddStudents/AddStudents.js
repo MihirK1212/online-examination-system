@@ -1,7 +1,8 @@
 import React from 'react';
-import "./style.css"
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
+
+import "./style.css"
 
 function AddStudent() {
 

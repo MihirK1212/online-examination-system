@@ -1,26 +1,23 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import Navbar from '../../../components/instructor/CourseHomepage/Navbar/Navbar';
 
-import { Link } from "react-router-dom";
-
-import Courses from './sample_courses';
-
 function CourseHomepage() {
-  const { index }= useParams();
+    const {state} = useLocation();
+    console.log("Received params ",state)
   
-    let exam=Courses[index].Exams;
-    let a=Courses[index].announcements;
+    let exams = state.Exams;
+    let a = state.announcements;
     return(
         <> 
-            <Navbar course = {Courses[index]}/>
+            <Navbar course = {state}/>
             <br/>
-            <h1 align="center">{Courses[index].courseName}</h1>
+            <h1 align="center">{state.courseName}</h1>
             <br/>
             <h2> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
             <br/>
-            {exam.map((exam,index) => {
+            {exams.map((exam,index) => {
                 return <>      
                 <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
                     <div class="card w-75 border-secondary mb-3">
@@ -32,7 +29,7 @@ function CourseHomepage() {
                                 Total weightage={exam.weightage} <br/>
                                 Instructions:- {exam.instructions}
                                 </p>
-                                <a href="#" class="btn btn-primary">View</a>
+                                {/* <a href="#" class="btn btn-primary">View</a> */}
                             </div>
                     </div>
                 </div>
