@@ -34,7 +34,7 @@ const googlelogin = (req,res) => {
         }
         if(type==='instructor')
         {
-            if(email==='cse200001044@iiti.ac.in'){
+            if(email==='cs208g6p16@gmail.com'){
                 const token = jwt.sign({emailId:email,type:'Instructor'},process.env.JWT_KEY,{expiresIn:'7d'});
                 res.json({token,instructor:{emailId : email,type:'Instructor'}})
             }   
@@ -44,7 +44,7 @@ const googlelogin = (req,res) => {
         }
         if(type==='student')
         {
-            if(email==='mihirkkarandikar@gmail.com'){
+            if(email==='cs208g6p16@gmail.com'){
                 const token = jwt.sign({emailId:email,type:'Student'},process.env.JWT_KEY,{expiresIn:'7d'});
                 res.json({token,student:{emailId : email,type:'Student'}})
             }   

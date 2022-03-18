@@ -1,7 +1,7 @@
 import React from 'react';
 import {useLocation} from 'react-router-dom';
 
-import Navbar from '../../../components/instructor/courseHomepage/Navbar/Navbar';
+import Navbar from '../../../components/instructor/CourseHomepage/Navbar/Navbar';
 
 function CourseHomepage() {
     const {state} = useLocation();

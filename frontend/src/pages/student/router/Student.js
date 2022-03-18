@@ -2,7 +2,7 @@ import React from 'react';
 import {Routes,Route} from "react-router-dom";
 
 import StudentHomepage from '../homepage/StudentHomepage';
-import GiveExam from '../giveExam/GiveExam';
+import GiveExam from '../giveExam/giveExam';
 
 function Student() {
   return (
