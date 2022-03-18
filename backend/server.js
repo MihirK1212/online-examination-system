@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 const DB_URI = process.env.MONGO_URI
@@ -27,14 +28,43 @@ app.get('/', (req, res) => {
   })
 })
 
+const jwtAuth = async (req,res,next)=>{
+  try{
+    // return next()
+    console.log("JWT Middleware",req.headers.authorization)
+    const decoded = jwt.verify(req.headers.authorization, process.env.JWT_KEY)
+    console.log("Decoded token ",decoded)
+
+    req.userName = decoded.name
+
+    const userEmailId = decoded.email
+    const user = await Admins.findOne({userEmailId:userEmailId})
+    if(user)
+    {
+      return next()
+    }
+    else
+    {
+      return res.status(401).json({message:"JWT Auth Failed"})
+    }
+  }
+  catch(error){
+    console.log(error)
+    return res.status(401).json({message:"JWT Auth Failed"})
+  }
+}
+
 const adminsRoute = require('./routes/Admin')
-app.use('/admin',adminsRoute)
+app.use('/admin',jwtAuth,adminsRoute)
 
 const instructorsRoute = require('./routes/Instructors')
-app.use('/instructor',instructorsRoute)
+app.use('/instructor',jwtAuth,instructorsRoute)
 
 const studentsRoute = require('./routes/Students')
-app.use('/student',studentsRoute)
+app.use('/student',jwtAuth,studentsRoute)
+
+const authRoute = require('./routes/auth')
+app.use('/auth',authRoute)
 
 app.post('/addAdmin',async (req,res)=>{
   try {
