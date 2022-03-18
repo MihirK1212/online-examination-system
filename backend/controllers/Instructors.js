@@ -55,4 +55,4 @@ const  assignGrade = async(req,res) => {
 }
 
 
-module.exports = {getCourses,getExams,addExam,saveExam,evaluateExam,assignGrade}
+module.exports = {getCourses,addExam,saveExam,evaluateExam,assignGrade}
