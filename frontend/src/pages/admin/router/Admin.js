@@ -1,9 +1,9 @@
 import React from 'react';
 import {Routes,Route} from "react-router-dom";
 
-import AdminHomepage from '../homepage/AdminHomepage';
-import AddCourseInstance from '../addCourseInstance/AddCourseInstance';
-import AddStudents from '../addStudents/AddStudents';
+import AdminHomepage from '../Homepage/AdminHomepage';
+import AddCourseInstance from '../AddCourseInstance/AddCourseInstance';
+import AddStudents from '../AddStudents/AddStudents';
 
 function Admin() {
   return (

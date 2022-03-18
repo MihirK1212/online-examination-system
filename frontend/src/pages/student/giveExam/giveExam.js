@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Grid } from '@material-ui/core'
 
-import ExamQuestion from '../../../components/student/giveExam/ExamQuestion/ExamQuestion'
+import ExamQuestion from '../../../components/student/GiveExam/ExamQuestion/ExamQuestion'
 
 import {setInitialResponses} from '../../../redux/actions/Responses'
 

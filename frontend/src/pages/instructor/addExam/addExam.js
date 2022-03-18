@@ -7,8 +7,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button} from "@material-ui/core";
 
-import ExamQuestion from '../../../components/instructor/addExam/ExamQuestion/ExamQuestion'
-import Navbar from "../../../components/instructor/addExam/Navbar/Navbar"
+import ExamQuestion from '../../../components/instructor/AddExam/ExamQuestion/ExamQuestion'
+import Navbar from "../../../components/instructor/AddExam/Navbar/Navbar"
 
 import "./style.css"
 

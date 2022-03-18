@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Paper } from "@mui/material";
 import {Button} from "@mui/material"
 
-import Navbar from "../../../components/admin/homepage/Navbar/Navbar"
+import Navbar from "../../../components/admin/Homepage/Navbar/Navbar"
 
 import StudentImage from "./student.png"
 import InstructorImage from "./instructor.png"
