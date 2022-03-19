@@ -2,9 +2,11 @@ import React from 'react';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-import { FormControl, InputLabel,Select,MenuItem , TextField , Card} from "@material-ui/core";
+import { FormControl, InputLabel,Select,MenuItem , TextField , Card , Button} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@mui/icons-material/Close';
+
+import Navbar from "../../../components/admin/General/Navbar/Navbar"
 
 import "./style.css"
 
@@ -15,10 +17,10 @@ function AddCourseInstance() {
     const [selectedInstructors,setSelectedInstructors] = useState([])
 
 
-    const [formData,setFormData] = useState({"courseCode":"","year":2000,"semester":"spring"})
+    const [formData,setFormData] = useState({"courseCode":"","year":2022,"semester":"spring"})
 
     const [filteredList,setFilteredList] = useState([])
-    const [searchQuery,setSearchQuery] = useState(null)
+    const [searchQuery,setSearchQuery] = useState("")
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
@@ -99,9 +101,36 @@ function AddCourseInstance() {
         setFilteredList(res)
     }
 
+    const handleSubmit = ()=>{
+      let postData = {}
+      postData.courseCode = formData.courseCode
+      postData.year = formData.year
+      postData.semester = formData.semester
+      postData.announcements = []
+
+      if(columns.length===1 && columns[0]['name']==='Email')
+      {
+          let res = []
+          data.forEach(student=>{
+              res.push(student.Email)
+          })
+          postData.studentsList = res
+      }
+      else
+      {
+        alert('Invalid file uploaded for students list. Please follow the instructions')
+        return
+      }
+
+      postData.instructorsList = selectedInstructors
+      postData.Exams = []
+
+      console.log("post data ",postData)
+    }
+
     return (
         <>
-        <h1>This is the add course instance page</h1>
+        <Navbar/>
             <div className="formContainer">
                 <form>
                     <h3>General Course Details</h3>
@@ -159,15 +188,22 @@ function AddCourseInstance() {
 
                     <br/><br/>
 
-                    <h3>Add Students</h3>
-
+                    <h3>Add Students </h3>
+                    <h5>(Upload one file with a column named 'Email' Format:.xlsx,.csv)</h5>
+                    <br></br>
                     <input
                     type="file"
                     accept=".csv,.xlsx,.xls"
                     onChange={handleFileUpload}
                     />
-
+                    <br></br>
+                    <br></br>
+                    <br></br>
                 </form>
+
+                <Button variant="contained" onClick={handleSubmit} style={{display:"block",marginLeft:"auto",marginRight:"auto",marginTop:20,marginBottom:20,maxWidth: '200px', maxHeight: '500px', minWidth: '200px', minHeight: '50px',backgroundColor: "#22a2ec",}}>Submit</Button>
+
+                
             </div>
         </>
     )

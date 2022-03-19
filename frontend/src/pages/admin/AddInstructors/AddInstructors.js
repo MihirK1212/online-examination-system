@@ -7,7 +7,7 @@ import "./style.css"
 import { Button } from '@material-ui/core';
 import Navbar from "../../../components/admin/General/Navbar/Navbar"
 
-function AddStudents() {
+function AddInstructors() {
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
@@ -16,22 +16,19 @@ function AddStudents() {
     console.log("Data",data)
 
     const handleSubmit = ()=>{
-      let students = []
-      data.forEach(student=>{
-        let studentData = {}
-        studentData.studentEmail = student.Email
-        studentData.generalDetails = {}
-        studentData.generalDetails.name = student.Name
-        studentData.generalDetails.dateOfBirth = student.D_O_B
-        studentData.generalDetails.phoneNumber = student.Phone_Number
-        studentData.generalDetails.degree = student.Degree
-        studentData.generalDetails.programName = student.Program_Name
-        studentData.generalDetails.startDateOfProgram = student.Start_Date
-        studentData.registeredCourses = []
-        students.push(studentData)
+      let instructors = []
+      data.forEach(instructor=>{
+        let instructorData = {}
+        instructorData.instructorEmail = instructor.Email
+        instructorData.generalDetails = {}
+        instructorData.generalDetails.name = instructor.Name
+        instructorData.generalDetails.dateOfBirth = instructor.D_O_B
+        instructorData.generalDetails.phoneNumber = instructor.Phone_Number
+        instructorData.registeredCourses = []
+        instructors.push(instructorData)
       })
 
-      console.log("students ",students)
+      console.log("instructors ",instructors)
     }
 
     // process CSV data
@@ -96,10 +93,10 @@ function AddStudents() {
     return (
         <>
           <Navbar/>
-            <div className="studentsForm">
+            <div className="instructorsForm">
                 <form action="/admin">
                     <br></br>
-                    <h3 style={{ paddingTop:'10px' }}>Add Students</h3>
+                    <h3 style={{ paddingTop:'10px' }}>Add Instructors</h3>
                     <br></br> <br></br> 
 
                     <input
@@ -116,24 +113,17 @@ function AddStudents() {
                         <th scope="col">Name</th>
                         <th scope="col">D.O.B</th>
                         <th scope="col">Phone Number</th>
-                        <th scope="col">Degree</th>
-                        <th scope="col">Program Name</th>
-                        <th scope="col">Start Date of Program</th>
                       </tr>
                     </thead>
                     <tbody>
                       {
                         data.map((d)=>(
-                          <tr key={d.Email}>
+                        <tr key={d.Email}>
                             <td> {d.Email}        </td>
                             <td> {d.Name}         </td>
                             <td> {d.D_O_B}        </td>
                             <td> {d.Phone_Number} </td>
-                            <td> {d.Degree}       </td>
-                            <td> {d.Program_Name} </td>
-                            <td> {d.Start_Date}   </td>
-                            
-                          </tr>
+                        </tr>
                         ))
                       }
                       
@@ -147,4 +137,4 @@ function AddStudents() {
     )
 }
 
-export default AddStudents;
+export default AddInstructors;

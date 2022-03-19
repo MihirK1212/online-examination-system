@@ -1,0 +1,24 @@
+#form {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  #info {
+    padding: 6% !important;
+  }
+  .field {
+    background-color: white;
+  }
+  
+  .handle2 {
+    /* position: relative; */
+    float: right;
+  }
+  
+  #apply {
+    /* background-color: #d7d1ac; */
+    background-color: white;
+    margin-top: 15px;
+  }
+  

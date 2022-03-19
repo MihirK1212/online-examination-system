@@ -1,9 +1,10 @@
-import React from 'react';
+import React  from 'react';
 
 import { Box, Paper } from "@mui/material";
 import {Button} from "@mui/material"
 
 import Navbar from "../../../components/admin/Homepage/Navbar/Navbar"
+import AddCourse from '../AddCourses/AddCourses';
 
 import StudentImage from "./student.png"
 import InstructorImage from "./instructor.png"
@@ -33,7 +34,7 @@ function AdminHomepage() {
               <Box gap={5} padding={3}  >
                   <img src={InstructorImage} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={120} width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                      <Button variant="contained" >Add Instructors</Button>
+                    <Button variant="contained" ><a href="/admin/addInstructors" style={{ color:'white', textDecoration: 'none' }}>Add Instructors</a></Button>
                   </Box>
               </Box>
           </Paper>
@@ -41,7 +42,7 @@ function AdminHomepage() {
               <Box gap={5} padding={3}  >
                   <img src={c} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={120} width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                      <Button variant="contained" >Add Courses</Button>
+                      <AddCourse/>
                   </Box>
               </Box>
           </Paper>
