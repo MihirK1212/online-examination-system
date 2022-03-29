@@ -15,7 +15,8 @@ const examsSchema = mongoose.Schema({
             questionNumber : Number,
             status : String,
             questionGivenAnswer : String,
-            questionSelectedOptions : [Number]
+            questionSelectedOptions : [Number],
+            marksObtained : Number
         }],
         marksObtained : Number
     }]

@@ -4,7 +4,7 @@ import { Box, Paper } from "@mui/material";
 import {Button} from "@mui/material"
 
 import Navbar from "../../../components/admin/Homepage/Navbar/Navbar"
-import AddCourse from '../AddCourses/AddCourses';
+import AddCourse from '../AddCourse/AddCourse';
 
 import StudentImage from "./student.png"
 import InstructorImage from "./instructor.png"

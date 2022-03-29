@@ -10,6 +10,7 @@ const saveResponse = (responses,responseData,questionNumber) => {
     res[index] = responseData
     return res
 }
+
 const reducer = (responses=[],action) => {
     switch(action.type){
         case "SET_INITIAL_RESPONSES":
