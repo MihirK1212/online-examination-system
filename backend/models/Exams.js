@@ -13,7 +13,7 @@ const examsSchema = mongoose.Schema({
         studentEmail : String,
         responses :[{
             questionNumber : Number,
-            status : String,
+            status : String, //Answered, Viewed, Not_Seen
             questionGivenAnswer : String,
             questionSelectedOptions : [Number]
         }],

@@ -5,7 +5,7 @@ const questionsSchema = mongoose.Schema({
     questionNumber : Number,
     questionContent : String,
     questionMarks : Number,
-    questionOptions : [String],
+    questionOptions : [String], 
     questionAnswerOptions : [Number],
     questionAnswer : String,
 })
