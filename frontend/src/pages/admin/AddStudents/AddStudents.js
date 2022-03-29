@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import {useDispatch} from 'react-redux'
 import * as XLSX from 'xlsx';
 
 import "./style.css"
@@ -7,7 +8,11 @@ import "./style.css"
 import { Button } from '@material-ui/core';
 import Navbar from "../../../components/admin/General/Navbar/Navbar"
 
+import { addStudents } from '../../../redux/actions/Admin';
+
 function AddStudents() {
+
+    const dispatch = useDispatch()
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
@@ -32,6 +37,7 @@ function AddStudents() {
       })
 
       console.log("students ",students)
+      dispatch(addStudents(students))
     }
 
     // process CSV data

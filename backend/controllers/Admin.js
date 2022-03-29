@@ -44,7 +44,7 @@ const  getCourses = async(req,res) => {
     }
 }
 
-const  addStudent = async(req,res) => {
+const  addStudents = async(req,res) => {
     try {
         const newStudent = await Students.create(req.body)
         return res.status(201).json({"newStudent":newStudent})
@@ -54,7 +54,7 @@ const  addStudent = async(req,res) => {
     }
 }
 
-const  addInstructor = async(req,res) => {
+const  addInstructors = async(req,res) => {
     try {
         const newInstructor = await Instructors.create(req.body)
         return res.status(201).json({"newInstructor":newInstructor})
@@ -85,4 +85,4 @@ const  addCourseInstance = async(req,res) => {
 }
 
 
-module.exports = {getAllStudents,getAllInstructors,getCourseList,getCourses,addStudent,addInstructor,addCourse,addCourseInstance}
+module.exports = {getAllStudents,getAllInstructors,getCourseList,getCourses,addStudents,addInstructors,addCourse,addCourseInstance}

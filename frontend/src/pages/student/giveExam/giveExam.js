@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {useDispatch , useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
 
 import { Grid } from '@material-ui/core'
 
@@ -14,40 +13,13 @@ import "./style.css"
 function GiveExam() {
 
     const dispatch = useDispatch()
-    // const navigate = useNavigate()
-
-    // const startTiming = exam.startTiming
-    // const endTiming = exam.endTiming
-
-    const [timeHours,setTimeHours] = useState(0)
-    const [timeMinutes,setTimeMinutes] = useState(0)
-    const [timeSeconds,setTimeSeconds] = useState(0)
-    
-    
-    // setInterval(()=>{
-    //     const currTiming = new Date()
-    //     const diff = endTiming-currTiming
-
-    //     if(diff<=0)
-    //     {
-    //         navigate('/')
-    //     }
-
-    //     const hours = Math.floor(diff/(1000*60*60))
-    //     const minutes = Math.floor((diff%(1000*60*60))/(1000*60))
-    //     const seconds = Math.floor((diff%(1000*60))/1000)
-
-    //     setTimeHours(hours)
-    //     setTimeMinutes(minutes)
-    //     setTimeSeconds(seconds)
-
-    // },1000)
-
+ 
     let [chosenQnIndex,setChosenQnIndex] = useState(0)
     const Questions  = exam.Questions
 
-    let responses = useSelector((state)=> state.Responses)
+    let responses = useSelector((state)=> state.responses)
 
+    
 
     if(responses.length !== Questions.length)
     {
@@ -61,14 +33,11 @@ function GiveExam() {
         'Attempted' : 'attempted-question'
     }
 
-    // console.log("responses ",responses)
+    console.log("Student responses ",responses)
 
     return (
 
         <>
-        <h4>{timeHours} hours </h4>
-        <h4>{timeMinutes} minutes </h4>
-        <h4>{timeSeconds} seconds </h4>
         {
             responses.length > 0 ?
                 <div className='examDisplay'>
