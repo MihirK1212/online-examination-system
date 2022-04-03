@@ -42,7 +42,6 @@ function InstructorHomepage() {
           </div>
 
         </>})}
-        
     </>
   )
 }

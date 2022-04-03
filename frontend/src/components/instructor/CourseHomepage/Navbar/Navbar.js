@@ -14,6 +14,11 @@ function Navbar(course) {
       state : course,
     })
   }
+  const goToPast = ()=>{
+    navigate('/instructor/pastExam', {
+      state : course,
+    })
+  }
 
   return(
     <> 
@@ -31,7 +36,7 @@ function Navbar(course) {
                   <Button onClick={goToAdd} style={{color:"white"}}>Add Exam</Button>
                 </li>
                 <li className="nav-item">
-                <Button onClick={goToAdd} style={{color:"white"}}>Past Exams</Button>
+                <Button onClick={goToPast} style={{color:"white"}}>Past Exams</Button>
                 </li>
                 <li className="nav-item">
                 <Button onClick={goToAdd} style={{color:"white"}}>Participants</Button>
