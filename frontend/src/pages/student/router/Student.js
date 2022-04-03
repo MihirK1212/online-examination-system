@@ -1,16 +1,26 @@
-import React from 'react';
+import React , {useEffect,useState} from 'react';
 import {Routes,Route} from "react-router-dom";
 
 import StudentHomepage from '../homepage/StudentHomepage';
 import GiveExam from '../giveExam/giveExam';
+import CourseHomepage from '../../instructor/CourseHomepage/CourseHomepage';
+
+import { getCoursesStudent } from '../../../api';
 
 function Student() {
+
+  const [courses,setCourses] = useState([])
+
+  useEffect(()=>{
+    getCoursesStudent().then(response=>setCourses(response.data.studentCourses))
+  },[])
   return (
   <>
     <div>
         <Routes>
-            <Route path="/" element={<StudentHomepage/>}/>
+            <Route path="/" element={<StudentHomepage courses={courses}/>}/>
             <Route path="/giveExam" element={<GiveExam/>}/>
+            <Route path="/courseHomepage" element={<CourseHomepage/>}/>
         </Routes>
     </div>
   </>)
