@@ -6,10 +6,15 @@ const Courses = require('../models/Courses')
 
 const  getCourses = async(req,res) => {
     try {
-        const getStudentEmail = req.body.studentEmail
-        const findStudent = await Students.findOne({studentEmail:getStudentEmail})
-        const studentCourses = findStudent.registeredCourses
-        return res.status(201).json({"studentCourses": studentCourses })
+        const studentEmail = req.emailID
+        
+        let courses = await Courses.find({})
+        
+        courses = courses.filter((course)=>{
+            return (course.studentsList).includes(studentEmail)
+        })
+
+        return res.status(201).json({"studentCourses": courses })
     } catch (error) {
         console.log(error)
         return res.status(404).json({"message":error})
@@ -18,22 +23,42 @@ const  getCourses = async(req,res) => {
 
 const  saveSubmissions = async(req,res) => {
     try {
-        const courseAddTo = req.body.courseCode
-        const examAddTo = req.body.examName
-        const submissionsToAdd = req.body.Submissions
-        const findCourse = await Courses.findOne({courseCode:courseCode})
-        let it = -1
-        for (let i = 0; i < findCourse.Exams.length; i++) 
-        {
-            if (findCourse.Exams[i].examName == examAddTo)
-            {
-                it = i;
-                break;
-            }
-        }
-        findCourse.Exams[i].Submissions.push(submissionsToAdd)
+        const studentEmail = req.emailID
 
-        return res.status(201).json({"submissionsToAdd": submissionsToAdd})
+        const courseDetails = req.body.courseDetails //{courseName:,year:,semester:}
+        const responses = req.body.responses
+        
+        // const courses = await Courses.find({})
+
+        // const courseIndex = courses.findIndex((course)=>
+        // {
+        //     course.courseName===courseDetails.courseName &&
+        //     course.year===courseDetails.year &&
+        //     course.semseter===courseDetails.semseter
+        // })
+
+        // const course = courses[courseIndex]
+
+        const course = await Courses.find({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
+        
+        const examInd = course.Exams.findIndex((exam)=>exam.examName===courseDetails.examName)
+
+        let Submissions = course.Exams[examInd].Submissions
+
+        const submissionsInd = Submissions.findIndex((submission)=>submission.studentEmail===studentEmail)
+
+        if(submissionsInd>=0)
+        {
+            Submissions[submissionsInd].responses = responses
+        }
+        else
+        {
+            Submissions.push({studentEmail:studentEmail,responses:responses})
+        }
+
+        await Courses.updateOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter},{'$set': { [`Exams.${examInd}.Submissions`] : Submissions}},{new:true})
+
+        return res.status(201).json({"addedResponses": responses})
     } catch (error) {
         console.log(error)
         return res.status(404).json({"message":error})

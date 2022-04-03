@@ -14,11 +14,12 @@ import { addCourseInstance } from '../../../redux/actions/Admin';
 import "./style.css"
 
 
-function AddCourseInstance() {
+function AddCourseInstance({instructors}) {
   
   const dispatch = useDispatch()
 
-  const instructors = ["asda123","xvkvx433","jsjd887","skdf9911","mihir123","mihi23","mk"];
+  instructors = instructors.map((instructor)=>{return instructor.instructorEmail})
+  console.log(instructors)
   const [selectedInstructors,setSelectedInstructors] = useState([])
 
 

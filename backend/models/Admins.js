@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const adminsSchema = mongoose.Schema({
-    adminEmail : String,
+    adminEmail : {
+        type : String,
+        unique : true
+    },
     instituteName : String
 })
 

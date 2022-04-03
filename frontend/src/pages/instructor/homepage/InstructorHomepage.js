@@ -5,9 +5,10 @@ import { Button } from '@material-ui/core';
 
 import Navbar from '../../../components/instructor/Homepage/Navbar/Navbar';
 
-import Courses from "./sample_courses"
 
-function InstructorHomepage() {
+function InstructorHomepage({courses}) {
+
+  console.log(courses)
 
   const navigate = useNavigate()
 
@@ -30,7 +31,7 @@ function InstructorHomepage() {
       </div>
       
       
-      {Courses.map((course,index)=>{
+      {courses.map((course,index)=>{
         return <>      
           <br/>
           <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>

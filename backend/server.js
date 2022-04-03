@@ -35,18 +35,49 @@ const jwtAuth = async (req,res,next)=>{
     const decoded = jwt.verify(req.headers.authorization, process.env.JWT_KEY)
     console.log("Decoded token ",decoded)
 
-    req.userName = decoded.name
+    const type = decoded.type
+    const emailID = decoded.emailID
 
-    const userEmailId = decoded.email
-    const user = await Admins.findOne({userEmailId:userEmailId})
-    if(user)
+    req.emailID = emailID
+
+    if(type==='Admin')
     {
-      return next()
+      const user = await Admins.findOne({adminEmail:emailID})
+      if(user)
+      {
+        return next()
+      }
+      else
+      {
+        return res.status(401).json({message:"JWT Auth Failed"})
+      }
     }
-    else
+    if(type==='Instructor')
     {
-      return res.status(401).json({message:"JWT Auth Failed"})
+      const user = await Instructors.findOne({instructorEmail:emailID})
+      if(user)
+      {
+        return next()
+      }
+      else
+      {
+        return res.status(401).json({message:"JWT Auth Failed"})
+      }
     }
+    if(type==='Student')
+    {
+      const user = await Students.findOne({studentEmail:emailID})
+      if(user)
+      {
+        return next()
+      }
+      else
+      {
+        return res.status(401).json({message:"JWT Auth Failed"})
+      }
+    }
+    
+    
   }
   catch(error){
     console.log(error)
@@ -63,7 +94,9 @@ app.use('/instructor',jwtAuth,instructorsRoute)
 const studentsRoute = require('./routes/Students')
 app.use('/student',jwtAuth,studentsRoute)
 
-const authRoute = require('./routes/auth')
+const authRoute = require('./routes/auth');
+const Instructors = require('./models/Instructors');
+const Students = require('./models/Students');
 app.use('/auth',authRoute)
 
 app.post('/addAdmin',async (req,res)=>{
