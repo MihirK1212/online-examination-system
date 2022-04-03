@@ -1,11 +1,14 @@
 import React from "react";
+import {useDispatch} from "react-redux"
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
+import { addCourse } from "../../../redux/actions/Admin";
 
 function AddCourse() {
+    const dispatch = useDispatch()
     
     const [formCourse, setFormCourse] = useState({"courseCode":"","courseName":"","description":""})
 
@@ -45,6 +48,11 @@ function AddCourse() {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleSubmit = ()=>{
+        console.log("New course ",formCourse)
+        dispatch(addCourse(formCourse))
+    }
 
     // const initial = sectionChild.visible
 
@@ -105,7 +113,7 @@ function AddCourse() {
                             onChange={(e) =>setFormCourse({ ...formCourse, description: e.target.value })}
                         />
 
-                        <Button type="button">Confirm</Button>
+                        <Button type="button" onClick={handleSubmit}>Confirm</Button>
                     </form>
                 </div>
             </Modal>

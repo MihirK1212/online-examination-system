@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
+import {useDispatch} from 'react-redux';
 import {useLocation} from 'react-router-dom';
 
 import { TextField} from "@material-ui/core";
@@ -10,9 +11,13 @@ import { Button} from "@material-ui/core";
 import ExamQuestion from '../../../components/instructor/AddExam/ExamQuestion/ExamQuestion'
 import Navbar from "../../../components/instructor/AddExam/Navbar/Navbar"
 
+import { addExam } from '../../../redux/actions/Instructor';
+
 import "./style.css"
 
 function AddExam() {
+
+    const dispatch = useDispatch()
 
     const {state} = useLocation();
     console.log("Received params ",state)
@@ -26,7 +31,8 @@ function AddExam() {
 
     const handleAddQuestion = () => {
         const questions = examData.Questions
-        const newQnNum = questions.length > 0 ? questions[questions.length-1].questionNumber + 1 : 1
+        const newQnNum = (Date.now()).toString()
+        // console.log(newQnNum)
 
         const newQuestion = {"questionType":"MCQ","questionNumber":newQnNum,"questionContent":"","questionMarks":"","questionOptions":[],"questionAnswerOptions":[],"questionAnswer":""}
         
@@ -41,8 +47,8 @@ function AddExam() {
     const handleSubmit = ()=>{
         let postData = {}
         postData.examName = examData.examName
-        postData.examMarks = examData.examMarks
-        postData.examWeightage = examData.examWeightage
+        postData.examMarks = parseFloat(examData.examMarks)
+        postData.examWeightage = parseFloat(examData.examWeightage)
         postData.instructions = examData.instructions
         postData.startTiming = new Date(examData.date+" "+examData.startTime+':00')
         postData.endTiming = new Date(examData.date+" "+examData.endTime+':00')
@@ -51,13 +57,15 @@ function AddExam() {
 
         Questions.map((question,index)=>{
             question.questionNumber = index+1
+            question.questionMarks = parseFloat(question.questionMarks)
             return question
         })
 
         postData.Questions = Questions
         postData.Submissions = []
 
-        console.log("Post data",postData)
+        console.log("Adding Exam",postData)
+        dispatch(addExam({exam:postData,courseDetails:course}))
     }
 
     
