@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 
 const instructorsSchema = mongoose.Schema({
-    instructorEmail : String,
+    instructorEmail : 
+    {
+        type: String,
+        unique : true
+    },
     generalDetails : {
         name : String,
         dateOfBirth : Date,

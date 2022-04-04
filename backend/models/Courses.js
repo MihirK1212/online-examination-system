@@ -5,6 +5,7 @@ const coursesSchema = mongoose.Schema({
     courseCode : String,
     year : Number,
     semester : String,
+    courseName : String,
     announcements : [String],
     studentsList : [String],
     instructorsList : [String],

@@ -3,7 +3,7 @@ import {useLocation} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 
-import Navbar from '../../../components/instructor/CourseHomepage/Navbar/Navbar';
+import Navbar from '../../../components/student/CourseHomepage/Navbar/Navbar'
 
 function CourseHomepage() {
     const {state} = useLocation();
@@ -14,15 +14,25 @@ function CourseHomepage() {
     const valid = (startTiming,endTiming)=>{
         startTiming = new Date(startTiming)
         endTiming = new Date(endTiming)
+        const now = new Date()
+
+        console.log(startTiming,endTiming,now)
+
+        return (endTiming-now)>0
+    }
+
+    const isCurrent = (startTiming,endTiming)=>{
+        startTiming = new Date(startTiming)
+        endTiming = new Date(endTiming)
         const now = new Date().getTime()
 
-        return (startTiming-now)>0 && (endTiming-now)>0
+        return (now-startTiming)>0 && (endTiming-now)>0
     }
 
     const goToExam = (exam) =>{
     
         console.log("going to exam ",exam)
-        navigate('/instructor/editExam', {
+        navigate('/student/giveExam', {
           state : {
               exam : exam,
               course : state
@@ -56,7 +66,15 @@ function CourseHomepage() {
                                     Total weightage={exam.examWeightage} <br/>
                                     Instructions:- {exam.instructions}
                                     </p>
-                                    <Button onClick={()=>{goToExam(exam)}}>Edit</Button>
+
+                                    {
+                                        isCurrent(exam.startTiming,exam.endTiming)?
+                                        <Button onClick={()=>{goToExam(exam)}}>Attempt</Button>:
+                                        <h2>This exam is closed for now</h2>
+                                    }
+
+
+                                    
                                 </div>
                         </div>
                     </div> : ""
@@ -73,17 +91,6 @@ function CourseHomepage() {
                     </li>
                 </ul>
                 </>})}
-
-            <form>
-            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
-            <div className="mb-3 w-75" >
-                <input type="text" placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1"/>
-                <br/>
-                <button type="submit" className="btn btn-primary">Add Announcements</button>
-            </div>
-            </div>
-            
-            </form>
     </>
   )
 }

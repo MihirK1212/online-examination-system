@@ -51,6 +51,7 @@ function AddCourse() {
 
     const handleSubmit = ()=>{
         console.log("New course ",formCourse)
+        setOpen(false)
         dispatch(addCourse(formCourse))
     }
 

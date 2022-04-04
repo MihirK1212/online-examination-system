@@ -11,28 +11,37 @@ import { Button} from "@material-ui/core";
 import ExamQuestion from '../../../components/instructor/AddExam/ExamQuestion/ExamQuestion'
 import Navbar from "../../../components/instructor/AddExam/Navbar/Navbar"
 
-import { addExam } from '../../../redux/actions/Instructor';
+import { saveExam } from '../../../redux/actions/Instructor';
 
 import "./style.css"
 
-function AddExam() {
+function EditExam() {
 
     const dispatch = useDispatch()
 
     const {state} = useLocation();
-    console.log("Received params add exam ",state)
-    const course = state
-    
-    const [examData,setExamData] = useState({"examName":"","examMarks":0,"examWeightage":0,"instructions":"",
-                                            "date": new Date(),"startTime":"","endTime":"",
-                                            "Questions":[]})
+    console.log("Received params ",state)
+    const exam = state.exam
+    const course = state.course
+
+    console.log((new Date(exam.startTiming)).toString())
+
+    const [examData,setExamData] = useState(exam)
+
+    const regex = /T(.*)\./
+
+
+    examData.date = (new Date(exam.startTiming)).toISOString().split('T')[0]
+    examData.startTime = regex.exec(((new Date(exam.startTiming)).toISOString()))[1]
+    examData.endTime = regex.exec(((new Date(exam.endTiming)).toISOString()))[1]
+
+    console.log("examData in edit ",examData)
 
     const [visible,setVisble] = useState(true)
 
     const handleAddQuestion = () => {
         const questions = examData.Questions
         const newQnNum = (Date.now()).toString()
-        // console.log(newQnNum)
 
         const newQuestion = {"questionType":"MCQ","questionNumber":newQnNum,"questionContent":"","questionMarks":"","questionOptions":[],"questionAnswerOptions":[],"questionAnswer":""}
         
@@ -44,8 +53,9 @@ function AddExam() {
         setExamData({...examData,Questions:examData.Questions.filter((question)=>question.questionNumber!==questionNumber)})
     }
 
-    const handleSubmit = ()=>{
+    const handleSave = ()=>{
         let postData = {}
+        postData._id = examData._id
         postData.examName = examData.examName
         postData.examMarks = parseFloat(examData.examMarks)
         postData.examWeightage = parseFloat(examData.examWeightage)
@@ -54,6 +64,8 @@ function AddExam() {
         postData.endTiming = new Date(examData.date+" "+examData.endTime+':00')
 
         let Questions = examData.Questions
+
+
 
         Questions.map((question,index)=>{
             question.questionNumber = index+1
@@ -64,8 +76,8 @@ function AddExam() {
         postData.Questions = Questions
         postData.Submissions = []
 
-        console.log("Adding Exam",postData)
-        dispatch(addExam({exam:postData,courseDetails:course}))
+        console.log("Saving Exam",postData)
+        dispatch(saveExam({exam:postData,courseDetails:course}))
     }
 
     
@@ -162,10 +174,10 @@ function AddExam() {
             </div>
         
 
-            <Button variant="contained" onClick={handleSubmit} style={{display:"block",marginLeft:"auto",marginRight:"auto",marginTop:20,marginBottom:20,maxWidth: '200px', maxHeight: '500px', minWidth: '200px', minHeight: '50px',backgroundColor: "#3da5e0",}}>Submit</Button>
+            <Button variant="contained" onClick={handleSave} style={{display:"block",marginLeft:"auto",marginRight:"auto",marginTop:20,marginBottom:20,maxWidth: '200px', maxHeight: '500px', minWidth: '200px', minHeight: '50px',backgroundColor: "#3da5e0",}}>Save</Button>
             
         </>
     )
 }
 
-export default AddExam
+export default EditExam

@@ -6,10 +6,17 @@ const Courses = require('../models/Courses')
 
 const  getCourses = async(req,res) => {
     try {
-        const getInstructorEmail = req.body.instructorEmail
-        const findInstructor = await Instructors.findOne({instructorEmail:getInstructorEmail})
-        const instructorCourses = findInstructor.registeredCourses
-        return res.status(201).json({"instructorCourses": instructorCourses })
+        const instructorEmail = req.emailID
+        console.log("get courses instructor ",instructorEmail)
+        let courses = await Courses.find({})
+        
+        courses = courses.filter((course)=>{
+            return (course.instructorsList).includes(instructorEmail)
+        })
+
+        console.log("final ",courses)
+
+        return res.status(201).json({"instructorCourses": courses })
     } catch (error) {
         console.log(error)
         return res.status(404).json({"message":error})
@@ -18,11 +25,17 @@ const  getCourses = async(req,res) => {
 
 const  addExam = async(req,res) => {
     try {
-        const examToAdd = req.body.exam
-        const addToCourse = req.body.courseCode
-        const findCourse = await Courses.findOne({courseCode:courseCode})
-        findCourse.Exams.push(exam)
-        return res.status(201).json({"examToAdd": examToAdd})
+        const exam = req.body.exam
+        const courseDetails = req.body.courseDetails
+
+        const course = await Courses.findOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
+        
+        let Exams = course.Exams
+        Exams.push(exam)
+
+        await Courses.updateOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter},{'$set': { [`Exams`] : Exams}},{new:true})
+        
+        return res.status(201).json({"examAdded": exam})
     } catch (error) {
         console.log(error)
         return res.status(404).json({"message":error})
@@ -31,13 +44,56 @@ const  addExam = async(req,res) => {
 
 const  saveExam = async(req,res) => {
     try {
-        let xyz = "hello"
-        return res.status(201).json({"data": xyz })
+        const saveExam = req.body.exam
+        const courseDetails = req.body.courseDetails
+
+        // console.log("save exam called ",courseDetails)
+
+
+        const course = await Courses.findOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
+        
+        let Exams = course.Exams
+        console.log(saveExam._id)
+        let ind  = Exams.findIndex((exam)=>((exam._id).toString())===((saveExam._id).toString()))
+        console.log("index found ",ind)
+
+        Exams[ind] = saveExam
+
+        await Courses.updateOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter},{'$set': { [`Exams`] : Exams}},{new:true})
+        
+        return res.status(201).json({"examSaved": saveExam})
     } catch (error) {
         console.log(error)
         return res.status(404).json({"message":error})
     }
 }
+
+const saveCheckedResponses = async (req,res)=>{
+    try {
+        const courseDetails = req.body.course
+        const examDetails = req.body.exam
+        const studentEmail = req.body.studentEmail
+        const responses = req.body.responses
+
+        const course = await Courses.findOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
+        
+        let Exams = course.Exams
+        let examInd  = Exams.findIndex((exam)=>((exam._id).toString())===((examDetails._id).toString()))
+        
+        let Submissions = Exams[examInd].Submissions
+        let submissionInd = Submissions.findIndex((submission)=>submission.studentEmail===studentEmail)
+
+        Submissions[submissionInd].responses = responses
+
+        await Courses.updateOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter},{'$set': { [`Exams.${examInd}.Submissions`] : Submissions}},{new:true})
+        
+        return res.status(201).json({"checkedSaved": responses})
+    } catch (error) {
+        console.log(error)
+        return res.status(404).json({"message":error})
+    }
+}
+
 
 const  evaluateExam = async(req,res) => {
     try {
@@ -192,4 +248,4 @@ const  assignGrade = async(req,res) => {
 }
 
 
-module.exports = {getCourses,addExam,saveExam,evaluateExam,assignGrade}
+module.exports = {getCourses,addExam,saveExam,saveCheckedResponses,evaluateExam,assignGrade}
