@@ -24,14 +24,16 @@ function EditExam() {
     const exam = state.exam
     const course = state.course
 
-    exam.startTiming = exam.startTiming.toString()
-    exam.endTiming = exam.startTiming.toString()
+    console.log((new Date(exam.startTiming)).toString())
 
     const [examData,setExamData] = useState(exam)
 
+    const regex = /T(.*)\./
+
+
     examData.date = (new Date(exam.startTiming)).toISOString().split('T')[0]
-    examData.startTime = (new Date(exam.startTiming)).toISOString().split('T')[1]
-    examData.endTime = (new Date(exam.endTiming)).toTimeString().split(' ')[1]
+    examData.startTime = regex.exec(((new Date(exam.startTiming)).toISOString()))[1]
+    examData.endTime = regex.exec(((new Date(exam.endTiming)).toISOString()))[1]
 
     console.log("examData in edit ",examData)
 

@@ -1,15 +1,27 @@
+import { Button } from '@material-ui/core';
 import React from 'react'
-import {useLocation} from 'react-router-dom';
-import { Link } from "react-router-dom";
+import {useLocation, useNavigate} from 'react-router-dom';
 import Navbar from "../../../components/instructor/PastExam/Navbar/Navbar"
 
 function PastExam() {
 
+    const navigate = useNavigate()
+
     const {state} = useLocation();
-    console.log("Received params ",state)
+    console.log("Received params past exam",state)
     
-    const course = state.course
+    const course = state
     let exams = course.Exams;
+
+    const goToCheck = (exam,submission)=>{
+        navigate('/instructor/checkExam', {
+            state : {
+                course : course,
+                exam : exam,
+                submission : submission
+            }
+        })
+    }
     
     return (
         <>
@@ -32,18 +44,18 @@ function PastExam() {
                                 Total weightage={exam.examWeightage} <br/>
                                 Instructions:- {exam.instructions}
                                 <p>
-                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={"#asd"} aria-expanded="false" aria-controls={"asd"}>
                                     View Students
                                 </button>
                                 </p>
-                                <div class="collapse" id="collapseExample">
-                                <div class="card card-body">
+                                <div class="collapse" id={"asd"}>
+                                <div class="card card-body" id={"asd"}>
                                     {submissions.map((submission) => {
                                         return <>      
                                         <ul>
                                             <li>
                                                 {submission.studentEmail} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Marks Obtained: {submission.marksObtained}
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Link >View Submission</Link>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={()=>{goToCheck(exam,submission)}}>View Submission</Button>
                                             </li>
                                         </ul>
                                         </>})}

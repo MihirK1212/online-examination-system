@@ -4,17 +4,27 @@ import { Button} from "@material-ui/core";
 
 import ExamQuestion from "../../../components/instructor/CheckExam/ExamQuestion/ExamQuestion"
 import Navbar from "../../../components/instructor/CheckExam/Navbar/Navbar"
+import {useDispatch} from 'react-redux'
+import { useLocation } from 'react-router-dom';
 
-import exam from './sample_exam'
 
-// import "./style.css"
+import { saveCheckedResponses } from '../../../redux/actions/Instructor';
 
-function AddExam() {
+
+function CheckExam() {
     
-    const studentEmail = 'cse200001044@iiti.ac.in'
+    const {state} = useLocation()
+    const dispatch = useDispatch()
 
-    
-    let responses = ((exam.Submissions.find(submission=>submission.studentEmail===studentEmail)).responses)
+    const course = state.course
+    const exam = state.exam
+    const submission = state.submission
+
+    console.log("received params check exam ",course,exam,submission)
+
+    const studentEmail = submission.studentEmail
+
+    let responses = submission.responses
 
     const setMarks = (qnIndex,val)=>{
         responses.map((response,index)=>{
@@ -27,12 +37,19 @@ function AddExam() {
     }
 
     const handleSubmit = ()=>{
-        console.log("Checked Responses ",responses)
+        const checkedData = {
+            course:course,
+            exam:exam,
+            studentEmail:studentEmail,
+            responses:responses
+        }
+        dispatch(saveCheckedResponses(checkedData))
     }
     
     return (
         <>
-            {/* <Navbar/>   */}
+            <Navbar/>  
+            <br></br>
 
             <div className='questionsHeading'>
                 <h2>Questions</h2>
@@ -52,4 +69,4 @@ function AddExam() {
     )
 }
 
-export default AddExam
+export default CheckExam

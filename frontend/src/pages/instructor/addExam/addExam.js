@@ -20,8 +20,8 @@ function AddExam() {
     const dispatch = useDispatch()
 
     const {state} = useLocation();
-    console.log("Received params ",state)
-    const course = state.course
+    console.log("Received params add exam ",state)
+    const course = state
     
     const [examData,setExamData] = useState({"examName":"","examMarks":0,"examWeightage":0,"instructions":"",
                                             "date": new Date(),"startTime":"","endTime":"",

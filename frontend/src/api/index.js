@@ -20,3 +20,4 @@ export const saveResponses = (responseData) => axios.patch(`${studentsURL}/exams
 export const getCoursesInstructor = () => axios.get(`${instructorsURL}/getCourses`,{ headers: { authorization: localStorage.getItem('instructor_token') } })
 export const addExam = (examData) => axios.post(`${instructorsURL}/exams`,examData,{ headers: { authorization: localStorage.getItem('instructor_token')}})
 export const saveExam = (examData) => axios.patch(`${instructorsURL}/exams`,examData,{ headers: { authorization: localStorage.getItem('instructor_token')}})
+export const saveCheckedResponses = (checkedData) => axios.patch(`${instructorsURL}/exams/check`,checkedData,{ headers: { authorization: localStorage.getItem('instructor_token')}})

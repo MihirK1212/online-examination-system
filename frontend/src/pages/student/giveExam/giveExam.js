@@ -1,16 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {useDispatch , useSelector } from 'react-redux'
-
+import {useLocation} from 'react-router-dom';
 import { Grid } from '@material-ui/core'
 
 import ExamQuestion from '../../../components/student/GiveExam/ExamQuestion/ExamQuestion'
 
 import {setInitialResponses} from '../../../redux/actions/Responses'
 
-import exam from './sample_exam'
+import { saveResponses } from '../../../redux/actions/Responses';
+
 import "./style.css"
 
 function GiveExam() {
+
+    const {state} = useLocation();
+
+    console.log("Received params in give exam ",state)
+    
+    const exam = state.exam
+    const course = state.course
 
     const dispatch = useDispatch()
  
@@ -25,7 +33,7 @@ function GiveExam() {
         dispatch(setInitialResponses(Questions))
     }
 
-    const endTiming = exam.endTiming
+    const endTiming = new Date(exam.endTiming)
 
     const [timerHours,setTimerHours] = useState('00')
     const [timerMinutes,setTimerMinutes] = useState('00')
@@ -45,7 +53,6 @@ function GiveExam() {
 
             if(distance<0){
                 window.location = "/student"
-                alert('End of Exam')
                 clearInterval(interval.current)
             }
 
@@ -70,6 +77,10 @@ function GiveExam() {
     useEffect(()=>{
         const timerID = setTimeout(()=>{
             console.log("saving responses ",responses)
+            let courseDetails = course
+            courseDetails.exam_id = exam._id
+
+            dispatch(saveResponses({courseDetails:courseDetails,responses:responses}))
         },1000);
 
         return  () => {

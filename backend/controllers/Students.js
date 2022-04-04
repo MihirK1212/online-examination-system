@@ -25,24 +25,17 @@ const  saveSubmissions = async(req,res) => {
     try {
         const studentEmail = req.emailID
 
-        const courseDetails = req.body.courseDetails //{courseName:,year:,semester:}
+        const courseDetails = req.body.courseDetails 
         const responses = req.body.responses
+
+        const course = await Courses.findOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
         
-        // const courses = await Courses.find({})
+        const examInd = course.Exams.findIndex((exam)=>((exam._id).toString())===((courseDetails.exam_id).toString()))
 
-        // const courseIndex = courses.findIndex((course)=>
-        // {
-        //     course.courseName===courseDetails.courseName &&
-        //     course.year===courseDetails.year &&
-        //     course.semseter===courseDetails.semseter
-        // })
 
-        // const course = courses[courseIndex]
+        console.log("save exam controller ",studentEmail,courseDetails,responses,course,examInd)
 
-        const course = await Courses.find({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
-        
-        const examInd = course.Exams.findIndex((exam)=>exam.examName===courseDetails.examName)
-
+       
         let Submissions = course.Exams[examInd].Submissions
 
         const submissionsInd = Submissions.findIndex((submission)=>submission.studentEmail===studentEmail)

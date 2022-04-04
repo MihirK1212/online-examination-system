@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@material-ui/core';
 
-function Navbar(course) {
+function Navbar({course}) {
 
   const navigate = useNavigate()
 

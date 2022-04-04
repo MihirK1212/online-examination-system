@@ -3,7 +3,7 @@ import {Routes,Route} from "react-router-dom";
 
 import StudentHomepage from '../homepage/StudentHomepage';
 import GiveExam from '../giveExam/giveExam';
-import CourseHomepage from '../../instructor/CourseHomepage/CourseHomepage';
+import CourseHomepage from '../../student/courseHomepage/CourseHomepage';
 
 import { getCoursesStudent } from '../../../api';
 
