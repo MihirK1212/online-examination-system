@@ -23,6 +23,7 @@ function MainHomepage() {
   const loginURL = "http://localhost:5000/auth/googlelogin"
   
     const responseSuccessGoogle = (response,type) => {
+        console.log("Google response",response)
         axios({
             method: "POST",
             url: loginURL,
@@ -42,7 +43,8 @@ function MainHomepage() {
                 }
                 if(type==='student')
                 {
-                    // console.log("Logging in as student ", response.data.student.emailId)
+                    localStorage.setItem('studentEmail',response.data.student.emailID)
+                    console.log("Logging in as student ", response.data.student.emailID)
                     dispatch(loginStudent())
                 }
                 navigate(`/${type}`)
@@ -53,7 +55,7 @@ function MainHomepage() {
     }
 
     const responseErrorGoogle = (response) => {
-        console.log(response)
+        console.log("Google response",response)
     }
 
     return (

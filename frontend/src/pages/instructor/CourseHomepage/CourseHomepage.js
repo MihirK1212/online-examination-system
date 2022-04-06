@@ -56,7 +56,7 @@ function CourseHomepage() {
                                     Total weightage={exam.examWeightage} <br/>
                                     Instructions:- {exam.instructions}
                                     </p>
-                                    <Button onClick={()=>{goToExam(exam)}}>Edit</Button>
+                                   <Button onClick={()=>{goToExam(exam)}}>Edit</Button>
                                 </div>
                         </div>
                     </div> : ""

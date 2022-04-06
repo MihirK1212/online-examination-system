@@ -9,13 +9,8 @@ function Navbar(course) {
 
   console.log("navbar course ",course)
 
-  const goToAdd = ()=>{
-    navigate('/instructor/addExam', {
-      state : course,
-    })
-  }
   const goToPast = ()=>{
-    navigate('/instructor/pastExam', {
+    navigate('/student/pastExam', {
       state : course,
     })
   }
@@ -34,7 +29,7 @@ function Navbar(course) {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <Button onClick={goToAdd} style={{color:"white"}}>Participants</Button>
+                  <Button onClick={()=>{console.log("a")}} style={{color:"white"}}>Participants</Button>
                 </li>
                 <li className="nav-item">
                   <Button onClick={goToPast} style={{color:"white"}}>Past Exams</Button>

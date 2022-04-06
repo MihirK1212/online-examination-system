@@ -94,70 +94,90 @@ const saveCheckedResponses = async (req,res)=>{
     }
 }
 
+function areEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+  
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+
 
 const  evaluateExam = async(req,res) => {
     try {
-        const evaCourse = req.body.courseCode
-        const evaExam = req.body.examName
-        const courseToEvaluate = await Courses.findOne({courseCode:evaCourse})
-        let examNumber;
-        for(let i=0; i<courseToEvaluate.Exams.length; i++)
+        const courseDetails = req.body.courseDetails
+        const examDetails = req.body.examDetails
+
+        const course = await Courses.findOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
+
+        let examInd = course.Exams.findIndex((exam)=>((exam._id).toString())===((examDetails._id).toString()))
+
+        const Questions = course.Exams[examInd].Questions
+
+        let questionAnswer = {}
+        let questionType = {}
+        let questionMarks = {}
+
+        for(let i=0;i<Questions.length;i++)
         {
-            if(courseToEvaluate.Exams[i].examName == evaExam)
-            {
-                examNumber = i;
-                break;
-            }
-        }
-        for(let i=0; i<courseToEvaluate.Exams[examNumber].Submissions.length; i++)
-        {
-            for(let j=0; j<courseToEvaluate.Exams[examNumber].Submissions[i].responses.length; j++)
-            {
-                if(courseToEvaluate.Exams[examNumber].Submissions[i].responses[j].status == "Answered")
-                {
-                    for(let k=0; k<courseToEvaluate.Exams[examNumber].Questions.length; k++)
-                    {
-                        if(courseToEvaluate.Exams[examNumber].Questions[k].questionNumber == courseToEvaluate.Exams[examNumber].Submissions[i].responses[j].questionNumber)
-                        {
-                            if(courseToEvaluate.Exams[examNumber].Questions[k].questionType != "Subjective")
-                            {
-                                if(courseToEvaluate.Exams[examNumber].Questions[k].questionType == "Numerical")
-                                {
-                                    if(courseToEvaluate.Exams[examNumber].Submissions[i].responses[j].questionGivenAnswer == courseToEvaluate.Exams[examNumber].Questions[k].questionAnswer)
-                                    {
-                                        courseToEvaluate.Exams[examNumber].Submissions[i].marksObtained = courseToEvaluate.Exams[examNumber].Submissions[i].marksObtained + courseToEvaluate.Exams[examNumber].Questions[k].questionMarks;
-                                    }
-                                }
-                                else
-                                {
-                                    if(courseToEvaluate.Exams[examNumber].Submissions[i].responses[j].questionSelectedOptions.length == courseToEvaluate.Exams[examNumber].Questions[k].questionAnswerOptions.length)
-                                    {
-                                        courseToEvaluate.Exams[examNumber].Submissions[i].responses[j].questionSelectedOptions.sort();
-                                        courseToEvaluate.Exams[examNumber].Questions[k].questionAnswerOptions.sort();
-                                        let checkAnswer = 1;
-                                        for(let i1=0; i1<courseToEvaluate.Exams[examNumber].Submissions[i].responses[j].questionSelectedOptions.length; i1++)
-                                        {
-                                            if(courseToEvaluate.Exams[examNumber].Submissions[i].responses[j].questionSelectedOptions[i1] != courseToEvaluate.Exams[examNumber].Questions[k].questionAnswerOptions[i1])
-                                            {
-                                                checkAnswer = 0;
-                                                break;
-                                            }
-                                        }
-                                        if(checkAnswer == 1)
-                                        {
-                                            courseToEvaluate.Exams[examNumber].Submissions[i].marksObtained = courseToEvaluate.Exams[examNumber].Submissions[i].marksObtained + courseToEvaluate.Exams[examNumber].Questions[k].questionMarks;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
+            const questionNumber = Questions[i].questionNumber
+
+            questionType[questionNumber] = Questions[i].questionType
+            questionMarks[questionNumber] = Questions[i].questionMarks
+
+            if(Questions[i].questionType==='MCQ'){questionAnswer[questionNumber]=Questions[i].questionAnswerOptions}
+            else{questionAnswer[questionNumber]=Questions[i].questionAnswer}
         }
 
-        return res.status(201).json({"courseToEvaluate": courseToEvaluate})
+        let Submissions = course.Exams[examInd].Submissions
+
+        let totalMarks = 0
+
+        for(let i=0; i<Submissions.length; i++)
+        {
+            for(let j=0; j<Submissions[i].responses.length; j++)
+            {
+                let questionResponse = Submissions[i].responses[j]
+
+                const questionNumber = questionResponse.questionNumber
+
+                if(questionType[questionNumber]==='MCQ')
+                {
+                    if(areEqual(questionResponse.questionSelectedOptions,questionAnswer[questionNumber]))
+                    {
+                        console.log("Correct answer ",questionResponse.questionSelectedOptions,questionAnswer[questionNumber])
+                        Submissions[i].responses[j].marksObtained = questionMarks[questionNumber]
+                    }
+                    else
+                    {
+                        console.log("Wrong answer ",questionResponse.questionSelectedOptions,questionAnswer[questionNumber])
+                        Submissions[i].responses[j].marksObtained = 0
+                    }
+                }
+                else if(questionType[questionNumber]==='Numerical')
+                {
+                    if((parseFloat(questionResponse.questionGivenAnswer))===(parseFloat(questionAnswer[questionNumber])))
+                    {
+                        Submissions[i].responses[j].marksObtained = questionMarks[questionNumber]
+                    }
+                    else
+                    {
+                        Submissions[i].responses[j].marksObtained = 0
+                    }
+                }
+
+                totalMarks+=Submissions[i].responses[j].marksObtained
+            }
+
+            Submissions[i].marksObtained = totalMarks
+        }
+
+        await Courses.updateOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter},{'$set': { [`Exams.${examInd}.Submissions`] : Submissions}},{new:true})
+
+        return res.status(201).json({"evaluatedSubmissions": Submissions})
     } catch (error) {
         console.log(error)
         return res.status(404).json({"message":error})
