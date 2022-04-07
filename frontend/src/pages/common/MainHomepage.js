@@ -20,9 +20,9 @@ function MainHomepage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const loginURL = "http://localhost:5000/auth/googlelogin"
-  
-    const responseSuccessGoogle = (response,type) => {
+  const loginURL = process.env.REACT_APP_DEV === 'true' ? "http://localhost:5000/auth/googlelogin" : "https://g6p16-online-examination.herokuapp.com/auth/googlelogin";
+    
+  const responseSuccessGoogle = (response,type) => {
         console.log("Google response",response)
         axios({
             method: "POST",
