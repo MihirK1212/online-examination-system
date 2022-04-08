@@ -21,7 +21,15 @@ function AddInstructors() {
     console.log("Data",data)
 
     const handleSubmit = ()=>{
-      let instructors = []
+    let instructors = []
+
+      if(!(columns.length===4 && columns[0]['name']==='Email' && columns[0]['name']==='Name' 
+                              && columns[0]['name']==='D_O_B' && columns[0]['name']==='Phone_Number'))
+      {
+        alert('Invalid file uploaded for instructors list. Please follow the instructions')
+        return
+      }
+
       data.forEach(instructor=>{
         let instructorData = {}
         instructorData.instructorEmail = instructor.Email

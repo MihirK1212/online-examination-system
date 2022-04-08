@@ -94,6 +94,8 @@ function AddCourseInstance({instructors}) {
 
   const selectInstructor = (id)=>{
       setSelectedInstructors([...selectedInstructors,id])
+      setSearchQuery("")
+      setFilteredList([])
   }
 
   const removeInstructor = (id)=>{
@@ -102,7 +104,8 @@ function AddCourseInstance({instructors}) {
 
   const filterList = (query)=>{
       if(query===""){query=null;}
-      const res = instructors.filter(id=>id.startsWith(query))
+      let res = instructors.filter(id=>id.startsWith(query))
+      res = res.filter(id=>!selectedInstructors.includes(id))
       setFilteredList(res)
   }
 
@@ -154,6 +157,7 @@ function AddCourseInstance({instructors}) {
                   variant={'standard'}
                   fullWidth
                   label={"Year"}
+                  type={"number"}
                   value={formData.year}
                   onChange={e=>setFormData({...formData,year:e.target.value})}
                   />

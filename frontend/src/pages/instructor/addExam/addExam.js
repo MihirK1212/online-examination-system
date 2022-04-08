@@ -53,6 +53,12 @@ function AddExam() {
         postData.startTiming = new Date(examData.date+" "+examData.startTime+':00')
         postData.endTiming = new Date(examData.date+" "+examData.endTime+':00')
 
+        if(postData.startTiming>postData.endTiming || postData.endTiming<=(new Date()))
+        {
+            alert("Choose valid timings for exam")
+            return 
+        }
+
         let Questions = examData.Questions
 
         Questions.map((question,index)=>{

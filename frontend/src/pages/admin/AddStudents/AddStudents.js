@@ -22,6 +22,16 @@ function AddStudents() {
 
     const handleSubmit = ()=>{
       let students = []
+
+      if(!(columns.length===4 && columns[0]['name']==='Email' && columns[0]['name']==='Name' 
+                              && columns[0]['name']==='D_O_B' && columns[0]['name']==='Phone_Number'
+                              && columns[0]['name']==='Degree' && columns[0]['name']==='Program_Name'
+                              && columns[0]['name']==='Start_Date'))
+      {
+        alert('Invalid file uploaded for students list. Please follow the instructions')
+        return
+      }
+
       data.forEach(student=>{
         let studentData = {}
         studentData.studentEmail = student.Email
