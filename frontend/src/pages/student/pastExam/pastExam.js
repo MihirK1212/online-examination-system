@@ -25,6 +25,7 @@ function PastExam() {
         const Submissions = exam.Submissions
 
         let ind = Submissions.findIndex((submission)=>submission.studentEmail === studentEmail)
+        if(ind===-1){return 0}
         return Submissions[ind].marksObtained 
     }
 
