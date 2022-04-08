@@ -138,6 +138,7 @@ const  evaluateExam = async(req,res) => {
 
         for(let i=0; i<Submissions.length; i++)
         {
+            totalMarks = 0
             for(let j=0; j<Submissions[i].responses.length; j++)
             {
                 let questionResponse = Submissions[i].responses[j]
@@ -170,6 +171,7 @@ const  evaluateExam = async(req,res) => {
                 }
 
                 totalMarks+=Submissions[i].responses[j].marksObtained
+                console.log("Student email ",Submissions[i].studentEmail," marksObtained ",Submissions[i].responses[j].marksObtained)
             }
 
             Submissions[i].marksObtained = totalMarks

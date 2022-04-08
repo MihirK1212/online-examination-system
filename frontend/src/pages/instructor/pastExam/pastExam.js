@@ -29,6 +29,7 @@ function PastExam() {
             examDetails : exam,
             courseDetails : course
         })
+        navigate('/instructor')
     }
 
     exams = exams.filter((exam)=>valid(exam.startTiming,exam.endTiming))
@@ -50,7 +51,7 @@ function PastExam() {
             <br/>
             <h2> &nbsp;&nbsp;List of Past Exams:- </h2>
             <br/>
-            {exams.map((exam) => {
+            {exams.map((exam,index) => {
                 let submissions=exam.Submissions;
                 return <>      
                 <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
@@ -65,12 +66,12 @@ function PastExam() {
                                     Instructions:- {exam.instructions}
                                     <p>
                                     <Button onClick={()=>{evaluate(exam)}}>Evaluate Exam</Button>
-                                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={"#asd"} aria-expanded="false" aria-controls={"asd"}>
+                                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={`#${"exam"+index}`} aria-expanded="false" aria-controls={`${"exam"+index}`}>
                                         View Students
                                     </button>
                                     </p>
-                                    <div class="collapse" id={"asd"}>
-                                        <div class="card card-body" id={"asd"}>
+                                    <div class="collapse" id={`${"exam"+index}`}>
+                                        <div class="card card-body" id={`${"exam"+index}`}>
                                             {submissions.map((submission) => {
                                                 return <>      
                                                 <ul>

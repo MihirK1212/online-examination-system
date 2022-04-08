@@ -7,11 +7,15 @@ import Navbar from "../../../components/instructor/CheckExam/Navbar/Navbar"
 import {useDispatch} from 'react-redux'
 import { useLocation } from 'react-router-dom';
 
+import {useNavigate} from 'react-router-dom';
+
 
 import { saveCheckedResponses } from '../../../redux/actions/Instructor';
 
 
 function CheckExam() {
+
+    const navigate = useNavigate()
     
     const {state} = useLocation()
     const dispatch = useDispatch()
@@ -44,6 +48,7 @@ function CheckExam() {
             responses:responses
         }
         dispatch(saveCheckedResponses(checkedData))
+        navigate('/instructor')
     }
     
     return (
