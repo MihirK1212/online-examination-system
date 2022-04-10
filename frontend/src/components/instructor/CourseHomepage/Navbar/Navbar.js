@@ -20,13 +20,19 @@ function Navbar({course}) {
     })
   }
 
+  const goToParticipants = ()=>{
+    navigate('/instructor/participants',{
+      state:course
+    })
+  }
+
   return(
     <> 
       <div>
        
         <nav  className="navbar navbar-expand-lg navbar-dark bg-primary">
           <div className="container-fluid">
-            <a classNameName="navbar-brand" href="/">Home</a>
+            <Button onClick={()=>{navigate('/instructor')}} style={{color:"white"}}>Home</Button>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -39,7 +45,7 @@ function Navbar({course}) {
                 <Button onClick={goToPast} style={{color:"white"}}>Past Exams</Button>
                 </li>
                 <li className="nav-item">
-                <Button onClick={goToAdd} style={{color:"white"}}>Participants</Button>
+                <Button onClick={goToParticipants} style={{color:"white"}}>Participants</Button>
                 </li>
              </ul>
             </div>

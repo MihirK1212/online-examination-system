@@ -3,13 +3,16 @@ import axios from 'axios';
 var dev = process.env.REACT_APP_DEV
 console.log(dev)
 const allURLs = {
+    baseURL : dev==='true' ? "http://localhost:5000" : "https://g6p16-online-examination.herokuapp.com",
     adminsURL: dev === 'true' ? "http://localhost:5000/admin" : "https://g6p16-online-examination.herokuapp.com/admin",
     instructorsURL : dev === 'true' ? "http://localhost:5000/instructor" : "https://g6p16-online-examination.herokuapp.com/instructor",
     studentsURL: dev === 'true' ? "http://localhost:5000/student" : "https://g6p16-online-examination.herokuapp.com/student",
 }
 
 
-const  {adminsURL , instructorsURL , studentsURL } = allURLs
+const  {baseURL ,adminsURL , instructorsURL , studentsURL } = allURLs
+
+export const getParticipants = (lists) => axios.post(`${baseURL}/getParticipants`,lists)
 
 export const getAllStudents    = ()  => axios.get(`${adminsURL}/getStudents`,    { headers: { authorization: localStorage.getItem('admin_token') } })
 export const getAllInstructors = ()  => axios.get(`${adminsURL}/getInstructors`, { headers: { authorization: localStorage.getItem('admin_token') } })
