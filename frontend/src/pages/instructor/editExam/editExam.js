@@ -28,19 +28,11 @@ function EditExam() {
 
     const [examData,setExamData] = useState(exam)
 
-    const regex = /T(.*)\./
-
     console.log("start timing in edit exam ",exam.startTiming)
     console.log(("start timing in edit exam (date var)",(new Date(exam.startTiming)).toTimeString()).split(' ')[0])
 
     console.log("end timing in edit exam ",exam.endTiming)
     console.log("end timing in edit exam (date var)",(new Date(exam.endTiming)))
-
-
-    // examData.date = (new Date(exam.startTiming)).toISOString().split('T')[0]
-    // examData.startTime = regex.exec(((new Date(exam.startTiming)).toISOString()))[1]
-    // examData.endTime = regex.exec(((new Date(exam.endTiming)).toISOString()))[1]
-
     examData.date = (new Date(exam.startTiming)).toISOString().split('T')[0]
     examData.startTime = (new Date(exam.startTiming)).toTimeString().split(' ')[0]
     examData.endTime = (new Date(exam.endTiming)).toTimeString().split(' ')[0]

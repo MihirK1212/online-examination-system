@@ -2,7 +2,7 @@ import React  from 'react';
 
 import { Box, Paper } from "@mui/material";
 import {Button} from "@mui/material"
-
+import { useNavigate} from 'react-router-dom';
 import Navbar from "../../../components/admin/Homepage/Navbar/Navbar"
 import AddCourse from '../AddCourse/AddCourse';
 
@@ -13,6 +13,7 @@ import c from "./cp.jpg"
 import "./style.css"
 
 function AdminHomepage() {
+    const navigate = useNavigate()
   return (
     <>
     <Navbar/>
@@ -26,7 +27,8 @@ function AdminHomepage() {
               <Box gap={5} padding={3}  >
                   <img src={StudentImage} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={120} width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                      <Button variant="contained" ><a href="/admin/addStudents" style={{ color:'white', textDecoration: 'none' }}>Add Students</a></Button>
+                    <Button variant="contained" onClick={()=>{navigate("/admin/addStudents")}}>Add Students</Button>
+                    {/* <Button variant="contained" ><a href="/admin/addStudents" style={{ color:'white', textDecoration: 'none' }}>Add Students</a></Button> */}
                   </Box>
               </Box>
           </Paper>
@@ -34,7 +36,8 @@ function AdminHomepage() {
               <Box gap={5} padding={3}  >
                   <img src={InstructorImage} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={120} width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                    <Button variant="contained" ><a href="/admin/addInstructors" style={{ color:'white', textDecoration: 'none' }}>Add Instructors</a></Button>
+                      <Button variant="contained" onClick={()=>{navigate("/admin/addInstructors")}} >Add Instructors</Button>
+                    {/* <Button variant="contained" ><a href="/admin/addInstructors" style={{ color:'white', textDecoration: 'none' }}>Add Instructors</a></Button> */}
                   </Box>
               </Box>
           </Paper>
@@ -49,12 +52,13 @@ function AdminHomepage() {
         </div>
     <br/>
     <br/>
-    <div class="card text-center">
-        <div class="card-header"></div>
-        <div class="card-body">
-            <a href="/admin/addCourseInstance" class="btn btn-primary">Make Course Instance</a>
+    <div className="card text-center">
+        <div className="card-header"></div>
+        <div className="card-body">
+        <Button variant="contained" onClick={()=>{navigate('/admin/addCourseInstance')}} >Make Course Instance</Button>
+        {/* <a href="/admin/addCourseInstance" className="btn btn-primary">Make Course Instance</a> */}
         </div>
-        <div class="card-footer text-muted"></div>
+        <div className="card-footer text-muted"></div>
     </div>
     </>
   )
