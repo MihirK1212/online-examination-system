@@ -5,6 +5,7 @@ import AdminHomepage from '../homepage/AdminHomepage';
 import AddCourseInstance from '../addCourseInstance/addCourseInstance';
 import AddStudents from '../AddStudents/AddStudents';
 import AddInstructors from '../AddInstructors/AddInstructors';
+import ViewStudents from '../ViewStudents/ViewStudents';
 
 import { getAllStudents , getAllInstructors , getCourseList , getCoursesAdmin } from '../../../api';
 
@@ -34,6 +35,7 @@ function Admin() {
             <Route path="/addStudents" element={<AddStudents/>}/>
             <Route path="/addInstructors" element={<AddInstructors/>}/>
             <Route path="/addCourseInstance" element={<AddCourseInstance instructors={instructors}/>}/>
+            <Route path="/viewStudents" element={<ViewStudents students={students}/>}/>
         </Routes>
     </div>
   </>
