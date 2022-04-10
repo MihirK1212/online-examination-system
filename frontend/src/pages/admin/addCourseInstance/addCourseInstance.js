@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import {useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+
 import * as XLSX from 'xlsx';
 
 import { FormControl, InputLabel,Select,MenuItem , TextField , Card , Button} from "@material-ui/core";
@@ -17,6 +19,7 @@ import "./style.css"
 function AddCourseInstance({instructors}) {
   
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   instructors = instructors.map((instructor)=>{return instructor.instructorEmail})
   console.log(instructors)
@@ -134,7 +137,9 @@ function AddCourseInstance({instructors}) {
     postData.Exams = []
 
     console.log("post data ",postData)
+    alert("Course instance added")
     dispatch(addCourseInstance(postData))
+    navigate('/admin')
   }
 
   return (

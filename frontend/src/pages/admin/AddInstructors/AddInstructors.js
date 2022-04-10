@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import {useDispatch} from 'react-redux'
 import * as XLSX from 'xlsx';
-
+import { useNavigate } from 'react-router-dom';
 import "./style.css"
 
 import { Button } from '@material-ui/core';
@@ -13,6 +13,7 @@ import { addInstructors } from '../../../redux/actions/Admin';
 function AddInstructors() {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
@@ -23,8 +24,8 @@ function AddInstructors() {
     const handleSubmit = ()=>{
     let instructors = []
 
-      if(!(columns.length===4 && columns[0]['name']==='Email' && columns[0]['name']==='Name' 
-                              && columns[0]['name']==='D_O_B' && columns[0]['name']==='Phone_Number'))
+      if(!(columns.length===4 && columns[0]['name']==='Email' && columns[1]['name']==='Name' 
+                              && columns[2]['name']==='D_O_B' && columns[3]['name']==='Phone_Number'))
       {
         alert('Invalid file uploaded for instructors list. Please follow the instructions')
         return
@@ -42,7 +43,9 @@ function AddInstructors() {
       })
 
       console.log("instructors ",instructors)
+      alert("Instructors Added")
       dispatch(addInstructors(instructors))
+      navigate('/admin')
     }
 
     // process CSV data
