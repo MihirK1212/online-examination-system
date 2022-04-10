@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 
 import Navbar from '../../../components/instructor/CourseHomepage/Navbar/Navbar';
+import InstructorImage from "../../common/instructor.png";
+import "./style.css"
 
 function CourseHomepage() {
     const {state} = useLocation();
@@ -39,27 +41,59 @@ function CourseHomepage() {
             <h1 align="center">{state.courseName}</h1>
             <br/>
             <h2> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
-            <br/>
             {exams.map((exam,index) => {
                 return <>    
                 {
                     valid(exam.startTiming,exam.endTiming)?
+                    <div class="card-category-5" style={{"marginTop":-2}}>
+                        <ul class="all-pr-cards">
+                            <li>
+                                <div class="per-card-3">
+                                    <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
+                                       <img src={InstructorImage}/>
+                                        <span class="per-name">{exam.examName}</span>
+                                    </div>
 
-                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                        <div className="card w-75 border-secondary mb-3">
-                            <h5 className="card-header" align="center">{exam.examName}</h5>
-                                <div className="card-body">
-                                    <h5 className="card-title">Start : {(new Date(exam.startTiming)).toString()} </h5>
-                                    <h5 className="card-title">End : {(new Date(exam.endTiming)).toString()} </h5>
-                                    <p className="card-text">Total marks={exam.examMarks} 
-                                    <br/> 
-                                    Total weightage={exam.examWeightage} <br/>
-                                    Instructions:- {exam.instructions}
-                                    </p>
-                                   <Button onClick={()=>{goToExam(exam)}}>Edit</Button>
+                                    <div class="card-content" >
+
+                                        <div style={{display:'flex','justifyContent':'center','flexDirection':'column'}}>
+                                            <div style={{display:'flex','justifyContent':'space-between'}}>
+                                                <span><b>Start Time</b> :  {(new Date(exam.startTiming)).toString().substring(0,24)}</span>
+                                                <span><b>End Time</b> :  {(new Date(exam.endTiming)).toString().substring(0,24)}</span>
+                                            </div>
+                                            <br></br>
+                                            <p>
+                                                The exam will be of {exam.examMarks} marks with 
+                                                a total weightage of {exam.examWeightage}. 
+                                                The instructions for the exam are as follows :-
+                                                
+                                                <ul className='ssfd' style={{"textAlign":'left'}}>
+                                                {
+                                                    exam.instructions.split('\n').map((i,index)=>
+                                                        <>
+                                                            <li>{index+1}) {i}</li>
+                                                            <br></br>
+                                                        </>)
+                                                }
+                                                </ul>
+                                                
+                                            </p>
+                                        </div>
+                                        
+                                        
+                                        <div class="social-icons" style={{"display":'flex',"justifyContent":'center',"backgroundColor":'#4253ed'}}>
+                                            <Button style={{"fontSize":25,"fontFamily":'sans-serif'}} onClick={()=>{goToExam(exam)}}>Edit</Button>
+                                                                       
+                                        </div>
+                                    </div>                  
                                 </div>
-                        </div>
-                    </div> : ""
+                            </li>
+                        </ul>
+                    </div>
+
+
+                  
+                    : ""
                 }   
                 <br/>
                 </>})}
@@ -72,7 +106,8 @@ function CourseHomepage() {
                         {announcement}
                     </li>
                 </ul>
-                </>})}
+                </>
+            })}
 
             <form>
             <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>

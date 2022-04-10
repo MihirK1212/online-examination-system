@@ -2,8 +2,9 @@ import React from 'react';
 import {useLocation} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-
+import "../../instructor/CourseHomepage/style.css"
 import Navbar from '../../../components/student/CourseHomepage/Navbar/Navbar'
+import InstructorImage from "../../common/student.png";
 
 function CourseHomepage() {
     const {state} = useLocation();
@@ -55,29 +56,55 @@ function CourseHomepage() {
                 {
                     valid(exam.startTiming,exam.endTiming)?
 
-                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                        <div className="card w-75 border-secondary mb-3">
-                            <h5 className="card-header" align="center">{exam.examName}</h5>
-                                <div className="card-body">
-                                    <h5 className="card-title">Start : {(new Date(exam.startTiming)).toString()} </h5>
-                                    <h5 className="card-title">End : {(new Date(exam.endTiming)).toString()} </h5>
-                                    <p className="card-text">Total marks={exam.examMarks} 
-                                    <br/> 
-                                    Total weightage={exam.examWeightage} <br/>
-                                    Instructions:- {exam.instructions}
-                                    </p>
+                    <div class="card-category-5" style={{"marginTop":-2}}>
+                        <ul class="all-pr-cards">
+                            <li>
+                                <div class="per-card-3">
+                                    <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
+                                       <img src={InstructorImage}/>
+                                        <span class="per-name">{exam.examName}</span>
+                                    </div>
 
-                                    {
-                                        isCurrent(exam.startTiming,exam.endTiming)?
-                                        <Button onClick={()=>{goToExam(exam)}}>Attempt</Button>:
-                                        <h2>This exam is closed for now</h2>
-                                    }
+                                    <div class="card-content" >
 
-
-                                    
+                                        <div style={{display:'flex','justifyContent':'center','flexDirection':'column'}}>
+                                            <div style={{display:'flex','justifyContent':'space-between'}}>
+                                                <span><b>Start Time</b> :  {(new Date(exam.startTiming)).toString().substring(0,24)}</span>
+                                                <span><b>End Time</b> :  {(new Date(exam.endTiming)).toString().substring(0,24)}</span>
+                                            </div>
+                                            <br></br>
+                                            <p>
+                                                The exam will be of {exam.examMarks} marks with 
+                                                a total weightage of {exam.examWeightage}. 
+                                                The instructions for the exam are as follows :-
+                                                
+                                                <ul className='ssfd' style={{"textAlign":'left'}}>
+                                                {
+                                                    exam.instructions.split('\n').map((i,index)=>
+                                                        <>
+                                                            <li>{index+1}) {i}</li>
+                                                            <br></br>
+                                                        </>)
+                                                }
+                                                </ul>
+                                                
+                                            </p>
+                                        </div>
+                                        
+                                        
+                                        <div class="social-icons" style={{"display":'flex',"alignItems":'center', "justifyContent":'center' ,"backgroundColor":'#4253ed'}}>
+                                        {
+                                            isCurrent(exam.startTiming,exam.endTiming)?
+                                            <Button onClick={()=>{goToExam(exam)}}>Attempt</Button>:
+                                            <h2>This exam is closed for now</h2>
+                                        }                          
+                                        </div>
+                                    </div>                  
                                 </div>
-                        </div>
-                    </div> : ""
+                            </li>
+                        </ul>
+                    </div>
+                    : ""
                 }   
                 <br/>
                 </>})}
