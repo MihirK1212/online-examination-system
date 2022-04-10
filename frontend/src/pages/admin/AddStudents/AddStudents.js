@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import {useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 
 import "./style.css"
@@ -13,6 +14,7 @@ import { addStudents } from '../../../redux/actions/Admin';
 function AddStudents() {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
@@ -23,12 +25,13 @@ function AddStudents() {
     const handleSubmit = ()=>{
       let students = []
 
-      if(!(columns.length===4 && columns[0]['name']==='Email' && columns[0]['name']==='Name' 
-                              && columns[0]['name']==='D_O_B' && columns[0]['name']==='Phone_Number'
-                              && columns[0]['name']==='Degree' && columns[0]['name']==='Program_Name'
-                              && columns[0]['name']==='Start_Date'))
+      if(!(columns.length===7 && columns[0]['name']==='Email' && columns[1]['name']==='Name' 
+                              && columns[2]['name']==='D_O_B' && columns[3]['name']==='Phone_Number'
+                              && columns[4]['name']==='Degree' && columns[5]['name']==='Program_Name'
+                              && columns[6]['name']==='Start_Date'))
       {
-        alert('Invalid file uploaded for students list. Please follow the instructions')
+        console.log(columns.length)
+        alert('Invalid file uploaded for Students list. Please follow the instructions')
         return
       }
 
@@ -47,7 +50,9 @@ function AddStudents() {
       })
 
       console.log("students ",students)
+      alert("Students Added") 
       dispatch(addStudents(students))
+      navigate('/admin')
     }
 
     // process CSV data

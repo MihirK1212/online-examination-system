@@ -40,6 +40,10 @@ function CourseHomepage() {
             }
         })
       }
+
+    function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+    }
     
     let exams = state.Exams;
     let announcements = state.announcements;
@@ -49,7 +53,7 @@ function CourseHomepage() {
             <br/>
             <h1 align="center">{state.courseName}</h1>
             <br/>
-            <h2> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
+            <h2 className='homepageHeading'> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
             <br/>
             {exams.map((exam,index) => {
                 return <>    
@@ -61,7 +65,7 @@ function CourseHomepage() {
                             <li>
                                 <div class="per-card-3">
                                     <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
-                                       <img src={InstructorImage}/>
+                                       <img src={InstructorImage} alt=""/>
                                         <span class="per-name">{exam.examName}</span>
                                     </div>
 
@@ -108,16 +112,22 @@ function CourseHomepage() {
                 }   
                 <br/>
                 </>})}
-            <h2> &nbsp;&nbsp;Announcements:- </h2>
 
-            {announcements.map((announcement,index) => {
-                return <>      
-                <ul>
-                    <li>
-                        {announcement}
-                    </li>
-                </ul>
-                </>})}
+            <div style={{marginLeft:50}}>
+                <h2 className='homepageHeading'> &nbsp;&nbsp;Announcements:- </h2>
+
+                <div style={{marginLeft:20}}>
+
+                    {announcements.map((announcement,index) => {
+                        return <>      
+                        <ul>
+                            <li>
+                                {capitalizeFirstLetter(announcement)}
+                            </li>
+                        </ul>
+                        </>})}
+                </div>
+            </div>
     </>
   )
 }

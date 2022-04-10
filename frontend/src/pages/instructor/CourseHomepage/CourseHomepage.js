@@ -39,6 +39,10 @@ function CourseHomepage() {
         })
       }
     
+      function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
     const handleAdd = (announcement) => {
         addAnnouncement({course:state,announcement:announcement}).then(response=>console.log("added successfully"))
         setAnnouncements([...announcements,announcement])
@@ -53,7 +57,7 @@ function CourseHomepage() {
             <br/>
             <h1 align="center">{state.courseName}</h1>
             <br/>
-            <h2> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
+            <h2 className='homepageHeading'> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
             {exams.map((exam,index) => {
                 return <>    
                 {
@@ -63,7 +67,7 @@ function CourseHomepage() {
                             <li>
                                 <div class="per-card-3">
                                     <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
-                                       <img src={InstructorImage}/>
+                                       <img src={InstructorImage} alt=""/>
                                         <span class="per-name">{exam.examName}</span>
                                     </div>
 
@@ -110,25 +114,35 @@ function CourseHomepage() {
                 }   
                 <br/>
                 </>})}
-            <h2> &nbsp;&nbsp;Announcements:- </h2>
 
-            {announcements.map((announcement,index) => {
-                return <>      
-                <ul>
-                    <li>
-                        {announcement}
-                    </li>
-                </ul>
-                </>
-            })}
+            <div style={{marginLeft:50}}>
+                <h2 className='homepageHeading'> &nbsp;&nbsp;Announcements:- </h2>
 
-                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
-                    <div className="mb-3 w-75" >
-                        <input type="text" value={formAnnouncement} placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1" onChange={(e)=>{setFormAnnouncement(e.target.value)}}/>
-                        <br/>
-                        <button onClick={()=>{handleAdd(formAnnouncement)}} className="btn btn-primary">Add Announcement</button>
-                    </div>
+                <div style={{marginLeft:20}}>
+                    {announcements.map((announcement,index) => {
+                        return <>      
+                        <ul>
+                            <li>
+                                {capitalizeFirstLetter(announcement)}
+                            </li>
+                        </ul>
+                        </>
+                    })}
                 </div>
+
+                
+
+                <br></br>
+
+                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
+                        <div className="mb-3 w-75" >
+                            <input type="text" value={formAnnouncement} placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1" onChange={(e)=>{setFormAnnouncement(e.target.value)}}/>
+                            <br/>
+                            <button onClick={()=>{handleAdd(formAnnouncement)}} className="btn btn-primary">Add Announcement</button>
+                        </div>
+                    </div>
+            </div>
+            
            
     </>
   )
