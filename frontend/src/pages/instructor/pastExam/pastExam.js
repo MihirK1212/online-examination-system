@@ -29,6 +29,7 @@ function PastExam() {
             examDetails : exam,
             courseDetails : course
         })
+        alert("Exam Is Being Evaluated...")
         navigate('/instructor')
     }
 
