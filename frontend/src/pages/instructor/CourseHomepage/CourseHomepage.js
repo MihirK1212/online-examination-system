@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-ui/core';
@@ -6,6 +6,8 @@ import { Button } from '@material-ui/core';
 import Navbar from '../../../components/instructor/CourseHomepage/Navbar/Navbar';
 import InstructorImage from "../../common/instructor.png";
 import "./style.css"
+
+import { addAnnouncement } from '../../../api';
 
 function CourseHomepage() {
     const {state} = useLocation();
@@ -21,6 +23,11 @@ function CourseHomepage() {
         return (startTiming-now)>0 && (endTiming-now)>0
     }
 
+    const [formAnnouncement,setFormAnnouncement] = useState("")
+    const [announcements,setAnnouncements] = useState(state.announcements) 
+
+    console.log("announcements are ",announcements)
+
     const goToExam = (exam) =>{
     
         console.log("going to exam ",exam)
@@ -32,8 +39,14 @@ function CourseHomepage() {
         })
       }
     
+    const handleAdd = (announcement) => {
+        addAnnouncement({course:state,announcement:announcement}).then(response=>console.log("added successfully"))
+        setAnnouncements([...announcements,announcement])
+        setFormAnnouncement("")
+    }
+    
     let exams = state.Exams;
-    let announcements = state.announcements;
+
     return(
         <> 
             <Navbar course = {state}/>
@@ -109,16 +122,14 @@ function CourseHomepage() {
                 </>
             })}
 
-            <form>
-            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
-            <div className="mb-3 w-75" >
-                <input type="text" placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1"/>
-                <br/>
-                <button type="submit" className="btn btn-primary">Add Announcements</button>
-            </div>
-            </div>
-            
-            </form>
+                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
+                    <div className="mb-3 w-75" >
+                        <input type="text" value={formAnnouncement} placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1" onChange={(e)=>{setFormAnnouncement(e.target.value)}}/>
+                        <br/>
+                        <button onClick={()=>{handleAdd(formAnnouncement)}} className="btn btn-primary">Add Announcement</button>
+                    </div>
+                </div>
+           
     </>
   )
 }
