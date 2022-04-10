@@ -15,6 +15,12 @@ function Navbar(course) {
     })
   }
 
+  const goToParticipants = ()=>{
+    navigate('/student/participants',{
+      state:course
+    })
+  }
+
   return(
     <> 
       <div>
@@ -29,7 +35,7 @@ function Navbar(course) {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <Button onClick={()=>{console.log("a")}} style={{color:"white"}}>Participants</Button>
+                  <Button onClick={goToParticipants} style={{color:"white"}}>Participants</Button>
                 </li>
                 <li className="nav-item">
                   <Button onClick={goToPast} style={{color:"white"}}>Past Exams</Button>
