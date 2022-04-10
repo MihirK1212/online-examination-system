@@ -13,7 +13,7 @@ const  getCourses = async(req,res) => {
         courses = courses.filter((course)=>{
             return (course.studentsList).includes(studentEmail)
         })
-
+        
         return res.status(201).json({"studentCourses": courses })
     } catch (error) {
         console.log(error)

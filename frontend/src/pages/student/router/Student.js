@@ -5,7 +5,7 @@ import StudentHomepage from '../homepage/StudentHomepage';
 import GiveExam from '../giveExam/giveExam';
 import CourseHomepage from '../../student/courseHomepage/CourseHomepage';
 import PastExam from '../pastExam/pastExam';
-import Participants from '../participants/participants';
+import Participants from '../participants/studentParticipants';
 
 import { getCoursesStudent } from '../../../api';
 

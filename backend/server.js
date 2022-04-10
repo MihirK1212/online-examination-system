@@ -99,6 +99,41 @@ const Instructors = require('./models/Instructors');
 const Students = require('./models/Students');
 app.use('/auth',authRoute)
 
+app.post('/getParticipants',async(req,res)=>{
+  try {
+    const studentsList = req.body.studentsList
+    const instructorsList = req.body.instructorsList
+
+    const students = await Students.find({})
+    const instructors = await Instructors.find({})
+
+    console.log("Student list received ",studentsList)
+    console.log("Instructor list received ",studentsList)
+
+    let studentParticipants = []
+    let instructorParticipants = []
+
+    studentsList.map((studentEmail)=>{
+      let ind = students.findIndex(student=>student.studentEmail===studentEmail)
+      let student = students[ind]
+      if(!student){return}
+      studentParticipants = [...studentParticipants,{studentEmail:studentEmail,studentName:student.generalDetails.name}]
+    })
+
+    instructorsList.map((instructorEmail)=>{
+      let ind = instructors.findIndex(instructor=>instructor.instructorEmail===instructorEmail)
+      let instructor = instructors[ind]
+      instructorParticipants = [...instructorParticipants,{instructorEmail:instructorEmail,instructorName:instructor.generalDetails.name}]
+    })
+
+    return res.status(201).json({"participants":{studentParticipants:studentParticipants,instructorParticipants:instructorParticipants}})
+
+  } catch (error) {
+    console.log(error)
+    return res.status(404).json({"message":error})
+  }
+})
+
 app.post('/addAdmin',async (req,res)=>{
   try {
     const admin = await Admins.create(req.body)
