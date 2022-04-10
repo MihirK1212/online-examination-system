@@ -47,11 +47,12 @@ function AddExam() {
     const handleSubmit = ()=>{
         let postData = {}
         postData.examName = examData.examName
-        postData.examMarks = parseFloat(examData.examMarks)
         postData.examWeightage = parseFloat(examData.examWeightage)
         postData.instructions = examData.instructions
         postData.startTiming = new Date(examData.date+" "+examData.startTime+':00')
         postData.endTiming = new Date(examData.date+" "+examData.endTime+':00')
+
+        let totalMarks = 0.0
 
         if(postData.startTiming>postData.endTiming || postData.endTiming<=(new Date()))
         {
@@ -64,8 +65,11 @@ function AddExam() {
         Questions.map((question,index)=>{
             question.questionNumber = index+1
             question.questionMarks = parseFloat(question.questionMarks)
+            totalMarks+=question.questionMarks
             return question
         })
+
+        postData.examMarks = parseFloat(totalMarks)
 
         postData.Questions = Questions
         postData.Submissions = []
@@ -95,16 +99,6 @@ function AddExam() {
                             label={"Exam Name"}
                             value={examData.examName}
                             onChange={e=>setExamData({...examData,examName:e.target.value})}
-                        />
-                        <br/><br/>
-
-                        <TextField
-                            variant={'standard'}
-                            fullWidth
-                            label={"Total Marks"}
-                            type = "number"
-                            value={examData.examMarks}
-                            onChange={e=>setExamData({...examData,examMarks:e.target.value})}
                         />
                         <br/><br/>
 

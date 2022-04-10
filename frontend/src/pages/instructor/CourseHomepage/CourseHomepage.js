@@ -1,9 +1,13 @@
-import React from 'react';
+import React , {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 
 import Navbar from '../../../components/instructor/CourseHomepage/Navbar/Navbar';
+import InstructorImage from "../../common/instructor.png";
+import "./style.css"
+
+import { addAnnouncement } from '../../../api';
 
 function CourseHomepage() {
     const {state} = useLocation();
@@ -19,6 +23,11 @@ function CourseHomepage() {
         return (startTiming-now)>0 && (endTiming-now)>0
     }
 
+    const [formAnnouncement,setFormAnnouncement] = useState("")
+    const [announcements,setAnnouncements] = useState(state.announcements) 
+
+    console.log("announcements are ",announcements)
+
     const goToExam = (exam) =>{
     
         console.log("going to exam ",exam)
@@ -30,60 +39,111 @@ function CourseHomepage() {
         })
       }
     
+      function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    const handleAdd = (announcement) => {
+        addAnnouncement({course:state,announcement:announcement}).then(response=>console.log("added successfully"))
+        setAnnouncements([...announcements,announcement])
+        setFormAnnouncement("")
+    }
+    
     let exams = state.Exams;
-    let announcements = state.announcements;
+
     return(
         <> 
             <Navbar course = {state}/>
             <br/>
             <h1 align="center">{state.courseName}</h1>
             <br/>
-            <h2> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
-            <br/>
+            <h2 className='homepageHeading'> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
             {exams.map((exam,index) => {
                 return <>    
                 {
                     valid(exam.startTiming,exam.endTiming)?
+                    <div class="card-category-5" style={{"marginTop":-2}}>
+                        <ul class="all-pr-cards">
+                            <li>
+                                <div class="per-card-3">
+                                    <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
+                                       <img src={InstructorImage} alt=""/>
+                                        <span class="per-name">{exam.examName}</span>
+                                    </div>
 
-                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                        <div className="card w-75 border-secondary mb-3">
-                            <h5 className="card-header" align="center">{exam.examName}</h5>
-                                <div className="card-body">
-                                    <h5 className="card-title">Start : {(new Date(exam.startTiming)).toString()} </h5>
-                                    <h5 className="card-title">End : {(new Date(exam.endTiming)).toString()} </h5>
-                                    <p className="card-text">Total marks={exam.examMarks} 
-                                    <br/> 
-                                    Total weightage={exam.examWeightage} <br/>
-                                    Instructions:- {exam.instructions}
-                                    </p>
-                                   <Button onClick={()=>{goToExam(exam)}}>Edit</Button>
+                                    <div class="card-content" >
+
+                                        <div style={{display:'flex','justifyContent':'center','flexDirection':'column'}}>
+                                            <div style={{display:'flex','justifyContent':'space-between'}}>
+                                                <span><b>Start Time</b> :  {(new Date(exam.startTiming)).toString().substring(0,24)}</span>
+                                                <span><b>End Time</b> :  {(new Date(exam.endTiming)).toString().substring(0,24)}</span>
+                                            </div>
+                                            <br></br>
+                                            <p>
+                                                The exam will be of {exam.examMarks} marks with 
+                                                a total weightage of {exam.examWeightage}. 
+                                                The instructions for the exam are as follows :-
+                                                
+                                                <ul className='ssfd' style={{"textAlign":'left'}}>
+                                                {
+                                                    exam.instructions.split('\n').map((i,index)=>
+                                                        <>
+                                                            <li>{index+1}) {i}</li>
+                                                            <br></br>
+                                                        </>)
+                                                }
+                                                </ul>
+                                                
+                                            </p>
+                                        </div>
+                                        
+                                        
+                                        <div class="social-icons" style={{"display":'flex',"justifyContent":'center',"backgroundColor":'#4253ed'}}>
+                                            <Button style={{"fontSize":25,"fontFamily":'sans-serif'}} onClick={()=>{goToExam(exam)}}>Edit</Button>
+                                                                       
+                                        </div>
+                                    </div>                  
                                 </div>
-                        </div>
-                    </div> : ""
+                            </li>
+                        </ul>
+                    </div>
+
+
+                  
+                    : ""
                 }   
                 <br/>
                 </>})}
-            <h2> &nbsp;&nbsp;Announcements:- </h2>
 
-            {announcements.map((announcement,index) => {
-                return <>      
-                <ul>
-                    <li>
-                        {announcement}
-                    </li>
-                </ul>
-                </>})}
+            <div style={{marginLeft:50}}>
+                <h2 className='homepageHeading'> &nbsp;&nbsp;Announcements:- </h2>
 
-            <form>
-            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
-            <div className="mb-3 w-75" >
-                <input type="text" placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1"/>
-                <br/>
-                <button type="submit" className="btn btn-primary">Add Announcements</button>
-            </div>
+                <div style={{marginLeft:20}}>
+                    {announcements.map((announcement,index) => {
+                        return <>      
+                        <ul>
+                            <li>
+                                {capitalizeFirstLetter(announcement)}
+                            </li>
+                        </ul>
+                        </>
+                    })}
+                </div>
+
+                
+
+                <br></br>
+
+                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
+                        <div className="mb-3 w-75" >
+                            <input type="text" value={formAnnouncement} placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1" onChange={(e)=>{setFormAnnouncement(e.target.value)}}/>
+                            <br/>
+                            <button onClick={()=>{handleAdd(formAnnouncement)}} className="btn btn-primary">Add Announcement</button>
+                        </div>
+                    </div>
             </div>
             
-            </form>
+           
     </>
   )
 }
