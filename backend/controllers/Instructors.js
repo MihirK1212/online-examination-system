@@ -94,6 +94,25 @@ const saveCheckedResponses = async (req,res)=>{
     }
 }
 
+const addAnnouncement = async (req,res)=>{
+    try {
+        const courseDetails = req.body.course
+        const announcement = req.body.announcement
+
+        const course = await Courses.findOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter})
+        
+        let announcements = course.announcements
+        announcements.push(announcement)
+
+        await Courses.updateOne({courseCode:courseDetails.courseCode,year:courseDetails.year,semseter:courseDetails.semseter},{'$set': { [`announcements`] : announcements}},{new:true})
+        
+        return res.status(201).json({"added announcement": req.body })
+    } catch (error) {
+        console.log(error)
+        return res.status(404).json({"message":error})
+    }
+}
+
 function areEqual(a, b) {
     if (a === b) return true;
     if (a == null || b == null) return false;
@@ -270,4 +289,4 @@ const  assignGrade = async(req,res) => {
 }
 
 
-module.exports = {getCourses,addExam,saveExam,saveCheckedResponses,evaluateExam,assignGrade}
+module.exports = {getCourses,addExam,saveExam,saveCheckedResponses,evaluateExam,assignGrade,addAnnouncement}
