@@ -21,6 +21,23 @@ const  getCourses = async(req,res) => {
     }
 }
 
+const  getStudentProfile = async(req,res) => {
+    try {
+        const studentEmail = req.emailID
+        
+        let courses = await Students.find({studentEmail:studentEmail})
+        
+        let profile = {}
+        
+
+        
+        return res.status(201).json({"profile": courses })
+    } catch (error) {
+        console.log(error)
+        return res.status(404).json({"message":error})
+    }
+}
+
 const  saveSubmissions = async(req,res) => {
     try {
         const studentEmail = req.emailID
@@ -59,4 +76,4 @@ const  saveSubmissions = async(req,res) => {
 }
 
 
-module.exports = {getCourses,saveSubmissions}
+module.exports = {getCourses,getStudentProfile,saveSubmissions}
