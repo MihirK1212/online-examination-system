@@ -7,7 +7,6 @@ import AddExam from "../addExam/addExam"
 import PastExam from "../pastExam/pastExam"
 import CheckExam from "../checkExam/checkExam"
 import EditExam from '../editExam/editExam';
-import Profile from '../profile/profile';
 import Participants from '../participants/instructorParticipants'
 
 
@@ -34,7 +33,7 @@ function Instructor() {
             <Route path="/checkExam" element={<CheckExam/>}/>
             <Route path="/editExam" element={<EditExam/>}/>
             <Route path="/PastExam" element={<PastExam/>}/>
-            <Route path="/profile" element={<Profile/>}/>
+            
             <Route path="/participants" element={<Participants/>}/>
         </Routes>
     </div>
