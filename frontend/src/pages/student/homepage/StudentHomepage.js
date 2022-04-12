@@ -59,15 +59,13 @@ function StudentHomepage({courses}) {
   
   return (
     <>
-      <Navbar/>
-      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '20vh'}}>
-      <h1> Welcome to Student, IITI </h1>
-      </div>
-      
-      
-        <div className='stud-home-main'>
+        <Navbar/>
+        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '20vh'}}>
+        <h1> Welcome to Student, IITI </h1>
+        </div>
+            <div className='main'>
                 <div className='image'><img className='dp-img' src={ img }></img></div>
-                <div className='stud-data'>
+                <div className='data'>
                     <h4 style={{marginTop: 3, marginBottom: 3}}>Name: { data.generalDetails.name }</h4>
                     <span>Phone Number: { data.generalDetails.phoneNumber }</span> <br></br>
                     <span>Date of Birth: { data.generalDetails.dateOfBirth }</span><br></br>
@@ -80,19 +78,19 @@ function StudentHomepage({courses}) {
             <center><h2>List of Courses Enrolled</h2></center>
             <br></br>
             <div className='courseList'>
-      {courses.map((course,index)=>{
-        return <>
-          <div className="course-card" >
-            <img src={ img_course } className="course-card-img-top"></img>
-              <div className="course-card-body">
-                  <h5 className="course-card-title" style={{marginLeft:20}}>{ course.courseCode }</h5>
-                  <Button onClick={()=>{goToCourse(course)}}>{course.courseName}</Button>
-                  <p className="course-card-text" style={{marginLeft:20}}>{course.semester} {course.year}</p>
-              </div>
-          </div>
+                {courses.map((course,index)=>{
+                  return <>
+                    <div className="card" >
+                      <img src={ img_course } className="card-img-top"></img>
+                        <div className="card-body">
+                            <h5 className="card-title" style={{marginLeft:20}}>{ course.courseCode }</h5>
+                            <Button onClick={()=>{goToCourse(course)}}>{course.courseName}</Button>
+                            <p className="card-text" style={{marginLeft:20}}>{course.semester} {course.year}</p>
+                        </div>
+                    </div>
 
-        </>})}
-        </div>
+                  </>})}
+            </div>
             
     </>
   )
