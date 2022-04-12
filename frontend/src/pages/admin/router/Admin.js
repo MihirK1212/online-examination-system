@@ -6,6 +6,8 @@ import AddCourseInstance from '../addCourseInstance/addCourseInstance';
 import AddStudents from '../AddStudents/AddStudents';
 import AddInstructors from '../AddInstructors/AddInstructors';
 import ViewStudents from '../ViewStudents/ViewStudents';
+import ViewInstructors from '../ViewInstructors/ViewInstructors';
+import ViewCourses from '../ViewCourses/ViewCourses';
 
 import { getAllStudents , getAllInstructors , getCourseList , getCoursesAdmin } from '../../../api';
 
@@ -36,6 +38,8 @@ function Admin() {
             <Route path="/addInstructors" element={<AddInstructors/>}/>
             <Route path="/addCourseInstance" element={<AddCourseInstance instructors={instructors}/>}/>
             <Route path="/viewStudents" element={<ViewStudents students={students}/>}/>
+            <Route path="/viewInstructors" element={<ViewInstructors students={instructors}/>}/>
+            <Route path="/viewCourses" element={<ViewCourses students={courseList}/>}/>
         </Routes>
     </div>
   </>
