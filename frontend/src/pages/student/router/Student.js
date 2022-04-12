@@ -6,8 +6,10 @@ import GiveExam from '../giveExam/giveExam';
 import CourseHomepage from '../../student/courseHomepage/CourseHomepage';
 import PastExam from '../pastExam/pastExam';
 import Participants from '../participants/studentParticipants';
+import Profile from '../profile/profile';
 
 import { getCoursesStudent } from '../../../api';
+// import Profile from '../../instructor/profile/profile';
 
 function Student() {
 
@@ -25,6 +27,7 @@ function Student() {
             <Route path="/courseHomepage" element={<CourseHomepage/>}/>
             <Route path="/pastExam" element={<PastExam/>}/>
             <Route path="/participants" element={<Participants/>}/>
+            <Route path="/profile" element={<Profile/>}/>
         </Routes>
     </div>
   </>)
