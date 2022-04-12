@@ -6,7 +6,7 @@ import Navbar from '../../../components/admin/General/Navbar/Navbar';
 import './style.css'
 
 function ViewStudents({students}) {
-
+    console.log(students)
     // const sortName = ()=>{
     //     console.log("sorting by name")
     // }
@@ -21,8 +21,6 @@ function ViewStudents({students}) {
                                     <div class="header__item"><a id="name" class="filter__link" href="#">Name</a></div>
                                     <div class="header__item"><a id="wins" class="filter__link filter__link--number" href="#">Email</a></div>
                                     <div class="header__item"><a id="draws" class="filter__link filter__link--number" href="#">Date of Birth</a></div>
-                                    <div class="header__item"><a id="total" class="filter__link filter__link--number" href="#">Degree</a></div>
-                                    <div class="header__item"><a id="total12" class="filter__link filter__link--number" href="#">Program</a></div>
                                     <div class="header__item"><a id="losses" class="filter__link filter__link--number" href="#">Phone Number</a></div>
                                 </div>
                                 {
@@ -31,10 +29,8 @@ function ViewStudents({students}) {
                                         <div class="table-content">	
                                             <div class="table-row">		
                                                 <div class="table-data">{student.generalDetails.name}</div>
-                                                <div class="table-data">{student.studentEmail}</div>
+                                                <div class="table-data">{student.instructorEmail}</div>
                                                 <div class="table-data">{student.generalDetails.dateOfBirth.substr(0,10)}</div>
-                                                <div class="table-data">{student.generalDetails.degree}</div>
-                                                <div class="table-data">{student.generalDetails.programName}</div>
                                                 <div class="table-data">{student.generalDetails.phoneNumber}</div>
                                             </div>
                                         </div>

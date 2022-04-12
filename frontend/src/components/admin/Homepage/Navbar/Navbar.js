@@ -11,6 +11,16 @@ function Navbar() {
       state : "",
     })
   }
+  const goToViewIns = ()=>{
+    navigate('/admin/viewInstructors', {
+      state : "",
+    })
+  }
+  const goToViewCou = ()=>{
+    navigate('/admin/viewCourses', {
+      state : "",
+    })
+  }
   return(
     <> 
       <div>
@@ -26,10 +36,10 @@ function Navbar() {
         <Button onClick={goToViewStu} style={{color:"white"}}>Student List</Button>
         </li>
         <li class="nav-item">
-        <Button onClick={goToViewStu} style={{color:"white"}}>Instructor List</Button>
+        <Button onClick={goToViewIns} style={{color:"white"}}>Instructor List</Button>
         </li>
         <li class="nav-item">
-        <Button onClick={goToViewStu} style={{color:"white"}}>Course List</Button>
+        <Button onClick={goToViewCou} style={{color:"white"}}>Course List</Button>
         </li>
         
         

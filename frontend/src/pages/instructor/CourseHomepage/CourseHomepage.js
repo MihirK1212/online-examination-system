@@ -112,7 +112,6 @@ function CourseHomepage() {
                   
                     : ""
                 }   
-                <br/>
                 </>})}
 
             <div style={{marginLeft:50}}>
