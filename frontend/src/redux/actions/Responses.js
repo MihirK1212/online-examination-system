@@ -1,9 +1,10 @@
 import * as api from "../../api";
 
-export const setInitialResponses = (Questions) => async (dispatch) => {
-    console.log("setInitialResponses action called",Questions)
+export const setInitialResponses = (exam) => async (dispatch) => {
+    console.log("setInitialResponses action called",exam)
     try {
-      dispatch({type:"SET_INITIAL_RESPONSES",payload:Questions})
+      const {data} = await api.getResponses(exam)
+      dispatch({type:"SET_INITIAL_RESPONSES",payload:data.initialResponses})
     } catch (error) {
         console.log(error)
     }

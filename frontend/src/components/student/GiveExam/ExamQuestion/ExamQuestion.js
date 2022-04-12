@@ -8,7 +8,7 @@ import './style.css'
 
 import { saveQuestionResponse } from '../../../../redux/actions/Responses';
 
-function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub}) {
+function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub,submitResponses}) {
 
     const dispatch = useDispatch()
 
@@ -178,8 +178,11 @@ function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub}) {
                         {
                             chosenQnIndex<ub?<Button onClick={()=>{saveQuestion('FORWARD')}}>Next</Button>:null
                         }
+                        {
+                            chosenQnIndex===ub?<Button onClick={()=>{submitResponses()}}>Submit</Button>:null
+                        }
                 </div>
-                </div>
+            </div>
         </>
     )
 }

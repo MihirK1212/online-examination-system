@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {useDispatch , useSelector } from 'react-redux'
-import {useLocation} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import { Grid } from '@material-ui/core'
 
 import ExamQuestion from '../../../components/student/GiveExam/ExamQuestion/ExamQuestion'
+import Navbar from '../../../components/student/GiveExam/Navbar/Navbar';
 
 import {setInitialResponses} from '../../../redux/actions/Responses'
 
@@ -14,6 +15,7 @@ import "./style.css"
 function GiveExam() {
 
     const {state} = useLocation();
+    const navigate = useNavigate()
 
     console.log("Received params in give exam ",state)
     
@@ -32,6 +34,10 @@ function GiveExam() {
     {
         dispatch(setInitialResponses(Questions))
     }
+
+    useEffect(()=>{
+        dispatch(setInitialResponses(exam))
+    })
 
     const endTiming = new Date(exam.endTiming)
 
@@ -88,6 +94,13 @@ function GiveExam() {
         }
     },[responses])
 
+    const submitResponses = () => {
+        let courseDetails = course
+        courseDetails.exam_id = exam._id
+        dispatch(saveResponses({courseDetails:courseDetails,responses:responses}))
+        navigate('/student')
+    }
+
     console.log("Student responses ",responses)
 
     const statusToStyle = {
@@ -98,13 +111,32 @@ function GiveExam() {
 
     return (
         <>
+        <Navbar/>
         {
             responses.length > 0 ?
-                <div className='examDisplay'>
-                    <h4>{timerHours} : {timerMinutes} : {timerSeconds}</h4>
-                    <div className='currentQuestion'>
-                        <ExamQuestion question={Questions[chosenQnIndex]} response={responses[chosenQnIndex]} chosenQnIndex={chosenQnIndex} setChosenQnIndex={setChosenQnIndex} ub={Questions.length-1} key={chosenQnIndex}/>
+            <>
+                <section className="countdown-container">
+                    <div className="countdown">
+                        <article>
+                        <p>{timerHours}</p>
+                        <h3>Hours</h3>
+                        </article>
+                        <article>
+                        <p>{timerMinutes}</p>
+                        <h3>Minutes</h3>
+                        </article>
+                        <article>
+                        <p>{timerSeconds}</p>
+                        <h3>Seconds</h3>
+                        </article>
                     </div>
+                </section>
+                
+                <div className='examDisplay'>
+                    {/* <h4>{timerHours} : {timerMinutes} : {timerSeconds}</h4> */}
+                        <div className='currentQuestion'>
+                            <ExamQuestion question={Questions[chosenQnIndex]} response={responses[chosenQnIndex]} chosenQnIndex={chosenQnIndex} setChosenQnIndex={setChosenQnIndex} ub={Questions.length-1} submitResponses={submitResponses} key={chosenQnIndex}/>
+                        </div>
 
                     <div className='responsesStatus'>
 
@@ -123,7 +155,8 @@ function GiveExam() {
                         </Grid>
                         
                     </div>
-            </div> : ""
+                </div> 
+            </>: ""
         }
            
         </>
