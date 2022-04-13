@@ -20,6 +20,10 @@ function StudentHomepage({courses,profile}) {
       state : course,
     })
   }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   
   return (
     <>
@@ -44,14 +48,15 @@ function StudentHomepage({courses,profile}) {
             <div className='courseList'>
                 {courses.map((course,index)=>{
                   return <>
-                    <div className="course-card" >
+                    <div className="course-card">
                       <img src={ img_course } className="card-img-top" alt=""></img>
-                        <div className="course-card-body">
-                            <h5 className="course-card-title" style={{marginLeft:20}}>{ course.courseCode }</h5>
+                        <div className="course-card-body" style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                            <h5 className="course-card-title">{ course.courseCode }</h5>
                             <Button onClick={()=>{goToCourse(course)}}>{course.courseName}</Button>
-                            <p className="course-card-text" style={{marginLeft:20}}>{course.semester} {course.year}</p>
+                            <p className="course-card-text">{capitalizeFirstLetter(course.semester)} {course.year}</p>
                         </div>
                     </div>
+
 
                   </>})}
             </div>

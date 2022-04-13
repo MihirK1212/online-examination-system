@@ -23,6 +23,24 @@ const  getCourses = async(req,res) => {
     }
 }
 
+const  getInstructorProfile = async(req,res) => {
+    try {
+        const instructorEmail = req.emailID
+        
+        let instructor = await Instructors.findOne({instructorEmail:instructorEmail})
+        
+        let profile = instructor.generalDetails
+
+        console.log("returning instructor profile ",profile)
+
+        
+        return res.status(201).json({"profile": profile })
+    } catch (error) {
+        console.log(error)
+        return res.status(404).json({"message":error})
+    }
+}
+
 const  addExam = async(req,res) => {
     try {
         const exam = req.body.exam
@@ -289,4 +307,4 @@ const  assignGrade = async(req,res) => {
 }
 
 
-module.exports = {getCourses,addExam,saveExam,saveCheckedResponses,evaluateExam,assignGrade,addAnnouncement}
+module.exports = {getCourses,addExam,saveExam,saveCheckedResponses,evaluateExam,assignGrade,addAnnouncement,getInstructorProfile}
