@@ -21,6 +21,36 @@ const  getCourses = async(req,res) => {
     }
 }
 
+const  getResponses = async(req,res) => {
+    try {
+        const studentEmail = req.emailID
+        const exam = req.body
+
+        let result = []
+
+        const submissionsInd = exam.Submissions.findIndex((submission)=>submission.studentEmail===studentEmail)
+
+        if(submissionsInd>=0){result = exam.Submissions[submissionsInd].responses}
+        else
+        {
+            exam.Questions.forEach((question)=>{
+                result.push({
+                    questionNumber : question.questionNumber,
+                    status : 'NotSeen',
+                    questionGivenAnswer : "",
+                    questionSelectedOptions : [],
+                    marksObtained : 0
+                })
+            })
+        }
+
+        return res.status(201).json({"initialResponses": result })
+    } catch (error) {
+        console.log(error)
+        return res.status(404).json({"message":error})
+    }
+}
+
 const  getStudentProfile = async(req,res) => {
     try {
         const studentEmail = req.emailID
@@ -77,4 +107,4 @@ const  saveSubmissions = async(req,res) => {
 }
 
 
-module.exports = {getCourses,getStudentProfile,saveSubmissions}
+module.exports = {getCourses,getResponses,getStudentProfile,saveSubmissions}

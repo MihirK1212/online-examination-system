@@ -30,14 +30,10 @@ function GiveExam() {
     
     let responses = useSelector((state)=> state.responses)
 
-    if(responses.length !== Questions.length)
+    if(responses.length!==Questions.length)
     {
-        dispatch(setInitialResponses(Questions))
-    }
-
-    useEffect(()=>{
         dispatch(setInitialResponses(exam))
-    })
+    }
 
     const endTiming = new Date(exam.endTiming)
 

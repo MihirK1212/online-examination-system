@@ -54,6 +54,8 @@ function CourseHomepage() {
             <h1 align="center">{state.courseName}</h1>
             <br/>
             <h2 className='homepageHeading'> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
+            <br></br>
+            <br></br>
             
             {exams.map((exam,index) => {
                 return <>    
