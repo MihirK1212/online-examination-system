@@ -6,6 +6,9 @@ import "../../instructor/CourseHomepage/style.css"
 import Navbar from '../../../components/student/CourseHomepage/Navbar/Navbar'
 import InstructorImage from "../../common/student.png";
 
+
+// This is the complete page for showing the course information in a student panel 
+
 function CourseHomepage() {
     const {state} = useLocation();
     const navigate = useNavigate()
