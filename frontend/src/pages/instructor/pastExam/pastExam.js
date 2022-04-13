@@ -106,8 +106,8 @@ function PastExam() {
                                 View Students
                             </button>
                     
-                        <div class="collapse" id={`${"exam"+index}`} style={{"width":'82%',"marginLeft":'0px'}}>
-                            <div class="card card-body" id={`${"exam"+index}`}>
+                        <div class="collapse" id={`${"exam"+index}`} style={{"width":'82%',"marginLeft":'0px','marginTop':10}}>
+                            <div class="card-xyz card-body-xyz" id={`${"exam"+index}`}>
                             <h4 style={{"marginBottom":4}}>Student Submissions</h4>
                                 {submissions.map((submission) => {
                                     return <>      
