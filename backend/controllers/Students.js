@@ -25,13 +25,14 @@ const  getStudentProfile = async(req,res) => {
     try {
         const studentEmail = req.emailID
         
-        let courses = await Students.find({studentEmail:studentEmail})
+        let student = await Students.findOne({studentEmail:studentEmail})
         
-        let profile = {}
-        
+        let profile = student.generalDetails
+
+        console.log("returning student profile ",profile)
 
         
-        return res.status(201).json({"profile": courses })
+        return res.status(201).json({"profile": profile })
     } catch (error) {
         console.log(error)
         return res.status(404).json({"message":error})
