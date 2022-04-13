@@ -60,9 +60,9 @@ function MainHomepage() {
 
     return (
     <>
-        <div className="header">
-          <h1>Welcome to the Examination System</h1>
-        </div>
+    <nav  class="navbar navbar-expand-lg navbar-dark bg-primary" style={{"justifyContent":'center'}}>
+        <h1>Welcome to the Examination System</h1>
+    </nav>
     
         <div style={{display:'flex',justifyContent:'space-between' , marginTop:'10px', marginLeft:'30px' , marginRight:'30px'}}>
           
