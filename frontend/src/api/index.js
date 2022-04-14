@@ -24,13 +24,13 @@ export const addInstructors    = (instructors)    => axios.post(`${adminsURL}/ad
 export const addCourse         = (course)         => axios.post(`${adminsURL}/addCourse`        , course        , { headers: { authorization: localStorage.getItem('admin_token') } })
 export const addCourseInstance = (courseInstance) => axios.post(`${adminsURL}/addCourseInstance`, courseInstance, { headers: { authorization: localStorage.getItem('admin_token') } })
 
+export const getStudentProfile = () => axios.get(`${studentsURL}/getProfile`,{ headers: { authorization: localStorage.getItem('student_token') } }) 
 export const getCoursesStudent = () => axios.get(`${studentsURL}/getCourses`,{ headers: { authorization: localStorage.getItem('student_token') } }) 
-export const getResponses = (exam) => axios.get(`${studentsURL}/getResponses`,{ headers: { authorization: localStorage.getItem('student_token') } })
+export const getResponses = (exam) => axios.post(`${studentsURL}/getResponses`,exam,{ headers: { authorization: localStorage.getItem('student_token') } })
 export const saveResponses = (responseData) => axios.patch(`${studentsURL}/exams`  , responseData, { headers: { authorization: localStorage.getItem('student_token') } })
 
-
-
 export const getCoursesInstructor = () => axios.get(`${instructorsURL}/getCourses`,{ headers: { authorization: localStorage.getItem('instructor_token') } })
+export const getInstructorProfile = () => axios.get(`${instructorsURL}/getProfile`,{ headers: { authorization: localStorage.getItem('instructor_token') } }) 
 export const addExam = (examData) => axios.post(`${instructorsURL}/exams`,examData,{ headers: { authorization: localStorage.getItem('instructor_token')}})
 export const saveExam = (examData) => axios.patch(`${instructorsURL}/exams`,examData,{ headers: { authorization: localStorage.getItem('instructor_token')}})
 export const saveCheckedResponses = (checkedData) => axios.patch(`${instructorsURL}/exams/check`,checkedData,{ headers: { authorization: localStorage.getItem('instructor_token')}})

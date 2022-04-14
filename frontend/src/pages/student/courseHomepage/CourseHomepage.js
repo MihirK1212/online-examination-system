@@ -6,6 +6,9 @@ import "../../instructor/CourseHomepage/style.css"
 import Navbar from '../../../components/student/CourseHomepage/Navbar/Navbar'
 import InstructorImage from "../../common/student.png";
 
+
+// This is the complete page for showing the course information in a student panel 
+
 function CourseHomepage() {
     const {state} = useLocation();
     const navigate = useNavigate()
@@ -54,7 +57,9 @@ function CourseHomepage() {
             <h1 align="center">{state.courseName}</h1>
             <br/>
             <h2 className='homepageHeading'> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
-            <br/>
+            <br></br>
+            <br></br>
+            
             {exams.map((exam,index) => {
                 return <>    
                 {
@@ -110,9 +115,8 @@ function CourseHomepage() {
                     </div>
                     : ""
                 }   
-                <br/>
                 </>})}
-
+                <br/>
             <div style={{marginLeft:50}}>
                 <h2 className='homepageHeading'> &nbsp;&nbsp;Announcements:- </h2>
 

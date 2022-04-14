@@ -7,19 +7,20 @@ import AddExam from "../addExam/addExam"
 import PastExam from "../pastExam/pastExam"
 import CheckExam from "../checkExam/checkExam"
 import EditExam from '../editExam/editExam';
-import Profile from '../profile/profile';
 import Participants from '../participants/instructorParticipants'
 
 
-import { getCoursesInstructor } from '../../../api';
+import { getCoursesInstructor , getInstructorProfile} from '../../../api';
 
 
 function Instructor() {
 
   const [courses,setCourses] = useState([])
+  const [profile,setProfile] = useState({})
 
   useEffect(()=>{
     getCoursesInstructor().then(response=>setCourses(response.data.instructorCourses))
+    getInstructorProfile().then(response=>setProfile(response.data.profile))
   },[])
 
   console.log(courses)
@@ -28,13 +29,13 @@ function Instructor() {
   <>
     <div>
         <Routes>
-            <Route path="/" element={<InstructorHomepage courses={courses}/>}/>
+            <Route path="/" element={<InstructorHomepage courses={courses} profile={profile}/>}/>
             <Route path="/courseHomepage" element={<CourseHomepage/>}/>
             <Route path="/addExam" element={<AddExam/>}/>
             <Route path="/checkExam" element={<CheckExam/>}/>
             <Route path="/editExam" element={<EditExam/>}/>
             <Route path="/PastExam" element={<PastExam/>}/>
-            <Route path="/profile" element={<Profile/>}/>
+            
             <Route path="/participants" element={<Participants/>}/>
         </Routes>
     </div>

@@ -6,46 +6,10 @@ import img from "./profile.png";
 import img_course from "./course.jpg";
 import "./style.css";
 
-let data = {
-  studentEmail: 'cse200001063@iiti.ac.in',
-  generalDetails: {
-      name: 'Priyansh Jaseja',
-      dateOfBirth: '11/11/2001',
-      phoneNumber: 9424664100,
-      programName: 'B.Tech.',
-      startDateOfProgram: '05/11/2021'
-  },
-  registeredCourses: [
-      {
-          courseCode: 'CS 202',
-          year: 2022,
-          semester: 'Spring',
-          grade: 'Not Given'
-      },
-      {
-          courseCode: 'CS 203',
-          year: 2022,
-          semester: 'Autumn',
-          grade: 'AA'
-      },
-      {
-          courseCode: 'CS 202',
-          year: 2022,
-          semester: 'Spring',
-          grade: 'Not Given'
-      },
-      {
-          courseCode: 'CS 202',
-          year: 2022,
-          semester: 'Spring',
-          grade: 'Not Given'
-      }
-  ]
-}
-
-function StudentHomepage({courses}) {
+function StudentHomepage({courses,profile}) {
 
   console.log(courses)
+  console.log("profile ",profile)
 
   const navigate = useNavigate()
 
@@ -56,22 +20,24 @@ function StudentHomepage({courses}) {
       state : course,
     })
   }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   
   return (
     <>
-      <Navbar/>
-      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '20vh'}}>
-      <h1> Welcome to Student, IITI </h1>
-      </div>
-      
-      
-        <div className='stud-home-main'>
-                <div className='image'><img className='dp-img' src={ img }></img></div>
-                <div className='stud-data'>
-                    <h4 style={{marginTop: 3, marginBottom: 3}}>Name: { data.generalDetails.name }</h4>
-                    <span>Phone Number: { data.generalDetails.phoneNumber }</span> <br></br>
-                    <span>Date of Birth: { data.generalDetails.dateOfBirth }</span><br></br>
-                    <span>Program: { data.generalDetails.programName }</span><br></br>
+        <Navbar/>
+        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '20vh'}}>
+        <h1> Welcome to Student, IITI </h1>
+        </div>
+            <div className='course-main'>
+                <div className='course-image'><img className='dp-img' src={ img } alt=""></img></div>
+                <div className='course-data'>
+                    <h4 style={{marginTop: 3, marginBottom: 3}}>Name: { profile.name }</h4>
+                    <span>Phone Number: { profile.phoneNumber }</span> <br></br>
+                    <span>Date of Birth: { profile.dateOfBirth }</span><br></br>
+                    <span>Program: { profile.programName }</span><br></br>
                 </div>
             </div>
             <br></br>
@@ -80,19 +46,20 @@ function StudentHomepage({courses}) {
             <center><h2>List of Courses Enrolled</h2></center>
             <br></br>
             <div className='courseList'>
-      {courses.map((course,index)=>{
-        return <>
-          <div className="course-card" >
-            <img src={ img_course } className="course-card-img-top"></img>
-              <div className="course-card-body">
-                  <h5 className="course-card-title" style={{marginLeft:20}}>{ course.courseCode }</h5>
-                  <Button onClick={()=>{goToCourse(course)}}>{course.courseName}</Button>
-                  <p className="course-card-text" style={{marginLeft:20}}>{course.semester} {course.year}</p>
-              </div>
-          </div>
+                {courses.map((course,index)=>{
+                  return <>
+                    <div className="course-card">
+                      <img src={ img_course } className="card-img-top" alt=""></img>
+                        <div className="course-card-body" style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                            <h5 className="course-card-title">{ course.courseCode }</h5>
+                            <Button onClick={()=>{goToCourse(course)}}>{course.courseName}</Button>
+                            <p className="course-card-text">{capitalizeFirstLetter(course.semester)} {course.year}</p>
+                        </div>
+                    </div>
 
-        </>})}
-        </div>
+
+                  </>})}
+            </div>
             
     </>
   )
