@@ -63,7 +63,7 @@ function PastExam() {
                             <li>
                                 <div class="per-card-3">
                                     <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
-                                       <img src={InstructorImage}/>
+                                       <img src={InstructorImage} alt=""/>
                                         <span class="per-name">{exam.examName}</span>
                                     </div>
 

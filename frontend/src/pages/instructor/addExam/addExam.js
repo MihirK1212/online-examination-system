@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import {useDispatch} from 'react-redux';
-import {useLocation} from 'react-router-dom';
+import {useLocation , useNavigate} from 'react-router-dom';
 
 import { TextField} from "@material-ui/core";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -18,6 +18,7 @@ import "./style.css"
 function AddExam() {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const {state} = useLocation();
     console.log("Received params add exam ",state)
@@ -75,7 +76,9 @@ function AddExam() {
         postData.Submissions = []
 
         console.log("Adding Exam",postData)
+        alert('Exam has been added')
         dispatch(addExam({exam:postData,courseDetails:course}))
+        navigate('/instructor')
     }
 
     

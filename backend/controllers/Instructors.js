@@ -207,7 +207,7 @@ const  evaluateExam = async(req,res) => {
                     }
                 }
 
-                totalMarks+=Submissions[i].responses[j].marksObtained
+                totalMarks+=(Submissions[i].responses[j].marksObtained)?(Submissions[i].responses[j].marksObtained):0
                 console.log("Student email ",Submissions[i].studentEmail," marksObtained ",Submissions[i].responses[j].marksObtained)
             }
 
