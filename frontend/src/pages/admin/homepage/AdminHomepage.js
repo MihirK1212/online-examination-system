@@ -52,7 +52,7 @@ function AdminHomepage() {
         </div>
     <br/>
     <br/>
-    <div className="card text-center">
+    <div className="card text-center" style={{width:"100%",margin:0}}>
         <div className="card-header"></div>
         <div className="card-body">
         <Button variant="contained" onClick={()=>{navigate('/admin/addCourseInstance')}} >Make Course Instance</Button>
