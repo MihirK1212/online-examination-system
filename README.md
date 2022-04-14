@@ -32,3 +32,18 @@ They can give exams, for subjective type, they can add attachments or type the a
 and for objective type, they can choose the options. They can also view their grade
 sheets of past courses.
 3
+
+# Steps to start (For development)
+## Steps to start backend (Run the following commands in a terminal)
+1) Add .env file to ./backend (Please contact developers for this file)
+2) cd ./backend
+3) npm install
+4) npm start
+
+## Steps to start frontend (Run the following commands in a separate terminal)
+1) cd ./frontend
+2) npm install
+3) npm start
+
+# Hosted Link
+The hosted website can be found at https://g6p16-online-examination.netlify.app/
