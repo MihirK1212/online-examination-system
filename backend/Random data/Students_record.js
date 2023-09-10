@@ -1,10 +1,10 @@
 let Students = ([
     {
-        studentEmail : 'cse200001043@iiti.ac.in',
-        generalDetails : {
-            name : 'Mayank Tayal',
-            dateOfBirth : new Date("2003-11-21"),
-            phoneNumber : '1234567890',
+        "studentEmail" : 'cse200001043@iiti.ac.in',
+        "generalDetails" : {
+            "name" : 'Mayank Tayal',
+            "dateOfBirth" : new Date("2003-11-21"),
+            "phoneNumber" : '1234567890',
             degree : 'B.Tech',
             programName : 'Computer Science and Engineering',
             startDateOfProgram : Date.now(),
