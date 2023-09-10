@@ -72,7 +72,7 @@ function MainHomepage() {
                       width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
                         <GoogleLogin
-                            clientId="499316289094-jrcm8c2ugt7d7hobasv2sh2u63a7d1r1.apps.googleusercontent.com"
+                            clientId="630790416751-g3tk05k5j2kmgtqkl151o7rch4ol441r.apps.googleusercontent.com"
                             buttonText="Admin Login"
                             onSuccess={(response)=>{responseSuccessGoogle(response,'admin')}}
                             onFailure={responseErrorGoogle}
@@ -88,7 +88,7 @@ function MainHomepage() {
                       width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
                         <GoogleLogin
-                            clientId="499316289094-jrcm8c2ugt7d7hobasv2sh2u63a7d1r1.apps.googleusercontent.com"
+                            clientId="630790416751-g3tk05k5j2kmgtqkl151o7rch4ol441r.apps.googleusercontent.com"
                             buttonText="Intructor Login"
                             onSuccess={(response)=>{responseSuccessGoogle(response,'instructor')}}
                             onFailure={responseErrorGoogle}
@@ -103,7 +103,7 @@ function MainHomepage() {
                       width={'100%'} />
                   <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
                         <GoogleLogin
-                            clientId="499316289094-jrcm8c2ugt7d7hobasv2sh2u63a7d1r1.apps.googleusercontent.com"
+                            clientId="630790416751-g3tk05k5j2kmgtqkl151o7rch4ol441r.apps.googleusercontent.com"
                             buttonText="Student Login"
                             onSuccess={(response)=>{responseSuccessGoogle(response,'student')}}
                             onFailure={responseErrorGoogle}
