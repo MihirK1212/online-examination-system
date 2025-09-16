@@ -3,10 +3,10 @@ import { useState } from 'react';
 import {useDispatch} from 'react-redux';
 import {useLocation , useNavigate} from 'react-router-dom';
 
-import { TextField} from "@material-ui/core";
+import { TextField} from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button} from "@material-ui/core";
+import { Button} from "@mui/material";
 
 import ExamQuestion from '../../../components/instructor/AddExam/ExamQuestion/ExamQuestion'
 import Navbar from "../../../components/instructor/AddExam/Navbar/Navbar"

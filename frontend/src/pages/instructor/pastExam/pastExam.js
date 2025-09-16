@@ -18,10 +18,13 @@ import {
     Divider,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useDispatch } from 'react-redux';
 import Navbar from '../../../components/instructor/PastExam/Navbar/Navbar';
 import { evaluateExam } from '../../../api';
+import "./style.css"
 
 function PastExam() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { state: course } = useLocation();
     

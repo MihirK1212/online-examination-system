@@ -8,7 +8,8 @@ import {
     Card,
     CardContent,
 } from '@mui/material';
-import Navbar from '../../../components/instructor/PastExam/Navbar/Navbar';
+import Navbar from '../../../components/student/CourseHomepage/Navbar/Navbar'
+import "./style.css"
 
 function PastExam() {
     const studentEmail = localStorage.getItem('studentEmail');

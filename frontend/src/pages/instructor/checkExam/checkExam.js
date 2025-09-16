@@ -11,6 +11,7 @@ import {
 import ExamQuestion from '../../../components/instructor/CheckExam/ExamQuestion/ExamQuestion';
 import Navbar from '../../../components/instructor/CheckExam/Navbar/Navbar';
 import { saveCheckedResponses } from '../../../redux/actions/Instructor';
+import "./style.css"
 
 function CheckExam() {
     const navigate = useNavigate();
