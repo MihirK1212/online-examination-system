@@ -1,185 +1,163 @@
-import React from 'react'
-import { useState } from 'react';
-import {useDispatch} from 'react-redux';
-import {useLocation} from 'react-router-dom';
-
-import { TextField} from "@material-ui/core";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import {
+    TextField,
+    Button,
+    Container,
+    Typography,
+    Paper,
+    Box,
+    Grid,
+    IconButton,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button} from "@material-ui/core";
-
-import ExamQuestion from '../../../components/instructor/AddExam/ExamQuestion/ExamQuestion'
-import Navbar from "../../../components/instructor/AddExam/Navbar/Navbar"
-
+import ExamQuestion from '../../../components/instructor/AddExam/ExamQuestion/ExamQuestion';
+import Navbar from '../../../components/instructor/AddExam/Navbar/Navbar';
 import { saveExam } from '../../../redux/actions/Instructor';
 
-import "./style.css"
+// Helper to format date and time
+const toLocalISOString = (date) => {
+    const d = new Date(date);
+    const pad = (num) => (num < 10 ? '0' : '') + num;
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+
+const toTimeString = (date) => {
+    const d = new Date(date);
+    const pad = (num) => (num < 10 ? '0' : '') + num;
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
 
 function EditExam() {
+    const dispatch = useDispatch();
+    const { state } = useLocation();
+    const { exam, course } = state;
 
-    const dispatch = useDispatch()
-
-    const {state} = useLocation();
-    console.log("Received params ",state)
-    const exam = state.exam
-    const course = state.course
-
-    console.log((new Date(exam.startTiming)).toString())
-
-    const [examData,setExamData] = useState(exam)
-
-    console.log("start timing in edit exam ",exam.startTiming)
-    console.log(("start timing in edit exam (date var)",(new Date(exam.startTiming)).toTimeString()).split(' ')[0])
-
-    console.log("end timing in edit exam ",exam.endTiming)
-    console.log("end timing in edit exam (date var)",(new Date(exam.endTiming)))
-    examData.date = (new Date(exam.startTiming)).toISOString().split('T')[0]
-    examData.startTime = (new Date(exam.startTiming)).toTimeString().split(' ')[0]
-    examData.endTime = (new Date(exam.endTiming)).toTimeString().split(' ')[0]
-
-    console.log("examData in edit ",examData)
-
-    const [visible,setVisble] = useState(true)
+    const [examData, setExamData] = useState({
+        ...exam,
+        date: toLocalISOString(exam.startTiming),
+        startTime: toTimeString(exam.startTiming),
+        endTime: toTimeString(exam.endTiming),
+    });
 
     const handleAddQuestion = () => {
-        const questions = examData.Questions
-        const newQnNum = (Date.now()).toString()
-
-        const newQuestion = {"questionType":"MCQ","questionNumber":newQnNum,"questionContent":"","questionMarks":"","questionOptions":[],"questionAnswerOptions":[],"questionAnswer":""}
-        
-        setExamData({...examData,Questions:[...questions,newQuestion]})
-    }
+        const newQuestion = {
+            questionType: 'MCQ',
+            questionNumber: Date.now().toString(),
+            questionContent: '',
+            questionMarks: 0,
+            questionOptions: [],
+            questionAnswerOptions: [],
+            questionAnswer: '',
+        };
+        setExamData({ ...examData, Questions: [...examData.Questions, newQuestion] });
+    };
 
     const handleDeleteQuestion = (questionNumber) => {
-        console.log("deleting ",questionNumber)
-        setExamData({...examData,Questions:examData.Questions.filter((question)=>question.questionNumber!==questionNumber)})
-    }
+        setExamData({
+            ...examData,
+            Questions: examData.Questions.filter((q) => q.questionNumber !== questionNumber),
+        });
+    };
 
-    const handleSave = ()=>{
-        let postData = {}
-        postData._id = examData._id
-        postData.examName = examData.examName
-        postData.examMarks = parseFloat(examData.examMarks)
-        postData.examWeightage = parseFloat(examData.examWeightage)
-        postData.instructions = examData.instructions
-        postData.startTiming = new Date(examData.date+" "+examData.startTime+':00')
-        postData.endTiming = new Date(examData.date+" "+examData.endTime+':00')
+    const handleSave = () => {
+        const finalQuestions = examData.Questions.map((q, index) => ({
+            ...q,
+            questionNumber: index + 1,
+            questionMarks: parseFloat(q.questionMarks) || 0,
+        }));
 
-        let Questions = examData.Questions
+        const totalMarks = finalQuestions.reduce((acc, curr) => acc + curr.questionMarks, 0);
 
+        const postData = {
+            ...examData,
+            examMarks: totalMarks,
+            examWeightage: parseFloat(examData.examWeightage) || 0,
+            startTiming: new Date(`${examData.date}T${examData.startTime}`),
+            endTiming: new Date(`${examData.date}T${examData.endTime}`),
+            Questions: finalQuestions,
+        };
 
-
-        Questions.map((question,index)=>{
-            question.questionNumber = index+1
-            question.questionMarks = parseFloat(question.questionMarks)
-            return question
-        })
-
-        postData.Questions = Questions
-        postData.Submissions = []
-
-        console.log("Saving Exam",postData)
-        dispatch(saveExam({exam:postData,courseDetails:course}))
-    }
-
+        dispatch(saveExam({ exam: postData, courseDetails: course }));
+        alert('Exam saved successfully!');
+    };
     
+    const handleInputChange = (e) => {
+        setExamData({ ...examData, [e.target.name]: e.target.value });
+    };
+
     return (
         <>
-            <Navbar/>  
+            <Navbar />
+            <Container maxWidth="md">
+                <Paper sx={{ p: 4, my: 4 }}>
+                    <Typography variant="h4" gutterBottom>
+                        Edit Exam
+                    </Typography>
+                    <Typography variant="h6" gutterBottom color="text.secondary">
+                        Course: {course.courseName}
+                    </Typography>
 
-            <h5>Course Name : {course.courseName}</h5>
+                    <Accordion defaultExpanded>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h5">General Details</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField name="examName" label="Exam Name" fullWidth value={examData.examName} onChange={handleInputChange} />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField name="examWeightage" label="Weightage" type="number" fullWidth value={examData.examWeightage} onChange={handleInputChange} />
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <TextField name="date" label="Date" type="date" fullWidth InputLabelProps={{ shrink: true }} value={examData.date} onChange={handleInputChange} />
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <TextField name="startTime" label="Start Time" type="time" fullWidth InputLabelProps={{ shrink: true }} value={examData.startTime} onChange={handleInputChange} />
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <TextField name="endTime" label="End Time" type="time" fullWidth InputLabelProps={{ shrink: true }} value={examData.endTime} onChange={handleInputChange} />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField name="instructions" label="Instructions" multiline rows={4} fullWidth value={examData.instructions} onChange={handleInputChange} />
+                                </Grid>
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
+                    
+                    <Box sx={{ my: 4 }}>
+                        <Typography variant="h5">Questions</Typography>
+                        {examData.Questions.map((question, index) => (
+                            <ExamQuestion
+                                key={question.questionNumber}
+                                question={question}
+                                qnIndex={index}
+                                handleDeleteQuestion={handleDeleteQuestion}
+                                examData={examData}
+                                setExamData={setExamData}
+                            />
+                        ))}
+                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                            <IconButton onClick={handleAddQuestion} color="primary" size="large">
+                                <AddCircleIcon fontSize="large" />
+                            </IconButton>
+                        </Box>
+                    </Box>
 
-            <div className='container'>
-                <ArrowDropDownIcon style={{marginTop:20}} onClick={()=>{setVisble(!visible)}}></ArrowDropDownIcon>
-
-                
-                <div className="formContainer" style={{display:visible?"block":"none"}}>
-                    <form>
-                        <h2>General Exam Details</h2>
-                        <hr/>
-                        <TextField
-                            variant={'standard'}
-                            fullWidth
-                            label={"Exam Name"}
-                            value={examData.examName}
-                            onChange={e=>setExamData({...examData,examName:e.target.value})}
-                        />
-                        <br/><br/>
-
-                        <TextField
-                            variant={'standard'}
-                            fullWidth
-                            label={"Total Marks"}
-                            type = "number"
-                            value={examData.examMarks}
-                            onChange={e=>setExamData({...examData,examMarks:e.target.value})}
-                        />
-                        <br/><br/>
-
-                        <TextField
-                            variant={'standard'}
-                            fullWidth
-                            label={"Weightage"}
-                            type = "number"
-                            value={examData.examWeightage}
-                            onChange={e=>setExamData({...examData,examWeightage:e.target.value})}
-                        />
-                        <br/><br/>
-
-                        <div className="date-time">
-                            <h4>Choose Date and Time</h4>
-                            <br/>
-
-                            <span>Start Time</span> <input type={"time"} onChange={e=>setExamData({...examData,startTime:e.target.value})} value={examData.startTime}/>
-                            <br/><br/>
-
-                            <span>End Time</span> <input type={"time"} onChange={e=>setExamData({...examData,endTime:e.target.value})} value={examData.endTime}/>
-                            <br/>
-
-                            <br/><br/>
-
-                            <span>Date</span><input type="date" value={examData.date} onChange={e=>setExamData({...examData,date:e.target.value})}/>
-                        </div>
-                        <br/><br/>
-
-                        <TextField
-                                id="filled-multiline-flexible"
-                                variant={'filled'}
-                                label="Instructions"
-                                multiline
-                                fullWidth
-                                minRows={3}
-                                maxRows={4}
-                                value = {examData.instructions}
-                                onChange={e=>setExamData({...examData,instructions:e.target.value})}
-                        />
-
-                        <br/><br/>
-                    </form>
-                </div>
-            </div>
-
-            <br/>
-
-            <div className='questionsHeading'>
-                <h2>Questions</h2>
-            </div>
-
-            
-
-
-            <div className='questionsContainer'>
-                {
-                    examData.Questions.map((question,index)=><ExamQuestion question={question} qnIndex = {index} handleDeleteQuestion={handleDeleteQuestion} examData={examData} setExamData={setExamData} key={question.questionNumber}/>)
-                }
-                <AddCircleIcon onClick={handleAddQuestion}></AddCircleIcon>
-            </div>
-        
-
-            <Button variant="contained" onClick={handleSave} style={{display:"block",marginLeft:"auto",marginRight:"auto",marginTop:20,marginBottom:20,maxWidth: '200px', maxHeight: '500px', minWidth: '200px', minHeight: '50px',backgroundColor: "#3da5e0",}}>Save</Button>
-            
+                    <Button variant="contained" color="primary" size="large" onClick={handleSave} sx={{ display: 'block', mx: 'auto' }}>
+                        Save Exam
+                    </Button>
+                </Paper>
+            </Container>
         </>
-    )
+    );
 }
 
-export default EditExam
+export default EditExam;

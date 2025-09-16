@@ -1,138 +1,110 @@
-import { Button } from '@material-ui/core';
-import React from 'react'
-import {useLocation, useNavigate} from 'react-router-dom';
-import Navbar from "../../../components/instructor/PastExam/Navbar/Navbar"
-import InstructorImage from "../../common/instructor.png";
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    Container,
+    Typography,
+    Paper,
+    Box,
+    Card,
+    CardContent,
+    CardActions,
+    Button,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    List,
+    ListItem,
+    ListItemText,
+    Divider,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Navbar from '../../../components/instructor/PastExam/Navbar/Navbar';
 import { evaluateExam } from '../../../api';
 
-import "./style.css"
-
-
 function PastExam() {
-
-    const navigate = useNavigate()
-
-    const {state} = useLocation();
-    console.log("Received params past exam",state)
+    const navigate = useNavigate();
+    const { state: course } = useLocation();
     
-    const course = state
-    let exams = course.Exams;
+    const isPastExam = (endTiming) => new Date(endTiming) < new Date();
+    const pastExams = course.Exams.filter((exam) => isPastExam(exam.endTiming));
 
-    const valid = (startTiming,endTiming) => {
-        startTiming = new Date(startTiming)
-        endTiming = new Date(endTiming)
-        const now = new Date().getTime()
-
-        return (now-startTiming)>0 && (now-endTiming)>0
-    }
-
-    const evaluate = (exam)=>{
+    const handleEvaluate = (exam) => {
         evaluateExam({
-            examDetails : exam,
-            courseDetails : course
-        })
-        alert("Exam Is Being Evaluated...")
-        navigate('/instructor')
-    }
+            examDetails: exam,
+            courseDetails: course,
+        });
+        alert('Exam evaluation has been initiated.');
+        navigate('/instructor');
+    };
 
-    exams = exams.filter((exam)=>valid(exam.startTiming,exam.endTiming))
-
-    const goToCheck = (exam,submission)=>{
+    const goToCheckSubmission = (exam, submission) => {
         navigate('/instructor/checkExam', {
-            state : {
-                course : course,
-                exam : exam,
-                submission : submission
-            }
-        })
-    }
-    
+            state: { course, exam, submission },
+        });
+    };
+
     return (
         <>
-            <Navbar/>
-            <h1 align="center">{course.courseName}</h1>
-            <br/>
-            <h2> &nbsp;&nbsp;List of Past Exams:- </h2>
-            <br/>
-            {exams.map((exam,index) => {
-                let submissions=exam.Submissions;
-                return <>      
-
-                    <div class="card-category-5" style={{"marginTop":-2,"display":'flex',"justifyContent":'center'}}>
-                        <ul class="all-pr-cards">
-                            <li>
-                                <div class="per-card-3">
-                                    <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
-                                       <img src={InstructorImage} alt=""/>
-                                        <span class="per-name">{exam.examName}</span>
-                                    </div>
-
-                                    <div class="card-content">
-
-                                        <div style={{display:'flex','justifyContent':'center','flexDirection':'column'}}>
-                                            <div style={{display:'flex','justifyContent':'space-between'}}>
-                                                <span><b>Start Time</b> :  {(new Date(exam.startTiming)).toString().substring(0,24)}</span>
-                                                <span><b>End Time</b> :  {(new Date(exam.endTiming)).toString().substring(0,24)}</span>
-                                            </div>
-                                            <br></br>
-                                            <p>
-                                                The exam will be of {exam.examMarks} marks with 
-                                                a total weightage of {exam.examWeightage}. 
-                                                The instructions for the exam are as follows :-
-                                                
-                                                <ul className='ssfd' style={{"textAlign":'left'}}>
-                                                {
-                                                    exam.instructions.split('\n').map((i,index)=>
-                                                        <>
-                                                            <li>{index+1}) {i}</li>
-                                                            <br></br>
-                                                        </>)
-                                                }
-                                                </ul>
-                                                
-                                            </p>
-                                        </div>
-                                        
-                                        
-                                        <div class="social-icons" style={{"display":'flex',"justifyContent":'center',"backgroundColor":'#4253ed'}}>
-                                            <Button  style={{"fontSize":25,"fontFamily":'sans-serif'}} onClick={()=>{evaluate(exam)}}>Evaluate Exam</Button>
-                                        </div>
-                                    </div>   
-                                                   
-                                </div>
-                            </li>
-
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={`#${"exam"+index}`} aria-expanded="false" aria-controls={`${"exam"+index}`} style={{marginLeft:5}}>
-                                View Students
-                            </button>
-                    
-                        <div class="collapse" id={`${"exam"+index}`} style={{"width":'82%',"marginLeft":'0px','marginTop':10}}>
-                            <div class="card-xyz card-body-xyz" id={`${"exam"+index}`}>
-                            <h4 style={{"marginBottom":4}}>Student Submissions</h4>
-                                {submissions.map((submission) => {
-                                    return <>      
-                                    <ul>
-                                        <li>
-                                            {submission.studentEmail} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Marks Obtained: {submission.marksObtained}
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={()=>{goToCheck(exam,submission)}}>View Submission</Button>
-                                        </li>
-                                    </ul>
-                                    </>})}
-                            </div>
-                        </div>
-                    
-                            
-                           
-                        </ul>
-                        
-                           
-                        
-                    </div>
-                <br/>
-                </>
-            })}
+            <Navbar />
+            <Container maxWidth="md">
+                <Box sx={{ my: 4 }}>
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        Past Exams for {course.courseName}
+                    </Typography>
+                    {pastExams.length > 0 ? (
+                        pastExams.map((exam) => (
+                            <Card key={exam.examName} sx={{ mb: 3 }}>
+                                <CardContent>
+                                    <Typography variant="h5">{exam.examName}</Typography>
+                                    <Typography color="text.secondary">
+                                        Ended: {new Date(exam.endTiming).toLocaleString()}
+                                    </Typography>
+                                    <Typography sx={{ mt: 1 }}>Total Marks: {exam.examMarks}</Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="small" onClick={() => handleEvaluate(exam)}>
+                                        Evaluate Exam
+                                    </Button>
+                                </CardActions>
+                                <Accordion>
+                                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                        <Typography>View Submissions</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <List>
+                                            {exam.Submissions.map((submission, index) => (
+                                                <React.Fragment key={submission.studentEmail}>
+                                                    <ListItem
+                                                        secondaryAction={
+                                                            <Button
+                                                                variant="outlined"
+                                                                size="small"
+                                                                onClick={() => goToCheckSubmission(exam, submission)}
+                                                            >
+                                                                View
+                                                            </Button>
+                                                        }
+                                                    >
+                                                        <ListItemText
+                                                            primary={submission.studentEmail}
+                                                            secondary={`Marks: ${submission.marksObtained}`}
+                                                        />
+                                                    </ListItem>
+                                                    {index < exam.Submissions.length - 1 && <Divider />}
+                                                </React.Fragment>
+                                            ))}
+                                        </List>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </Card>
+                        ))
+                    ) : (
+                        <Typography>No past exams found for this course.</Typography>
+                    )}
+                </Box>
+            </Container>
         </>
-    )
+    );
 }
 
-export default PastExam
+export default PastExam;

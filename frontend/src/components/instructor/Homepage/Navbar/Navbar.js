@@ -1,25 +1,34 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { AppBar, Toolbar, Button, Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
 
 function Navbar() {
-  const navigate = useNavigate()
-  return(
-    <> 
-      <div>
-        <nav  class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <Button onClick={()=>{navigate('/')}} style={{color:"white"}}>Home</Button>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
-  </div>
-</nav>
-      </div>
-      
-       </>
-  )
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch({ type: 'LOGOUT' });
+    navigate('/');
+  };
+
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Box sx={{ flexGrow: 1 }}>
+          <Button color="inherit" onClick={() => navigate('/instructor')}>
+            Home
+          </Button>
+          <Button color="inherit" onClick={() => navigate('/instructor/profile')}>
+            Profile
+          </Button>
+        </Box>
+        <Button color="inherit" onClick={logout}>
+          Logout
+        </Button>
+      </Toolbar>
+    </AppBar>
+  );
 }
 
 export default Navbar;

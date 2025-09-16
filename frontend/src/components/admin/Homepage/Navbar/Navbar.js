@@ -1,57 +1,40 @@
 import React from 'react';
-// import viewStudents from '../../../../pages/admin/ViewStudents/ViewStudents'
 import { useNavigate } from 'react-router-dom';
-
-import { Button } from '@material-ui/core';
+import { AppBar, Toolbar, Button, Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
 
 function Navbar() {
-  const navigate = useNavigate()
-  const goToViewStu = ()=>{
-    navigate('/admin/viewStudents', {
-      state : "",
-    })
-  }
-  const goToViewIns = ()=>{
-    navigate('/admin/viewInstructors', {
-      state : "",
-    })
-  }
-  const goToViewCou = ()=>{
-    navigate('/admin/viewCourses', {
-      state : "",
-    })
-  }
-  return(
-    <> 
-      <div>
-        <nav  class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-    <Button onClick={()=>{navigate('/')}} style={{color:"white"}}>Home</Button>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-        <Button onClick={goToViewStu} style={{color:"white"}}>Student List</Button>
-        </li>
-        <li class="nav-item">
-        <Button onClick={goToViewIns} style={{color:"white"}}>Instructor List</Button>
-        </li>
-        <li class="nav-item">
-        <Button onClick={goToViewCou} style={{color:"white"}}>Course List</Button>
-        </li>
-        
-        
-      </ul>
-      
-    </div>
-  </div>
-</nav>
-      </div>
-      
-       </>
-  )
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch({ type: 'LOGOUT' });
+    navigate('/');
+  };
+
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Box sx={{ flexGrow: 1 }}>
+          <Button color="inherit" onClick={() => navigate('/admin')}>
+            Home
+          </Button>
+          <Button color="inherit" onClick={() => navigate('/admin/viewStudents')}>
+            Students
+          </Button>
+          <Button color="inherit" onClick={() => navigate('/admin/viewInstructors')}>
+            Instructors
+          </Button>
+          <Button color="inherit" onClick={() => navigate('/admin/viewCourses')}>
+            Courses
+          </Button>
+        </Box>
+        <Button color="inherit" onClick={logout}>
+          Logout
+        </Button>
+      </Toolbar>
+    </AppBar>
+  );
 }
 
 export default Navbar;

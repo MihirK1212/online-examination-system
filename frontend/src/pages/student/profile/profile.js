@@ -1,79 +1,86 @@
 import React from 'react';
-import Navbar from '../../../components/student/Participants/Navbar/Navbar';
-import img from "./profile.png";
-import img_course from "./course.jpg";
-import "./style.css";
+import {
+    Container,
+    Typography,
+    Paper,
+    Box,
+    Grid,
+    Card,
+    CardContent,
+    Avatar,
+    List,
+    ListItem,
+    ListItemText,
+    Divider,
+} from '@mui/material';
+import Navbar from '../../../components/student/Participants/Navbar/Navbar'; // Assuming a generic student navbar exists
+import DefaultAvatar from './profile.png';
 
-let data = {
+// Mock data, replace with actual data fetching
+const studentData = {
     studentEmail: 'cse200001063@iiti.ac.in',
     generalDetails: {
         name: 'Priyansh Jaseja',
-        dateOfBirth: '11/11/2001',
-        phoneNumber: 9424664100,
-        programName: 'B.Tech.',
-        startDateOfProgram: '05/11/2021'
+        dateOfBirth: '2001-11-11',
+        phoneNumber: '9424664100',
+        programName: 'B.Tech. in Computer Science',
     },
     registeredCourses: [
-        {
-            courseCode: 'CS 202',
-            year: 2022,
-            semester: 'Spring',
-            grade: 'Not Given'
-        },
-        {
-            courseCode: 'CS 203',
-            year: 2022,
-            semester: 'Autumn',
-            grade: 'AA'
-        },
-        {
-            courseCode: 'CS 202',
-            year: 2022,
-            semester: 'Spring',
-            grade: 'Not Given'
-        },
-        {
-            courseCode: 'CS 202',
-            year: 2022,
-            semester: 'Spring',
-            grade: 'Not Given'
-        }
-    ]
-}
+        { courseCode: 'CS 202', year: 2022, semester: 'Spring', grade: 'A' },
+        { courseCode: 'CS 203', year: 2022, semester: 'Autumn', grade: 'A+' },
+        { courseCode: 'MA 201', year: 2022, semester: 'Spring', grade: 'B' },
+    ],
+};
 
 function Profile() {
     return (
         <>
-            <Navbar/>
-            <div className='main'>
-                <div className='image'><img className='dp-img' src={ img }></img></div>
-                <div className='data'>
-                    <h4 style={{marginTop: 3, marginBottom: 3}}>Name: { data.generalDetails.name }</h4>
-                    <span>Phone Number: { data.generalDetails.phoneNumber }</span> <br></br>
-                    <span>Date of Birth: { data.generalDetails.dateOfBirth }</span><br></br>
-                    <span>Program: { data.generalDetails.programName }</span><br></br>
-                </div>
-            </div>
-            <br></br>
-            <br></br>
-            <hr></hr>
-            <center><h2>List of Courses Enrolled</h2></center>
-            <br></br>
-            <div className='courseList'>
-                {data.registeredCourses.map((p) => {
-                    return (<>                        
-                            <div className="card" >
-                                <img src={ img_course } className="card-img-top"></img>
-                                <div className="card-body">
-                                    <h5 className="card-title">{ p.courseCode }</h5>
-                                    <p className="card-text">{p.semester} {p.year}</p>
-                                </div>
-                            </div>
-                    </>)
-                })}
-            </div>
+            <Navbar />
+            <Container maxWidth="lg">
+                <Box sx={{ my: 4 }}>
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        Student Profile
+                    </Typography>
+                    <Paper sx={{ p: 2, display: 'flex', alignItems: 'center', mb: 4 }}>
+                        <Avatar
+                            alt={studentData.generalDetails.name}
+                            src={DefaultAvatar}
+                            sx={{ width: 100, height: 100, mr: 3 }}
+                        />
+                        <Box>
+                            <Typography variant="h5">{studentData.generalDetails.name}</Typography>
+                            <Typography color="text.secondary">{studentData.studentEmail}</Typography>
+                            <Typography color="text.secondary">
+                                DOB: {new Date(studentData.generalDetails.dateOfBirth).toLocaleDateString()}
+                            </Typography>
+                            <Typography color="text.secondary">
+                                Program: {studentData.generalDetails.programName}
+                            </Typography>
+                        </Box>
+                    </Paper>
+
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Course History
+                    </Typography>
+                    <Paper>
+                        <List>
+                            {studentData.registeredCourses.map((course, index) => (
+                                <React.Fragment key={index}>
+                                    <ListItem>
+                                        <ListItemText
+                                            primary={`${course.courseCode} (${course.semester} ${course.year})`}
+                                            secondary={`Grade: ${course.grade}`}
+                                        />
+                                    </ListItem>
+                                    {index < studentData.registeredCourses.length - 1 && <Divider />}
+                                </React.Fragment>
+                            ))}
+                        </List>
+                    </Paper>
+                </Box>
+            </Container>
         </>
-    )
+    );
 }
 
-export default Profile
+export default Profile;

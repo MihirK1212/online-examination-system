@@ -1,53 +1,94 @@
 import React from 'react';
-import { Box, Paper } from "@mui/material";
+import {
+	Box,
+	AppBar,
+	Toolbar,
+	Typography,
+	Container,
+	Grid,
+	Card,
+	CardMedia,
+	CardContent,
+    CardActions,
+    Button
+} from "@mui/material";
+import { Link } from 'react-router-dom';
 
 import AdminImage from "./admin.png"
 import InstructorImage from "./instructor.png"
 import StudentImage from "./student.png"
-import "./style.css"
-import { Link } from 'react-router-dom';
 
 function MainHomepage() {
+    const loginOptions = [
+        {
+            title: "Admin",
+            image: AdminImage,
+            link: "/login/admin"
+        },
+        {
+            title: "Instructor",
+            image: InstructorImage,
+            link: "/login/instructor"
+        },
+        {
+            title: "Student",
+            image: StudentImage,
+            link: "/login/student"
+        }
+    ];
 
     return (
-    <>
-    <nav  class="navbar navbar-expand-lg navbar-dark bg-primary" style={{"justifyContent":'center'}}>
-        <h1>Welcome to the Examination System</h1>
-    </nav>
-    
-        <div style={{display:'flex',justifyContent:'space-between' , marginTop:'10px', marginLeft:'30px' , marginRight:'30px'}}>
-          
-          <Paper sx={{ maxWidth: '320px', zIndex: 10, borderRadius: '25px', margin: '0, 20px' ,display:'flex',justifyContent:'center'}} elevation={3}>
-              <Box gap={5} padding={3}  >
-                  <img src={AdminImage} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={180}
-                      width={'100%'} />
-                  <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                    <Link to="/login/admin">Admin Login</Link>
-                  </Box>
-              </Box>
-          </Paper>
-
-          <Paper sx={{ maxWidth: '320px', zIndex: 10, borderRadius: '25px', margin: '0, 20px' }} elevation={3}>
-              <Box gap={5} padding={3}  >
-                  <img src={InstructorImage} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={180}
-                      width={'100%'} />
-                  <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                    <Link to="/login/instructor">Intructor Login</Link>
-                  </Box>
-              </Box>
-          </Paper>
-          <Paper sx={{ maxWidth: '320px', zIndex: 10, borderRadius: '25px', margin: '0, 20px' }} elevation={3}>
-              <Box gap={5} padding={3}  >
-                  <img src={StudentImage} style={{ borderRadius: '25px', objectFit: 'cover' }} alt={"dsadsa"} height={180}
-                      width={'100%'} />
-                  <Box style={{display:'flex',justifyContent:'center' , marginTop:'10px'}}>
-                    <Link to="/login/student">Student Login</Link>
-                  </Box>
-              </Box>
-          </Paper>
-        </div>
-    
-  </>)
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Examination System
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <Container
+                maxWidth="md"
+                sx={{
+                    py: 8,
+                }}
+            >
+                <Typography variant="h4" component="h1" gutterBottom align="center">
+                    Welcome to the Examination System
+                </Typography>
+                <Typography variant="h6" align="center" color="text.secondary" paragraph>
+                    Please select your role to login.
+                </Typography>
+                <Grid container spacing={4} justifyContent="center">
+                    {loginOptions.map((option) => (
+                        <Grid item key={option.title} xs={12} sm={6} md={4}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <CardMedia
+                                    component="img"
+                                    sx={{
+                                        pt: '10%',
+                                        objectFit: 'contain',
+                                        height: '150px'
+                                    }}
+                                    image={option.image}
+                                    alt={option.title}
+                                />
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Typography gutterBottom variant="h5" component="h2" align="center">
+                                        {option.title}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions sx={{justifyContent:'center', paddingBottom:'16px'}}>
+                                    <Button component={Link} to={option.link} variant="contained" color="primary">
+                                        Login as {option.title}
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+        </Box>
+    );
 }
 
 export default MainHomepage;

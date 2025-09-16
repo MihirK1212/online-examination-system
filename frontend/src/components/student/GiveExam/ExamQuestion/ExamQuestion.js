@@ -1,190 +1,99 @@
-import React , {useState} from 'react'
-import { Button, Card} from "@material-ui/core";
-import {useDispatch} from 'react-redux'
-import { TextField} from "@material-ui/core";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import './style.css'
-
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import {
+    Card,
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    Box,
+    Typography,
+    RadioGroup,
+    Radio,
+} from '@mui/material';
 import { saveQuestionResponse } from '../../../../redux/actions/Responses';
 
-function ExamQuestion({question,response,chosenQnIndex,setChosenQnIndex,ub,submitResponses}) {
+function ExamQuestion({ question, response }) {
+    const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
+    const handleMCQChange = (event) => {
+        const optionIndex = parseInt(event.target.value, 10);
+        let newSelectedOptions;
 
-    let [selectedOptions,setSelectedOptions] = useState(response.questionSelectedOptions)
-    let [givenAnswer,setGivenAnswer] = useState(response.questionGivenAnswer)
-
-    const isChosen = (index) => {
-        return selectedOptions.includes(index)
-    }
-    
-    const optionSelect = (index) => {
-        let currSelected = selectedOptions
-        if(currSelected.includes(index))
-        {
-            currSelected = currSelected.filter(ansInd => ansInd!==index)
+        // For single-choice MCQ (assuming radio buttons), replace the selection
+        // For multiple-choice (checkboxes), add/remove from the array
+        if (question.singleChoice) { // Assuming a property to distinguish
+            newSelectedOptions = [optionIndex];
+        } else {
+            const currentIndex = response.questionSelectedOptions.indexOf(optionIndex);
+            if (currentIndex === -1) {
+                newSelectedOptions = [...response.questionSelectedOptions, optionIndex];
+            } else {
+                newSelectedOptions = response.questionSelectedOptions.filter(i => i !== optionIndex);
+            }
         }
-        else
-        {
-            currSelected.push(index)
-            currSelected = currSelected.sort()
-        }
-
-        setSelectedOptions([...currSelected])
-    }
-
-    const saveQuestion = (action) => {
-
-        let responseData = {}
-
-        responseData.questionNumber = question.questionNumber
-        responseData.questionGivenAnswer = givenAnswer
-        responseData.questionSelectedOptions = selectedOptions
         
-        if(givenAnswer==='' && selectedOptions.length===0)
-        {
-            responseData.status = 'NotAttempted'
-        }
-        else
-        {
-            responseData.status = 'Attempted'
-        }
+        dispatch(saveQuestionResponse({
+            ...response,
+            questionSelectedOptions: newSelectedOptions,
+            status: 'Attempted',
+        }));
+    };
 
-        console.log("saving question ",responseData)
-
-        dispatch(saveQuestionResponse(responseData))
-
-
-        if(action==='FORWARD')
-        {
-            setChosenQnIndex(chosenQnIndex+1)
-        }
-        if(action==='BACKWARD')
-        {
-            setChosenQnIndex(chosenQnIndex-1)
-        }
-    }
+    const handleTextChange = (event) => {
+        const { value } = event.target;
+        dispatch(saveQuestionResponse({
+            ...response,
+            questionGivenAnswer: value,
+            status: value.trim() ? 'Attempted' : 'NotAttempted',
+        }));
+    };
 
     return (
-        <>
-            <div className={"questionContainerStudent"}>
-                <Card className={"questionCardStudent"} >
+        <Card sx={{ p: 3 }}>
+            <Typography variant="h6" gutterBottom>
+                Question {question.questionNumber} ({question.questionMarks} Marks)
+            </Typography>
+            <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', mb: 2 }}>
+                {question.questionContent}
+            </Typography>
 
-                    <div className={"questionHeaderStudent"}>
-
-                        <h3>{question.questionNumber}</h3>
-                        
-                        <div className="marksInputStudent">
-                            <TextField
-                                id="standard-number"
-                                label="Marks"
-                                type="number"
-                                disabled
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                value={question.questionMarks}
-                                variant="standard"
-                            />
-                        </div>
-
-                    </div>
-
-                    <div className="questionContentStudent">
-                        <TextField
-                            id="filled-multiline-flexible"
-                            variant={'filled'}
-                            label="Question Content"
-                            multiline
-                            fullWidth
-                            minRows={4}
-                            maxRows={5}
-                            disabled
-                            value = {question.questionContent}
+            {question.questionType === 'MCQ' && (
+                <RadioGroup
+                    value={response.questionSelectedOptions[0] ?? null}
+                    onChange={handleMCQChange}
+                >
+                    {question.questionOptions.map((option, index) => (
+                        <FormControlLabel
+                            key={index}
+                            value={index}
+                            control={<Radio />}
+                            label={option}
                         />
-                    </div>
+                    ))}
+                </RadioGroup>
+            )}
 
-                    {
-                        question.questionType === "MCQ" ?
-                        <>  
-                            {
-                                question.questionOptions.map((option,index)=>{
-                                    return (
-                                        <>
-                                            <Card className="optionCardStudent" key={index}>
-                                            <FormControlLabel control={<Checkbox checked={isChosen(index)} onChange={()=>{optionSelect(index)}}/>} style={{marginLeft:20}}/>
-                                                <TextField
-                                                    id="filled-multiline-flexible"
-                                                    variant={'filled'}
-                                                    label="Option Text"
-                                                    className='optionTextStudent'
-                                                    multiline
-                                                    size='small'
-                                                    minRows={1}
-                                                    maxRows={4}
-                                                    disabled
-                                                    value = {question.questionOptions[index]}
-                                                />
-                                            </Card>
-                                        </>
-                                    )
-                                })
-                            }
-                            
-                        </>
-                        
-                        :
-                        <>
-                        {
-                            question.questionType==='Numerical'?
-                            <div className='numericAnswerStudent'>
-                                <TextField
-                                id="filled-number"
-                                label="Numeric Answer"
-                                type="number"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                value = {givenAnswer}
-                                variant="filled"
-                                onChange = {e=>setGivenAnswer(e.target.value)}
-                                />
-                            </div>:
-                            <div className='subjectiveAnswerStudent'>
-                                <TextField
-                                    id="filled-multiline-flexible"
-                                    variant={'filled'}
-                                    label="Subjective Answer"
-                                    multiline
-                                    fullWidth
-                                    minRows={6}
-                                    value = {givenAnswer}
-                                    onChange = {e=>setGivenAnswer(e.target.value)}
-                                />
-                            </div>
-                        }
-                            
-                        </>
+            {question.questionType === 'Numerical' && (
+                <TextField
+                    label="Your Answer"
+                    type="number"
+                    value={response.questionGivenAnswer}
+                    onChange={handleTextChange}
+                />
+            )}
 
-                        
-                    }
-                </Card>
-
-                <div>
-                        {
-                            chosenQnIndex>0?<Button onClick={()=>{saveQuestion('BACKWARD')}}>Previous</Button>:null
-                        }
-                        {
-                            chosenQnIndex<ub?<Button onClick={()=>{saveQuestion('FORWARD')}}>Next</Button>:null
-                        }
-                        {
-                            chosenQnIndex===ub?<Button onClick={()=>{submitResponses()}}>Submit</Button>:null
-                        }
-                </div>
-            </div>
-        </>
-    )
+            {question.questionType === 'Subjective' && (
+                <TextField
+                    label="Your Answer"
+                    multiline
+                    fullWidth
+                    rows={8}
+                    value={response.questionGivenAnswer}
+                    onChange={handleTextChange}
+                />
+            )}
+        </Card>
+    );
 }
 
-export default ExamQuestion
+export default ExamQuestion;

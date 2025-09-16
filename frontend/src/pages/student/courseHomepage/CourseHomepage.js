@@ -1,139 +1,103 @@
 import React from 'react';
-import {useLocation} from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@material-ui/core';
-import "../../instructor/CourseHomepage/style.css"
-import Navbar from '../../../components/student/CourseHomepage/Navbar/Navbar'
-import InstructorImage from "../../common/student.png";
-
-
-// This is the complete page for showing the course information in a student panel 
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    Container,
+    Typography,
+    Paper,
+    Box,
+    Grid,
+    Card,
+    CardContent,
+    CardActions,
+    Button,
+    List,
+    ListItem,
+    ListItemText,
+} from '@mui/material';
+import Navbar from '../../../components/student/CourseHomepage/Navbar/Navbar';
 
 function CourseHomepage() {
-    const {state} = useLocation();
-    const navigate = useNavigate()
+    const { state: course } = useLocation();
+    const navigate = useNavigate();
 
-    console.log("Received params ",state)
+    const isUpcoming = (endTiming) => new Date(endTiming) > new Date();
+    const isCurrent = (startTiming, endTiming) => {
+        const now = new Date();
+        return new Date(startTiming) <= now && now <= new Date(endTiming);
+    };
 
-    const valid = (startTiming,endTiming)=>{
-        startTiming = new Date(startTiming)
-        endTiming = new Date(endTiming)
-        const now = new Date()
-
-        console.log(startTiming,endTiming,now)
-
-        return (endTiming-now)>0
-    }
-
-    const isCurrent = (startTiming,endTiming)=>{
-        startTiming = new Date(startTiming)
-        endTiming = new Date(endTiming)
-        const now = new Date().getTime()
-
-        return (now-startTiming)>0 && (endTiming-now)>0
-    }
-
-    const goToExam = (exam) =>{
-    
-        console.log("going to exam ",exam)
+    const goToExam = (exam) => {
         navigate('/student/giveExam', {
-          state : {
-              exam : exam,
-              course : state
-            }
-        })
-      }
+            state: { exam, course },
+        });
+    };
 
-    function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-    
-    let exams = state.Exams;
-    let announcements = state.announcements;
-    return(
-        <> 
-            <Navbar course = {state}/>
-            <br/>
-            <h1 align="center">{state.courseName}</h1>
-            <br/>
-            <h2 className='homepageHeading'> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
-            <br></br>
-            <br></br>
-            
-            {exams.map((exam,index) => {
-                return <>    
-                {
-                    valid(exam.startTiming,exam.endTiming)?
+    const upcomingExams = course.Exams.filter((exam) => isUpcoming(exam.endTiming));
 
-                    <div class="card-category-5" style={{"marginTop":-2}}>
-                        <ul class="all-pr-cards">
-                            <li>
-                                <div class="per-card-3">
-                                    <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
-                                       <img src={InstructorImage} alt=""/>
-                                        <span class="per-name">{exam.examName}</span>
-                                    </div>
+    return (
+        <>
+            <Navbar course={course} />
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Typography variant="h4" component="h1" gutterBottom>
+                    {course.courseName}
+                </Typography>
 
-                                    <div class="card-content" >
-
-                                        <div style={{display:'flex','justifyContent':'center','flexDirection':'column'}}>
-                                            <div style={{display:'flex','justifyContent':'space-between'}}>
-                                                <span><b>Start Time</b> :  {(new Date(exam.startTiming)).toString().substring(0,24)}</span>
-                                                <span><b>End Time</b> :  {(new Date(exam.endTiming)).toString().substring(0,24)}</span>
-                                            </div>
-                                            <br></br>
-                                            <p>
-                                                The exam will be of {exam.examMarks} marks with 
-                                                a total weightage of {exam.examWeightage}. 
-                                                The instructions for the exam are as follows :-
-                                                
-                                                <ul className='ssfd' style={{"textAlign":'left'}}>
-                                                {
-                                                    exam.instructions.split('\n').map((i,index)=>
-                                                        <>
-                                                            <li>{index+1}) {i}</li>
-                                                            <br></br>
-                                                        </>)
-                                                }
-                                                </ul>
-                                                
-                                            </p>
-                                        </div>
-                                        
-                                        
-                                        <div class="social-icons" style={{"display":'flex',"alignItems":'center', "justifyContent":'center' ,"backgroundColor":'#4253ed'}}>
-                                        {
-                                            isCurrent(exam.startTiming,exam.endTiming)?
-                                            <Button onClick={()=>{goToExam(exam)}}>Attempt</Button>:
-                                            <h2>This exam is closed for now</h2>
-                                        }                          
-                                        </div>
-                                    </div>                  
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    : ""
-                }   
-                </>})}
-                <br/>
-            <div style={{marginLeft:50}}>
-                <h2 className='homepageHeading'> &nbsp;&nbsp;Announcements:- </h2>
-
-                <div style={{marginLeft:20}}>
-
-                    {announcements.map((announcement,index) => {
-                        return <>      
-                        <ul>
-                            <li>
-                                {capitalizeFirstLetter(announcement)}
-                            </li>
-                        </ul>
-                        </>})}
-                </div>
-            </div>
-    </>
-  )
+                <Grid container spacing={4}>
+                    <Grid item xs={12} md={8}>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            Upcoming & Active Exams
+                        </Typography>
+                        {upcomingExams.length > 0 ? (
+                            upcomingExams.map((exam) => (
+                                <Card key={exam.examName} sx={{ mb: 2 }}>
+                                    <CardContent>
+                                        <Typography variant="h6">{exam.examName}</Typography>
+                                        <Typography color="text.secondary">
+                                            Starts: {new Date(exam.startTiming).toLocaleString()}
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            Ends: {new Date(exam.endTiming).toLocaleString()}
+                                        </Typography>
+                                        <Typography sx={{ mt: 1 }}>Marks: {exam.examMarks}, Weightage: {exam.examWeightage}</Typography>
+                                        <Typography variant="body2" sx={{ mt: 1 }}>
+                                            <strong>Instructions:</strong> {exam.instructions}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        {isCurrent(exam.startTiming, exam.endTiming) ? (
+                                            <Button variant="contained" color="primary" onClick={() => goToExam(exam)}>
+                                                Attempt Exam
+                                            </Button>
+                                        ) : (
+                                            <Button variant="outlined" disabled>
+                                                Upcoming
+                                            </Button>
+                                        )}
+                                    </CardActions>
+                                </Card>
+                            ))
+                        ) : (
+                            <Typography>No upcoming exams.</Typography>
+                        )}
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Paper sx={{ p: 2 }}>
+                            <Typography variant="h5" component="h2" gutterBottom>
+                                Announcements
+                            </Typography>
+                            <List>
+                                {course.announcements.map((announcement, index) => (
+                                    <ListItem key={index}>
+                                        <ListItemText primary={announcement} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Container>
+        </>
+    );
 }
 
 export default CourseHomepage;

@@ -1,125 +1,111 @@
-import React from "react";
-import {useDispatch} from "react-redux"
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Modal from '@material-ui/core/Modal';
-import { useState } from "react";
-import TextField from "@material-ui/core/TextField";
-import { addCourse } from "../../../redux/actions/Admin";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Button, Modal, Box, TextField, Typography } from '@mui/material';
+import { addCourse } from '../../../redux/actions/Admin';
+
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+};
 
 function AddCourse() {
-    const dispatch = useDispatch()
-    
-    const [formCourse, setFormCourse] = useState({"courseCode":"","courseName":"","description":""})
-
-    function getModalStyle() {
-        const top = 50
-        const left = 50
-        return {
-            top: `${top}%`,
-            left: `${left}%`,
-            transform: `translate(-${top}%, -${left}%)`,
-        };
-    }
-
-    const useStyles = makeStyles(theme => ({
-        modal: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        paper: {
-            position: 'absolute',
-            width: 450,
-            backgroundColor: theme.palette.background.paper,
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
-        },
-    }));
-
-    const classes = useStyles();
-    const [modalStyle] = useState(getModalStyle);
+    const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
+    const [formCourse, setFormCourse] = useState({
+        courseCode: '',
+        courseName: '',
+        description: '',
+    });
 
-    const handleOpen = () => {
-        setOpen(true);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const handleSubmit = () => {
+        dispatch(addCourse(formCourse));
+        handleClose();
     };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleSubmit = ()=>{
-        console.log("New course ",formCourse)
-        setOpen(false)
-        dispatch(addCourse(formCourse))
-    }
-
-    // const initial = sectionChild.visible
 
     return (
         <div>
             <Button variant="contained" color="primary" onClick={handleOpen}>
                 Add Course
             </Button>
-
             <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
                 open={open}
                 onClose={handleClose}
+                aria-labelledby="add-course-modal-title"
+                aria-describedby="add-course-modal-description"
             >
-                <div style={modalStyle} className={classes.paper}>
-                    <form id="form">
+                <Box sx={modalStyle}>
+                    <Typography id="add-course-modal-title" variant="h6" component="h2">
+                        Add a New Course
+                    </Typography>
+                    <Box
+                        component="form"
+                        sx={{ mt: 2 }}
+                        noValidate
+                        autoComplete="off"
+                    >
                         <TextField
-                            variant="outlined"
                             margin="normal"
                             required
                             fullWidth
                             id="course-code"
-                            label={"Course Code"}
-                            type="text"
+                            label="Course Code"
                             name="course-code"
-                            autoComplete="Course Code"
-                            className="field"
+                            autoFocus
                             value={formCourse.courseCode}
-                            onChange={(e) =>setFormCourse({ ...formCourse, courseCode: e.target.value })}
+                            onChange={(e) =>
+                                setFormCourse({ ...formCourse, courseCode: e.target.value })
+                            }
                         />
                         <TextField
-                            variant="outlined"
                             margin="normal"
                             required
                             fullWidth
                             id="course-name"
-                            label={"Course Name"}
-                            type="text"
+                            label="Course Name"
                             name="course-name"
-                            autoComplete="Course Name"
-                            className="field"
                             value={formCourse.courseName}
-                            onChange={(e) =>setFormCourse({ ...formCourse, courseName: e.target.value })}
+                            onChange={(e) =>
+                                setFormCourse({ ...formCourse, courseName: e.target.value })
+                            }
                         />
                         <TextField
-                            variant="outlined"
                             margin="normal"
                             required
                             fullWidth
                             id="course-description"
-                            label={"Course Description"}
-                            type="text"
-                            name="course-code"
-                            autoComplete="Course Description"
-                            className="field"
+                            label="Course Description"
+                            name="course-description"
+                            multiline
+                            rows={4}
                             value={formCourse.description}
-                            onChange={(e) =>setFormCourse({ ...formCourse, description: e.target.value })}
+                            onChange={(e) =>
+                                setFormCourse({ ...formCourse, description: e.target.value })
+                            }
                         />
-
-                        <Button type="button" onClick={handleSubmit}>Confirm</Button>
-                    </form>
-                </div>
+                        <Button
+                            type="button"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            onClick={handleSubmit}
+                        >
+                            Add Course
+                        </Button>
+                    </Box>
+                </Box>
             </Modal>
         </div>
     );
 }
 
-export default AddCourse
+export default AddCourse;

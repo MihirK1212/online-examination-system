@@ -1,227 +1,157 @@
-import React from 'react';
-import { useState } from 'react';
-import {useDispatch } from 'react-redux'
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
 import * as XLSX from 'xlsx';
-
-import { FormControl, InputLabel,Select,MenuItem , TextField , Card , Button} from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@mui/icons-material/Close';
-
-import Navbar from "../../../components/admin/General/Navbar/Navbar"
-
+import {
+    Container,
+    Typography,
+    TextField,
+    Button,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Chip,
+    Autocomplete,
+    Paper,
+} from '@mui/material';
+import Navbar from '../../../components/admin/General/Navbar/Navbar';
 import { addCourseInstance } from '../../../redux/actions/Admin';
 
-import "./style.css"
+function AddCourseInstance({ instructors }) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+    const instructorEmails = instructors.map((instructor) => instructor.instructorEmail);
+    const [selectedInstructors, setSelectedInstructors] = useState([]);
+    const [formData, setFormData] = useState({
+        courseCode: '',
+        year: new Date().getFullYear(),
+        semester: 'spring',
+    });
+    const [studentData, setStudentData] = useState([]);
 
-function AddCourseInstance({instructors}) {
-  
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-
-  instructors = instructors.map((instructor)=>{return instructor.instructorEmail})
-  console.log(instructors)
-  const [selectedInstructors,setSelectedInstructors] = useState([])
-
-
-  const [formData,setFormData] = useState({"courseCode":"","year":2022,"semester":"spring"})
-
-  const [filteredList,setFilteredList] = useState([])
-  const [searchQuery,setSearchQuery] = useState("")
-
-  const [columns, setColumns] = useState([]);
-  const [data, setData] = useState([]);
-
-  
-  console.log("Columns",columns)
-  console.log("Data",data)
-  
-  const processData = dataString => {
-    const dataStringLines = dataString.split(/\r\n|\n/);
-    const headers = dataStringLines[0].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
-  
-    const list = [];
-    for (let i = 1; i < dataStringLines.length; i++) {
-      const row = dataStringLines[i].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
-      if (headers && row.length === headers.length) {
-        const obj = {};
-        for (let j = 0; j < headers.length; j++) {
-          let d = row[j];
-          if (d.length > 0) {
-            if (d[0] === '"')
-              d = d.substring(1, d.length - 1);
-            if (d[d.length - 1] === '"')
-              d = d.substring(d.length - 2, 1);
-          }
-          if (headers[j]) {
-            obj[headers[j]] = d;
-          }
-        }
-  
-        // remove the blank rows
-        if (Object.values(obj).filter(x => x).length > 0) {
-          list.push(obj);
-        }
-      }
-    }
-  
-    // prepare columns list from headers
-    const columns = headers.map(c => ({
-      name: c,
-      selector: c,
-    }));
-  
-    setData(list);
-    setColumns(columns);
-  }
-  
-  // handle file upload
-  const handleFileUpload = e => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      /* Parse data */
-      const bstr = evt.target.result;
-      const wb = XLSX.read(bstr, { type: 'binary' });
-      /* Get first worksheet */
-      const wsname = wb.SheetNames[0];
-      const ws = wb.Sheets[wsname];
-      /* Convert array of arrays */
-      const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-      processData(data);
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const bstr = evt.target.result;
+            const wb = XLSX.read(bstr, { type: 'binary' });
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+            const [headers, ...rows] = data;
+            if (headers[0] !== 'Email') {
+                alert("Invalid file format. The first column must be 'Email'.");
+                return;
+            }
+            const studentEmails = rows.map((row) => ({ Email: row[0] })).filter(student => student.Email);
+            setStudentData(studentEmails);
+        };
+        reader.readAsBinaryString(file);
     };
-    reader.readAsBinaryString(file);
-  }
 
-  const selectInstructor = (id)=>{
-      setSelectedInstructors([...selectedInstructors,id])
-      setSearchQuery("")
-      setFilteredList([])
-  }
+    const handleSubmit = () => {
+        if (!formData.courseCode || selectedInstructors.length === 0 || studentData.length === 0) {
+            alert('Please fill all fields, select instructors, and upload a student list.');
+            return;
+        }
 
-  const removeInstructor = (id)=>{
-    setSelectedInstructors([...selectedInstructors.filter(x=>x!==id)])
-  }
+        const postData = {
+            ...formData,
+            instructorsList: selectedInstructors,
+            studentsList: studentData.map(s => s.Email),
+            announcements: [],
+            Exams: [],
+        };
 
-  const filterList = (query)=>{
-      if(query===""){query=null;}
-      let res = instructors.filter(id=>id.startsWith(query))
-      res = res.filter(id=>!selectedInstructors.includes(id))
-      setFilteredList(res)
-  }
+        dispatch(addCourseInstance(postData));
+        alert('Course instance added successfully!');
+        navigate('/admin');
+    };
 
-  const handleSubmit = ()=>{
-    let postData = {}
-    postData.courseCode = formData.courseCode
-    postData.year = formData.year
-    postData.semester = formData.semester
-    postData.announcements = []
+    return (
+        <>
+            <Navbar />
+            <Container maxWidth="md">
+                <Paper sx={{ p: 4, mt: 4 }}>
+                    <Typography variant="h4" gutterBottom>
+                        Create Course Instance
+                    </Typography>
+                    <Box component="form" noValidate autoComplete="off">
+                        <TextField
+                            label="Course Code"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formData.courseCode}
+                            onChange={(e) => setFormData({ ...formData, courseCode: e.target.value })}
+                        />
+                        <TextField
+                            label="Year"
+                            variant="outlined"
+                            type="number"
+                            fullWidth
+                            margin="normal"
+                            value={formData.year}
+                            onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                        />
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel>Semester</InputLabel>
+                            <Select
+                                value={formData.semester}
+                                label="Semester"
+                                onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
+                            >
+                                <MenuItem value={'spring'}>Spring</MenuItem>
+                                <MenuItem value={'autumn'}>Autumn</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Autocomplete
+                            multiple
+                            id="instructors-autocomplete"
+                            options={instructorEmails}
+                            value={selectedInstructors}
+                            onChange={(event, newValue) => {
+                                setSelectedInstructors(newValue);
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Instructors"
+                                    placeholder="Select Instructors"
+                                    margin="normal"
+                                />
+                            )}
+                        />
+                        <Box sx={{ my: 2 }}>
+                            <Typography variant="h6">Add Students</Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Upload a .xlsx or .csv file with a single column named 'Email'.
+                            </Typography>
+                            <Button variant="contained" component="label" sx={{ mt: 1 }}>
+                                Upload File
+                                <input type="file" hidden accept=".csv,.xlsx,.xls" onChange={handleFileUpload} />
+                            </Button>
+                            {studentData.length > 0 && <Typography sx={{mt: 1}}>{studentData.length} students loaded.</Typography>}
+                        </Box>
 
-    if(columns.length===1 && columns[0]['name']==='Email')
-    {
-        let res = []
-        data.forEach(student=>{
-            res.push(student.Email)
-        })
-        postData.studentsList = res
-    }
-    else
-    {
-      alert('Invalid file uploaded for students list. Please follow the instructions')
-      return
-    }
-
-    postData.instructorsList = selectedInstructors
-    postData.Exams = []
-
-    console.log("post data ",postData)
-    alert("Course instance added")
-    dispatch(addCourseInstance(postData))
-    navigate('/admin')
-  }
-
-  return (
-      <>
-      <Navbar/>
-          <div className="formContainer">
-              <form>
-                  <h3>General Course Details</h3>
-                  
-                  <TextField
-                  variant={'standard'}
-                  fullWidth
-                  label={"Course Code"}
-                  value={formData.courseCode}
-                  onChange={e=>setFormData({...formData,courseCode:e.target.value})}
-                  />
-                  <br/><br/>
-                  
-                  <TextField
-                  variant={'standard'}
-                  fullWidth
-                  label={"Year"}
-                  type={"number"}
-                  value={formData.year}
-                  onChange={e=>setFormData({...formData,year:e.target.value})}
-                  />
-                  <br/><br/>
-                  
-                  <FormControl fullWidth>
-                      <InputLabel variant={'standard'}>Semester</InputLabel>
-                      <Select
-                          value={formData.semester}
-                          label="Semester"
-                          onChange={e=>setFormData({...formData,semester:e.target.value})}
-                          variant={'standard'}>
-                          <MenuItem value={'spring'}>Spring</MenuItem>
-                          <MenuItem value={'autumn'}>Autumn</MenuItem>
-                      </Select>
-                  </FormControl>
-                  <br/><br/>
-
-                  <h3>Add Instructors</h3>
-
-                  <TextField
-                  variant={'standard'}
-                  fullWidth
-                  label={"Search Email-ID"}
-                  value={searchQuery}
-                  onChange={(e)=>{console.log("Setting",e.target.value); setSearchQuery(e.target.value); filterList(e.target.value)}}
-                  />
-                  <br/><br/>
-
-                  <ul>
-                      {
-                          selectedInstructors.map(id=><Card className="instructorCard"><span>{id}</span> <CloseIcon onClick={()=>{removeInstructor(id)}}/></Card>)
-                      }
-                  </ul>
-                  {
-                      filteredList.map(id=><Card className="instructorCard"><span>{id}</span> <AddIcon onClick={()=>{selectInstructor(id)}}/></Card>)
-                  }
-
-                  <br/><br/>
-
-                  <h3>Add Students </h3>
-                  <h5>(Upload one file with a column named 'Email' Format:.xlsx,.csv)</h5>
-                  <br></br>
-                  <input
-                  type="file"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={handleFileUpload}
-                  />
-                  <br></br>
-                  <br></br>
-                  <br></br>
-              </form>
-
-              <Button variant="contained" onClick={handleSubmit} style={{display:"block",marginLeft:"auto",marginRight:"auto",marginTop:20,marginBottom:20,maxWidth: '200px', maxHeight: '500px', minWidth: '200px', minHeight: '50px',backgroundColor: "#22a2ec",}}>Submit</Button>
-
-              
-          </div>
-      </>
-  )
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            onClick={handleSubmit}
+                            sx={{ mt: 2 }}
+                        >
+                            Create Course Instance
+                        </Button>
+                    </Box>
+                </Paper>
+            </Container>
+        </>
+    );
 }
 
 export default AddCourseInstance;

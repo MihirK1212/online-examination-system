@@ -1,211 +1,184 @@
-import React from 'react'
-import { useState} from 'react';
-import { Button, Card} from "@material-ui/core";
-import { FormControl, InputLabel,Select,MenuItem } from "@material-ui/core";
-import { TextField} from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
-import "./style.css"
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState } from 'react';
+import {
+    Button,
+    Card,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    TextField,
+    Box,
+    Typography,
+    IconButton,
+    FormControlLabel,
+    Checkbox,
+    Grid,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import CloseIcon from '@mui/icons-material/Close';
 
-function ExamQuestion({question,qnIndex,handleDeleteQuestion,examData,setExamData}) {
+function ExamQuestion({ question, qnIndex, handleDeleteQuestion, examData, setExamData }) {
+    const [formQuestion, setFormQuestion] = useState(question);
+    const [editing, setEditing] = useState(false);
 
-    const [formQuestion,setFormQuestion] = useState(question)
-    const [editing,setEditing] = useState(false)
+    const qNum = question.questionNumber;
 
-    const qNum = question.questionNumber
-
-    const saveQuestion = ()=> {
-        
-        setEditing(!editing)
-
-        let questions = examData.Questions
-        
-        questions[qnIndex] = formQuestion
-        setExamData({...examData,Questions:[...questions]})
-    }
+    const saveQuestion = () => {
+        setEditing(false);
+        const questions = [...examData.Questions];
+        questions[qnIndex] = formQuestion;
+        setExamData({ ...examData, Questions: questions });
+    };
 
     const handleTypeChange = (e) => {
-        setFormQuestion({...formQuestion,questionType:e.target.value})
-    }
+        setFormQuestion({ ...formQuestion, questionType: e.target.value });
+    };
 
     const addOption = () => {
-        let origOptions  = formQuestion.questionOptions
-        setFormQuestion({...formQuestion,questionOptions:[...origOptions,""]})
-    }
+        setFormQuestion({
+            ...formQuestion,
+            questionOptions: [...formQuestion.questionOptions, ''],
+        });
+    };
 
-    const removeOption = (index) =>{
-        let options = formQuestion.questionOptions
-        options.splice(index,1)
-        setFormQuestion({...formQuestion,questionOptions:[...options]})
+    const removeOption = (index) => {
+        const newOptions = formQuestion.questionOptions.filter((_, i) => i !== index);
+        let newAnswerOptions = formQuestion.questionAnswerOptions.filter((ansInd) => ansInd !== index);
+        newAnswerOptions = newAnswerOptions.map((ansInd) => (ansInd > index ? ansInd - 1 : ansInd));
 
-        let answerOptions = formQuestion.questionAnswerOptions
-        answerOptions = answerOptions.filter(ansInd => ansInd!==index)
-        answerOptions = answerOptions.map(ansInd => ansInd>index ? ansInd-1 : ansInd)
-        setFormQuestion({...formQuestion,questionAnswerOptions:[...answerOptions]})
-    }
+        setFormQuestion({
+            ...formQuestion,
+            questionOptions: newOptions,
+            questionAnswerOptions: newAnswerOptions,
+        });
+    };
 
-    const isAnswer = (index) => {
-        let answerOptions = formQuestion.questionAnswerOptions
-        return answerOptions.includes(index)
-    }
-
-    const optionSelect = (index) => {
-        let answerOptions = formQuestion.questionAnswerOptions
-        if(answerOptions.includes(index))
-        {
-            answerOptions = answerOptions.filter(ansInd => ansInd!==index)
+    const handleOptionSelect = (index) => {
+        let newAnswerOptions;
+        if (formQuestion.questionAnswerOptions.includes(index)) {
+            newAnswerOptions = formQuestion.questionAnswerOptions.filter((ansInd) => ansInd !== index);
+        } else {
+            newAnswerOptions = [...formQuestion.questionAnswerOptions, index].sort((a, b) => a - b);
         }
-        else
-        {
-            answerOptions.push(index)
-            answerOptions = answerOptions.sort()
-        }
-        setFormQuestion({...formQuestion,questionAnswerOptions:[...answerOptions]})
-    }
+        setFormQuestion({ ...formQuestion, questionAnswerOptions: newAnswerOptions });
+    };
 
-    const changeOptionText = (e,index) => {
-        let options  = formQuestion.questionOptions
-        options[index] = e.target.value
-        return options
-    }
+    const handleOptionTextChange = (e, index) => {
+        const newOptions = [...formQuestion.questionOptions];
+        newOptions[index] = e.target.value;
+        setFormQuestion({ ...formQuestion, questionOptions: newOptions });
+    };
 
     return (
-        <>
-            <div className={"questionContainer"}>
+        <Card sx={{ p: 2, mb: 2 }}>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item>
+                    <Typography variant="h6">{qnIndex + 1}.</Typography>
+                </Grid>
+                <Grid item xs>
+                    {editing ? (
+                        <Button variant="contained" onClick={saveQuestion} size="small">
+                            Save
+                        </Button>
+                    ) : (
+                        <Button variant="outlined" onClick={() => setEditing(true)} size="small">
+                            Edit
+                        </Button>
+                    )}
+                </Grid>
+                <Grid item>
+                    <IconButton onClick={() => handleDeleteQuestion(qNum)} size="small">
+                        <DeleteIcon />
+                    </IconButton>
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={8}>
+                    <FormControl fullWidth disabled={!editing}>
+                        <InputLabel>Question Type</InputLabel>
+                        <Select
+                            value={formQuestion.questionType}
+                            label="Question Type"
+                            onChange={handleTypeChange}
+                        >
+                            <MenuItem value={'MCQ'}>Multiple Choice Question</MenuItem>
+                            <MenuItem value={'Numerical'}>Numerical Question</MenuItem>
+                            <MenuItem value={'Subjective'}>Subjective Question</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <TextField
+                        label="Marks"
+                        type="number"
+                        fullWidth
+                        disabled={!editing}
+                        value={formQuestion.questionMarks}
+                        onChange={(e) => setFormQuestion({ ...formQuestion, questionMarks: e.target.value })}
+                    />
+                </Grid>
+            </Grid>
+            <TextField
+                label="Question Content"
+                multiline
+                fullWidth
+                rows={4}
+                disabled={!editing}
+                value={formQuestion.questionContent}
+                onChange={(e) => setFormQuestion({ ...formQuestion, questionContent: e.target.value })}
+                sx={{ mt: 2 }}
+            />
 
-                    <Card className={"questionCard"} >
-
-                        <h3 style={{marginLeft:10,marginTop:10}}>{qnIndex+1}</h3>
-                        
-                        <div className='questionHeader'>
-                            
-                            <div className = "buttons">
-                                {
-                                    editing?
-                                    <Button variant="contained" className="saveBtn" onClick={()=>{saveQuestion()}}>
-                                        SAVE
-                                    </Button>:
-                                    <Button variant="contained" className="editBtn" onClick={()=>{setEditing(!editing)}}>
-                                        EDIT
-                                    </Button>
+            {formQuestion.questionType === 'MCQ' && (
+                <Box sx={{ mt: 2 }}>
+                    {formQuestion.questionOptions.map((option, index) => (
+                        <Card key={index} sx={{ display: 'flex', alignItems: 'center', p: 1, mb: 1 }}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={formQuestion.questionAnswerOptions.includes(index)}
+                                        onChange={() => handleOptionSelect(index)}
+                                        disabled={!editing}
+                                    />
                                 }
-                            </div>
-                            <DeleteIcon style={{marginLeft:50,marginTop:20,cursor:"default",display:"inline"}} onClick={()=>{handleDeleteQuestion(qNum)}}></DeleteIcon>
-                        </div>
-                            
-                        <div className={"questionType"}>
-                            <FormControl fullWidth disabled={!editing}>
-                                <InputLabel variant={'standard'}>Choose Question Type</InputLabel>
-                                <Select
-                                    value={formQuestion.questionType}
-                                    label="Theme"
-                                    onChange={handleTypeChange}
-                                    variant={'standard'}>
-                                    <MenuItem value={'MCQ'}>Multiple Choice Question</MenuItem>
-                                    <MenuItem value={'Numerical'}>Numerical Question</MenuItem>
-                                    <MenuItem value={'Subjective'}>Subjective Question</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
-
-                        
-                        <div className="marksInput">
-                            <TextField
-                                id="standard-number"
-                                label="Marks"
-                                type="number"
-                                disabled={!editing}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                value = {formQuestion.questionMarks}
-                                variant="standard"
-                                onChange={(e)=>{setFormQuestion({...formQuestion,questionMarks:e.target.value})}}
+                                label=""
                             />
-                        </div>
-
-                        
-
-                       <div className="questionContent">
                             <TextField
-                                id="filled-multiline-flexible"
-                                variant={'filled'}
-                                label="Question Content"
-                                multiline
                                 fullWidth
-                                minRows={4}
-                                maxRows={5}
+                                variant="standard"
+                                placeholder={`Option ${index + 1}`}
+                                value={option}
                                 disabled={!editing}
-                                value = {formQuestion.questionContent}
-                                onChange={e=>setFormQuestion({...formQuestion,questionContent:e.target.value})}
+                                onChange={(e) => handleOptionTextChange(e, index)}
                             />
-                        </div>
+                            {editing && (
+                                <IconButton onClick={() => removeOption(index)} size="small">
+                                    <CloseIcon />
+                                </IconButton>
+                            )}
+                        </Card>
+                    ))}
+                    {editing && (
+                        <Button startIcon={<AddIcon />} onClick={addOption} sx={{ mt: 1 }}>
+                            Add Option
+                        </Button>
+                    )}
+                </Box>
+            )}
 
-                        {
-                            formQuestion.questionType === "MCQ" ?
-                            <>
-                                <div className="addOptionButton" onClick={addOption} style={{visibility:editing?"":"hidden"}}>
-                                    <span>Add Option</span> <AddIcon/>
-                                </div>
-
-                                {
-                                    formQuestion.questionOptions.map((option,index)=>{
-                                        return (
-                                            <>
-                                                <Card className="optionCard" key={index}>
-                                                <FormControlLabel control={<Checkbox checked={isAnswer(index)} onChange={()=>{optionSelect(index)}}/>} style={{marginLeft:20}}/>
-                                                    <TextField
-                                                        id="filled-multiline-flexible"
-                                                        variant={'filled'}
-                                                        label="Enter Option Text"
-                                                        className='optionText'
-                                                        multiline
-                                                        size='small'
-                                                        minRows={1}
-                                                        maxRows={4}
-                                                        disabled={!editing}
-                                                        value = {formQuestion.questionOptions[index]}
-                                                        onChange={e=>setFormQuestion({...formQuestion,questionOptions : changeOptionText(e,index)})}
-                                                    />
-                                                    <CloseIcon onClick={()=>{removeOption(index)}} style={{marginLeft:20 ,visibility:editing?"":"hidden"}} />
-                                                </Card>
-                                            </>
-                                        )
-                                    })
-                                }
-                                
-                            </>
-                            
-                            :
-                            <>
-                                {
-                                    formQuestion.questionType==='Numerical'?
-                                        <div className='numericAnswer'>
-                                            <TextField
-                                            id="filled-number"
-                                            label="Numeric Answer"
-                                            type="number"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            value = {formQuestion.questionAnswer}
-                                            onChange = {e=>setFormQuestion({...formQuestion,questionAnswer:e.target.value})}
-                                            variant="filled"
-                                            disabled={!editing}
-                                            />
-                                        </div>
-                                    : <br></br>
-                                }
-                            </>
-                        }
-                    </Card>
-                </div>
-           
-        </>
-    )
+            {formQuestion.questionType === 'Numerical' && (
+                <TextField
+                    label="Numerical Answer"
+                    type="number"
+                    disabled={!editing}
+                    value={formQuestion.questionAnswer}
+                    onChange={(e) => setFormQuestion({ ...formQuestion, questionAnswer: e.target.value })}
+                    sx={{ mt: 2 }}
+                />
+            )}
+        </Card>
+    );
 }
 
-export default ExamQuestion
+export default ExamQuestion;

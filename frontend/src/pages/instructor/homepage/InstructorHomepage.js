@@ -1,66 +1,95 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { Button } from '@material-ui/core';
-
+import {
+    Container,
+    Typography,
+    Grid,
+    Card,
+    CardMedia,
+    CardContent,
+    CardActions,
+    Button,
+    Box,
+    Paper,
+    Avatar
+} from '@mui/material';
 import Navbar from '../../../components/instructor/Homepage/Navbar/Navbar';
-import img from "./profile.png";
-import img_course from "./course.jpg";
-import "./style.css";
+import img_course from './course.jpg';
+import DefaultAvatar from './profile.png'; 
 
-function InstructorHomepage({courses,profile}) {
+function InstructorHomepage({ courses, profile }) {
+    const navigate = useNavigate();
 
-  console.log(courses)
+    const goToCourse = (course) => {
+        navigate('/instructor/CourseHomepage', {
+            state: course,
+        });
+    };
 
-  const navigate = useNavigate()
+    function capitalizeFirstLetter(string) {
+        if (!string) return '';
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
-  const goToCourse = (course) =>{
-    
-    console.log("going to course ",course)
-    navigate('/instructor/CourseHomepage', {
-      state : course,
-    })
-  }
-
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-  
-  return (
-    <>
-      <Navbar/>
-        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '20vh'}}>
-        <h1> Welcome to Instructor, IITI </h1>
-        </div>
-            <div className='course-main'>
-                <div className='course-image'><img className='dp-img' src={ img } alt=""></img></div>
-                <div className='course-data'>
-                    <h4 style={{marginTop: 3, marginBottom: 3}}>Name: { profile.name }</h4>
-                    <span>Phone Number: { profile.phoneNumber }</span> <br></br>
-                    <span>Date of Birth: { profile.dateOfBirth }</span><br></br>
-                </div>
-            </div>
-            <br></br>
-            <br></br>
-            <hr></hr>
-            <center><h2>List of Courses</h2></center>
-            <br></br>
-            <div className='courseList'>
-                {courses.map((course,index)=>{
-                  return <>
-                    <div className="course-card">
-                      <img src={ img_course } className="card-img-top" alt=""></img>
-                        <div className="course-card-body" style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
-                            <h5 className="course-card-title">{ course.courseCode }</h5>
-                            <Button onClick={()=>{goToCourse(course)}}>{course.courseName}</Button>
-                            <p className="course-card-text">{capitalizeFirstLetter(course.semester)} {course.year}</p>
-                        </div>
-                    </div>
-
-                  </>})}
-            </div>
-    </>
-  )
+    return (
+        <>
+            <Navbar />
+            <Container maxWidth="lg">
+                <Box sx={{ my: 4 }}>
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        Welcome, {profile.name || 'Instructor'}!
+                    </Typography>
+                    <Paper sx={{ p: 2, display: 'flex', alignItems: 'center', mb: 4 }}>
+                        <Avatar
+                            alt={profile.name}
+                            src={DefaultAvatar} // Using a default avatar
+                            sx={{ width: 80, height: 80, mr: 2 }}
+                        />
+                        <Box>
+                            <Typography variant="h6">{profile.name}</Typography>
+                            <Typography color="text.secondary">Phone: {profile.phoneNumber}</Typography>
+                            <Typography color="text.secondary">
+                                Date of Birth: {new Date(profile.dateOfBirth).toLocaleDateString()}
+                            </Typography>
+                        </Box>
+                    </Paper>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Your Courses
+                    </Typography>
+                    <Grid container spacing={4}>
+                        {courses.map((course) => (
+                            <Grid item key={course.courseCode + course.year + course.semester} xs={12} sm={6} md={4}>
+                                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                    <CardMedia
+                                        component="img"
+                                        image={img_course}
+                                        alt={course.courseName}
+                                        height="140"
+                                    />
+                                    <CardContent sx={{ flexGrow: 1 }}>
+                                        <Typography gutterBottom variant="h6" component="h2">
+                                            {course.courseCode}
+                                        </Typography>
+                                        <Typography>
+                                            {course.courseName}
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            {capitalizeFirstLetter(course.semester)} {course.year}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small" onClick={() => goToCourse(course)}>
+                                            View Course
+                                        </Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </Container>
+        </>
+    );
 }
 
 export default InstructorHomepage;

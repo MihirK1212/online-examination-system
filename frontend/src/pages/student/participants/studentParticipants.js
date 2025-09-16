@@ -1,78 +1,80 @@
-import React , {useState,useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import {
+    Container,
+    Typography,
+    Paper,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    Avatar,
+    Divider,
+    Box,
+} from '@mui/material';
 import Navbar from '../../../components/student/Participants/Navbar/Navbar';
-import './style.css';
-import img from "./profileIMG2.jpg"
-
+import DefaultAvatar from './profileIMG2.jpg';
 import { getParticipants } from '../../../api';
 
 function StudentParticipants() {
-    const {state} = useLocation();
+    const { state } = useLocation();
+    const course = state.course;
+    const { studentsList, instructorsList } = course;
+    const [participants, setParticipants] = useState({ studentParticipants: [], instructorParticipants: [] });
 
-    const studentsList = state.course.studentsList
-    const instructorsList = state.course.instructorsList
-
-    const [participants,setParticipants] = useState([])
-
-    useEffect(()=>{
-        getParticipants({studentsList:studentsList,instructorsList:instructorsList}).then((response)=>{
-            console.log("response ",response)
-            setParticipants(response.data.participants)
-        })
-    },[studentsList,instructorsList])
-
-    console.log("participants ",participants)
+    useEffect(() => {
+        getParticipants({ studentsList, instructorsList }).then((response) => {
+            setParticipants(response.data.participants);
+        });
+    }, [studentsList, instructorsList]);
 
     return (
         <>
-            <Navbar/>
+            <Navbar />
+            <Container maxWidth="md">
+                <Box sx={{ my: 4 }}>
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        Participants for {course.courseName}
+                    </Typography>
 
-            {
-                participants.studentParticipants && participants.instructorParticipants?
-                <>
-                    <h3 style={{marginTop:10,marginLeft:150}}>Instructors</h3>
+                    <Paper sx={{ mb: 4 }}>
+                        <Typography variant="h5" component="h2" sx={{ p: 2 }}>
+                            Instructors
+                        </Typography>
+                        <List>
+                            {participants.instructorParticipants.map((p) => (
+                                <ListItem key={p.instructorEmail}>
+                                    <ListItemAvatar>
+                                        <Avatar alt={p.instructorName} src={DefaultAvatar} />
+                                    </ListItemAvatar>
+                                    <ListItemText primary={p.instructorName} secondary={p.instructorEmail} />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Paper>
 
-                    {
-                        participants.instructorParticipants.map((p) => {
-                            return(<>
-                                <div className="list-card w-75">
-                                    <div><img src={img} alt=""></img></div>
-                                    <div className="card-body">
-                                        <h5 className="card-title">{p.instructorName}</h5>
-                                        <p className="card-text">{p.instructorEmail}</p>
-                                    </div>
-                                </div>
-                            </>)
-                        })
-                    }
-
-                    <br></br>
-                    <br></br>
-
-                    <h3 style={{marginTop:10,marginLeft:150}}>Students</h3>
-
-                    {
-                        participants.studentParticipants.map((p) => {
-                            return(<>
-                                <div className="list-card w-75">
-                                    <div><img src={img} alt=""></img></div>
-                                    <div className="card-body">
-                                        <h5 className="card-title">{p.studentName}</h5>
-                                        <p className="card-text">{p.studentEmail}</p>
-                                    </div>
-                                </div>
-                            </>)
-                        })
-                    }
-                    </> : ""
-                
-
-            }
-
-            
+                    <Paper>
+                        <Typography variant="h5" component="h2" sx={{ p: 2 }}>
+                            Students
+                        </Typography>
+                        <List>
+                            {participants.studentParticipants.map((p, index) => (
+                                <React.Fragment key={p.studentEmail}>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar alt={p.studentName} src={DefaultAvatar} />
+                                        </ListItemAvatar>
+                                        <ListItemText primary={p.studentName} secondary={p.studentEmail} />
+                                    </ListItem>
+                                    {index < participants.studentParticipants.length - 1 && <Divider variant="inset" component="li" />}
+                                </React.Fragment>
+                            ))}
+                        </List>
+                    </Paper>
+                </Box>
+            </Container>
         </>
-    )
+    );
 }
 
 export default StudentParticipants;

@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-const DB_URI = process.env.MONGO_URI
+const DB_URI = process.env.MONGO_URI // eg:- mongodb://localhost/ONLINE-EXAMINATION-SYSTEM
 const PORT = process.env.PORT || 5000;
 
 const Admins = require('./models/Admins')

@@ -1,152 +1,117 @@
-import React , {useState} from 'react';
-import {useLocation} from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@material-ui/core';
-
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    Container,
+    Typography,
+    Paper,
+    Box,
+    Grid,
+    Card,
+    CardContent,
+    CardActions,
+    Button,
+    List,
+    ListItem,
+    ListItemText,
+    TextField,
+} from '@mui/material';
 import Navbar from '../../../components/instructor/CourseHomepage/Navbar/Navbar';
-import InstructorImage from "../../common/instructor.png";
-import "./style.css"
-
 import { addAnnouncement } from '../../../api';
 
 function CourseHomepage() {
-    const {state} = useLocation();
-    const navigate = useNavigate()
+    const { state: course } = useLocation();
+    const navigate = useNavigate();
+    const [formAnnouncement, setFormAnnouncement] = useState('');
+    const [announcements, setAnnouncements] = useState(course.announcements);
 
-    console.log("Received params ",state)
+    const isUpcoming = (startTiming) => new Date(startTiming) > new Date();
 
-    const valid = (startTiming,endTiming)=>{
-        startTiming = new Date(startTiming)
-        endTiming = new Date(endTiming)
-        const now = new Date().getTime()
-
-        return (startTiming-now)>0 && (endTiming-now)>0
-    }
-
-    const [formAnnouncement,setFormAnnouncement] = useState("")
-    const [announcements,setAnnouncements] = useState(state.announcements) 
-
-    console.log("announcements are ",announcements)
-
-    const goToExam = (exam) =>{
-    
-        console.log("going to exam ",exam)
+    const goToExam = (exam) => {
         navigate('/instructor/editExam', {
-          state : {
-              exam : exam,
-              course : state
-            }
-        })
-      }
-    
-      function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-    
-    const handleAdd = (announcement) => {
-        addAnnouncement({course:state,announcement:announcement}).then(response=>console.log("added successfully"))
-        setAnnouncements([...announcements,announcement])
-        setFormAnnouncement("")
-    }
-    
-    let exams = state.Exams;
+            state: { exam, course },
+        });
+    };
 
-    return(
-        <> 
-            <Navbar course = {state}/>
-            <br/>
-            <h1 align="center">{state.courseName}</h1>
-            <br/>
-            <h2 className='homepageHeading'> &nbsp;&nbsp;List of Upcoming Exams:- </h2>
-            <br></br>
-            <br></br>
-            {exams.map((exam,index) => {
-                return <>    
-                {
-                    valid(exam.startTiming,exam.endTiming)?
-                    <div class="card-category-5" style={{"marginTop":-2}}>
-                        <ul class="all-pr-cards">
-                            <li>
-                                <div class="per-card-3">
-                                    <div class="card-image" style={{"backgroundColor":'#5866e4'}}>
-                                       <img src={InstructorImage} alt=""/>
-                                        <span class="per-name">{exam.examName}</span>
-                                    </div>
+    const handleAddAnnouncement = () => {
+        if (!formAnnouncement.trim()) return;
+        addAnnouncement({ course, announcement: formAnnouncement }).then(() => {
+            setAnnouncements([...announcements, formAnnouncement]);
+            setFormAnnouncement('');
+        });
+    };
 
-                                    <div class="card-content" >
+    const upcomingExams = course.Exams.filter((exam) => isUpcoming(exam.startTiming));
 
-                                        <div style={{display:'flex','justifyContent':'center','flexDirection':'column'}}>
-                                            <div style={{display:'flex','justifyContent':'space-between'}}>
-                                                <span><b>Start Time</b> :  {(new Date(exam.startTiming)).toString().substring(0,24)}</span>
-                                                <span><b>End Time</b> :  {(new Date(exam.endTiming)).toString().substring(0,24)}</span>
-                                            </div>
-                                            <br></br>
-                                            <p>
-                                                The exam will be of {exam.examMarks} marks with 
-                                                a total weightage of {exam.examWeightage}. 
-                                                The instructions for the exam are as follows :-
-                                                
-                                                <ul className='ssfd' style={{"textAlign":'left'}}>
-                                                {
-                                                    exam.instructions.split('\n').map((i,index)=>
-                                                        <>
-                                                            <li>{index+1}) {i}</li>
-                                                            <br></br>
-                                                        </>)
-                                                }
-                                                </ul>
-                                                
-                                            </p>
-                                        </div>
-                                        
-                                        
-                                        <div class="social-icons" style={{"display":'flex',"justifyContent":'center',"backgroundColor":'#4253ed'}}>
-                                            <Button style={{"fontSize":25,"fontFamily":'sans-serif'}} onClick={()=>{goToExam(exam)}}>Edit</Button>
-                                                                       
-                                        </div>
-                                    </div>                  
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+    return (
+        <>
+            <Navbar course={course} />
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Typography variant="h4" component="h1" gutterBottom>
+                    {course.courseName}
+                </Typography>
 
-
-                  
-                    : ""
-                }   
-                </>})}
-
-            <div style={{marginLeft:50}}>
-                <h2 className='homepageHeading'> &nbsp;&nbsp;Announcements:- </h2>
-
-                <div style={{marginLeft:20}}>
-                    {announcements.map((announcement,index) => {
-                        return <>      
-                        <ul>
-                            <li>
-                                {capitalizeFirstLetter(announcement)}
-                            </li>
-                        </ul>
-                        </>
-                    })}
-                </div>
-
-                
-
-                <br></br>
-
-                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',}}>
-                        <div className="mb-3 w-75" >
-                            <input type="text" value={formAnnouncement} placeholder="Announce something to class..." className="form-control" id="exampleInputPassword1" onChange={(e)=>{setFormAnnouncement(e.target.value)}}/>
-                            <br/>
-                            <button onClick={()=>{handleAdd(formAnnouncement)}} className="btn btn-primary">Add Announcement</button>
-                        </div>
-                    </div>
-            </div>
-            
-           
-    </>
-  )
+                <Grid container spacing={4}>
+                    <Grid item xs={12} md={8}>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            Upcoming Exams
+                        </Typography>
+                        {upcomingExams.length > 0 ? (
+                            upcomingExams.map((exam) => (
+                                <Card key={exam.examName} sx={{ mb: 2 }}>
+                                    <CardContent>
+                                        <Typography variant="h6">{exam.examName}</Typography>
+                                        <Typography color="text.secondary">
+                                            Starts: {new Date(exam.startTiming).toLocaleString()}
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            Ends: {new Date(exam.endTiming).toLocaleString()}
+                                        </Typography>
+                                        <Typography sx={{ mt: 1 }}>Marks: {exam.examMarks}, Weightage: {exam.examWeightage}</Typography>
+                                        <Typography variant="body2" sx={{ mt: 1 }}>
+                                            <strong>Instructions:</strong> {exam.instructions}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small" onClick={() => goToExam(exam)}>
+                                            Edit Exam
+                                        </Button>
+                                    </CardActions>
+                                </Card>
+                            ))
+                        ) : (
+                            <Typography>No upcoming exams.</Typography>
+                        )}
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Paper sx={{ p: 2 }}>
+                            <Typography variant="h5" component="h2" gutterBottom>
+                                Announcements
+                            </Typography>
+                            <List>
+                                {announcements.map((announcement, index) => (
+                                    <ListItem key={index}>
+                                        <ListItemText primary={announcement} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                            <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                                <TextField
+                                    label="New Announcement"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formAnnouncement}
+                                    onChange={(e) => setFormAnnouncement(e.target.value)}
+                                />
+                                <Button variant="contained" onClick={handleAddAnnouncement}>
+                                    Add
+                                </Button>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Container>
+        </>
+    );
 }
 
 export default CourseHomepage;
