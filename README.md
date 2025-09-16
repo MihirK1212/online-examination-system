@@ -5,7 +5,7 @@ As due to ongoing pandemic, all physical classes and exams are not possible, so 
 
 ## Demo Video
 
-https://drive.google.com/file/d/1wZiMAddnJ62YD6D1qQyb7BQGhKGUsnsc/view?usp=sharing
+https://drive.google.com/file/d/18f1c2pXhniO982bDrPJ7Y3xw99mG1C5v/view?usp=sharing
 
 # Project Scope
 ”Online Examination System” creates a space for Admin, Instructors and Students for taking online exams.
