@@ -3,6 +3,10 @@
 # Purpose
 As due to ongoing pandemic, all physical classes and exams are not possible, so duethat new ways of assessment is required. Now, for teachers it is very difficult to take exams online and track records of students. So, ”Online Examination System” is the solution. It is the website for taking online exams. It has various unique features like auto evaluation, speed and accuracy. Also it helps environments by reducing the use of paper.
 
+## Demo Video
+
+https://drive.google.com/file/d/1wZiMAddnJ62YD6D1qQyb7BQGhKGUsnsc/view?usp=sharing
+
 # Project Scope
 ”Online Examination System” creates a space for Admin, Instructors and Students for taking online exams.
 
